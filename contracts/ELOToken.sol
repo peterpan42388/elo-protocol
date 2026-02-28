@@ -6,14 +6,39 @@ contract ELOToken {
     string public constant symbol = "ELO";
     uint8 public constant decimals = 18;
 
+    address public owner;
+    mapping(address => bool) public minters;
+
     uint256 public totalSupply;
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
+    event MinterUpdated(address indexed minter, bool allowed);
 
-    function mint(address to, uint256 amount) external {
+    modifier onlyOwner() {
+        require(msg.sender == owner, "only owner");
+        _;
+    }
+
+    modifier onlyMinter() {
+        require(minters[msg.sender], "only minter");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+        minters[msg.sender] = true;
+    }
+
+    function setMinter(address minter, bool allowed) external onlyOwner {
+        require(minter != address(0), "invalid minter");
+        minters[minter] = allowed;
+        emit MinterUpdated(minter, allowed);
+    }
+
+    function mint(address to, uint256 amount) external onlyMinter {
         require(to != address(0), "invalid to");
         totalSupply += amount;
         balanceOf[to] += amount;

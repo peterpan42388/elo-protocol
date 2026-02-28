@@ -62,6 +62,7 @@ Decision:
 - balance checks and atomic transfer
 - deterministic rounding policy
 - audit log append-only format
+- role-based access control for registry and mint operations
 
 Replay rule:
 - every settlement MUST include a unique `requestId`
