@@ -11,6 +11,7 @@
     "start": "node src/apiServer.js",
     "test:contracts": "forge test -vv",
     "test:contracts:extreme": "forge test -vvv",
+    "policy:check": "bash scripts/check-repo-policy.sh",
     "deploy:local": "bash scripts/deploy-local-anvil.sh",
     "deploy:base-sepolia": "bash scripts/deploy-base-sepolia.sh"
   },

@@ -1,0 +1,22 @@
+name: Feature Request
+description: Propose a new feature
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: Risk / Tradeoffs
+    validations:
+      required: true
