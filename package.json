@@ -1,0 +1,16 @@
+{
+  "name": "elo-protocol",
+  "version": "0.1.0",
+  "private": false,
+  "description": "ELO protocol prototype for agent-to-agent settlement",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "demo": "node src/demo.js",
+    "compile:solidity": "node scripts/compile-solidity.mjs"
+  },
+  "devDependencies": {
+    "solc": "^0.8.30"
+  },
+  "license": "MIT"
+}
