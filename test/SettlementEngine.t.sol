@@ -5,11 +5,13 @@ import {Test} from "forge-std/Test.sol";
 import {OwnerRegistry} from "../contracts/OwnerRegistry.sol";
 import {ELOToken} from "../contracts/ELOToken.sol";
 import {SettlementEngine} from "../contracts/SettlementEngine.sol";
+import {ThresholdRiskPolicy} from "../contracts/ThresholdRiskPolicy.sol";
 
 contract SettlementEngineTest is Test {
     OwnerRegistry internal registry;
     ELOToken internal elo;
     SettlementEngine internal settlement;
+    ThresholdRiskPolicy internal policy;
 
     address internal provider = address(0xA11CE);
     address internal consumer = address(0xB0B);
@@ -23,6 +25,7 @@ contract SettlementEngineTest is Test {
         registry = new OwnerRegistry();
         elo = new ELOToken();
         settlement = new SettlementEngine(address(registry), address(elo));
+        policy = new ThresholdRiskPolicy(100 ether);
 
         registry.registerAgent(provider, providerOwner);
         registry.registerAgent(consumer, consumerOwner);
@@ -112,5 +115,40 @@ contract SettlementEngineTest is Test {
 
         assertEq(elo.balanceOf(provider), providerBefore);
         assertEq(elo.balanceOf(sameOwnerConsumer), consumerBefore);
+    }
+
+    function testOnlyOwnerCanSetRiskPolicy() public {
+        vm.prank(attacker);
+        vm.expectRevert("only owner");
+        settlement.setRiskPolicy(address(policy));
+    }
+
+    function testRiskPolicyCanBlockSettlement() public {
+        settlement.setRiskPolicy(address(policy));
+        policy.setBlocked(consumer, true);
+
+        vm.prank(consumer);
+        vm.expectRevert();
+        settlement.settle(provider, consumer, 1 ether, keccak256("risk-blocked"), keccak256("usage"));
+    }
+
+    function testRiskPolicyCanLimitAmount() public {
+        settlement.setRiskPolicy(address(policy));
+        policy.setMaxAmount(2 ether);
+
+        vm.prank(consumer);
+        vm.expectRevert();
+        settlement.settle(provider, consumer, 3 ether, keccak256("risk-limit"), keccak256("usage"));
+    }
+
+    function testRiskPolicyAllowsValidSettlement() public {
+        settlement.setRiskPolicy(address(policy));
+        policy.setMaxAmount(10 ether);
+
+        vm.prank(consumer);
+        settlement.settle(provider, consumer, 1 ether, keccak256("risk-ok"), keccak256("usage"));
+
+        assertEq(elo.balanceOf(provider), 1 ether);
+        assertEq(elo.balanceOf(consumer), 1_000_000 ether - 1 ether);
     }
 }

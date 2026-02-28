@@ -61,6 +61,7 @@ See [docs/API.md](docs/API.md).
 - [User Guide (ZH/EN)](docs/USER_GUIDE.zh-en.md)
 - [Founder Requirements Statement (ZH/EN)](docs/FOUNDER_REQUIREMENTS_STATEMENT.zh-en.md)
 - [Base Sepolia Deployment Guide (ZH/EN)](docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md)
+- [Risk Plugin Interface (ZH/EN)](docs/RISK_PLUGIN_INTERFACE.zh-en.md)
 
 ## CI
 - `CI`: node tests + solidity compile + forge contract tests
@@ -72,3 +73,4 @@ See [docs/API.md](docs/API.md).
 - Management plan: [docs/OPEN_SOURCE_MANAGEMENT_PLAN.zh-en.md](docs/OPEN_SOURCE_MANAGEMENT_PLAN.zh-en.md)
 - Governance: [GOVERNANCE.md](GOVERNANCE.md)
 - Security policy: [SECURITY.md](SECURITY.md)
+- Private risk extension repo: `peterpan42388/elo-risk-extension` (private)

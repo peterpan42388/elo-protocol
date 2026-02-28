@@ -33,3 +33,17 @@ Keep protocol transparency while reducing rule-arbitrage, abuse, and attack surf
 1. Protocol changes: semantic versioning.
 2. Risk interface changes: backward compatibility for at least one minor cycle.
 3. Breaking changes: announced deprecation window.
+
+## Current Repository Controls / 当前仓库控制
+
+### 中文
+- `main` 强制检查：`test`, `gitleaks`
+- 禁止强推与删除分支
+- 强制线性历史
+- 强制对话解决
+
+### English
+- required checks on `main`: `test`, `gitleaks`
+- force-push and branch deletion disabled
+- linear history enforced
+- conversation resolution enforced
