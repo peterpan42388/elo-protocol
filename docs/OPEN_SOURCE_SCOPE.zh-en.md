@@ -23,6 +23,7 @@ ELO 采用“协议核心开源 + 风控策略可私有扩展”的模式。
 2. 风控实现（可私有）
 3. 争议处理流程接口（开源）
 4. 裁决策略实现（可私有）
+5. 插件接口文档：`docs/RISK_PLUGIN_INTERFACE.zh-en.md`
 
 ## English
 
@@ -47,3 +48,4 @@ ELO uses an "open protocol core + private risk strategy extensions" model.
 2. Risk implementations (can be private)
 3. Dispute flow interfaces (open)
 4. Adjudication policy implementations (can be private)
+5. Plugin interface doc: `docs/RISK_PLUGIN_INTERFACE.zh-en.md`

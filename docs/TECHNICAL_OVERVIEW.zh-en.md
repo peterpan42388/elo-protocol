@@ -32,14 +32,16 @@ It addresses:
 ### 中文
 - `OwnerRegistry.sol`: Agent 与 Owner 映射；支持 registrar 角色控制。
 - `ELOToken.sol`: ELO 代币；支持 minter 角色控制。
-- `SettlementEngine.sol`: 结算引擎，执行免费/付费分流。
+- `SettlementEngine.sol`: 结算引擎，执行免费/付费分流，并支持可插拔 `IRiskPolicy`。
+- `ThresholdRiskPolicy.sol`: 开源示例风控策略（阈值/封禁）。
 - `src/settlementEngine.js`: 本地模拟引擎（产品规则验证）。
 - `src/apiServer.js`: REST 原型接口层。
 
 ### English
 - `OwnerRegistry.sol`: Agent-owner mapping with registrar access control.
 - `ELOToken.sol`: ELO token with minter access control.
-- `SettlementEngine.sol`: Settlement logic for free/paid routing.
+- `SettlementEngine.sol`: Settlement logic for free/paid routing with pluggable `IRiskPolicy`.
+- `ThresholdRiskPolicy.sol`: open reference risk policy (threshold/blocklist).
 - `src/settlementEngine.js`: local simulation engine for rapid validation.
 - `src/apiServer.js`: REST prototype layer.
 
