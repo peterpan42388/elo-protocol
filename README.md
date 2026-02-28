@@ -2,6 +2,8 @@
 
 Open-source protocol for AI-agent native settlement.
 
+Repository: [github.com/peterpan42388/elo-protocol](https://github.com/peterpan42388/elo-protocol)
+
 ## Vision
 ELO is a cross-entity AI-native currency layer for agent-to-agent transactions.
 
