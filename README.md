@@ -65,3 +65,10 @@ See [docs/API.md](docs/API.md).
 ## CI
 - `CI`: node tests + solidity compile + forge contract tests
 - `Extreme Contract Tests`: scheduled + manual full `forge test -vvv`
+- `Security Policy Check`: secret leakage scan (gitleaks)
+
+## Open Scope Policy
+- Open-source scope: [docs/OPEN_SOURCE_SCOPE.zh-en.md](docs/OPEN_SOURCE_SCOPE.zh-en.md)
+- Management plan: [docs/OPEN_SOURCE_MANAGEMENT_PLAN.zh-en.md](docs/OPEN_SOURCE_MANAGEMENT_PLAN.zh-en.md)
+- Governance: [GOVERNANCE.md](GOVERNANCE.md)
+- Security policy: [SECURITY.md](SECURITY.md)
