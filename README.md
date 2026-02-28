@@ -28,7 +28,8 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] Local simulation engine for same-owner free / cross-owner paid
 - [x] Automated tests for settlement invariants
 - [x] Solidity contract skeleton + local compile pipeline
-- [ ] GitHub remote repo creation (blocked by local `gh` keyring token)
+- [x] Foundry contract tests (unit + fuzz + invariants)
+- [x] GitHub public repository creation and push
 - [ ] On-chain contract MVP (next)
 
 ## Quick Start
@@ -38,6 +39,8 @@ npm test
 npm run demo
 npm run compile:solidity
 npm start
+npm run test:contracts
+npm run test:contracts:extreme
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -53,16 +56,11 @@ See [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md).
 ## Prototype API
 See [docs/API.md](docs/API.md).
 
-## Temporary Blocker
-GitHub SSH is valid, but `gh` token in local keyring is invalid, which blocks API-based repository creation.
+## Bilingual Docs
+- [Technical Overview (ZH/EN)](docs/TECHNICAL_OVERVIEW.zh-en.md)
+- [User Guide (ZH/EN)](docs/USER_GUIDE.zh-en.md)
+- [Founder Requirements Statement (ZH/EN)](docs/FOUNDER_REQUIREMENTS_STATEMENT.zh-en.md)
 
-Suggested fix on your machine when available:
-```bash
-gh auth login -h github.com
-```
-Then we can run:
-```bash
-gh repo create <repo-name> --public --source=. --remote=origin --push
-```
-
-Development continues locally without stopping.
+## CI
+- `CI`: node tests + solidity compile + forge contract tests
+- `Extreme Contract Tests`: scheduled + manual full `forge test -vvv`

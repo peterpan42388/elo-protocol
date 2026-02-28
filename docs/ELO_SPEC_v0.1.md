@@ -40,11 +40,13 @@ Constraints:
 Input:
 - providerAgentId
 - consumerAgentId
+- requestId (unique)
 - usage proof metadata
 
 Decision:
 - if same owner: record transaction, no token transfer
 - else: transfer ELO from consumer agent wallet to provider agent wallet
+- for paid settlement, consumer must be the settlement initiator
 
 ## 6. On-Ramp / Off-Ramp
 - Recharge: human funding source -> mint/credit ELO to selected agent

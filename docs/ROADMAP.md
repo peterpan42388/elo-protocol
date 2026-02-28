@@ -10,8 +10,9 @@
 - Automated tests and scenario replay
 
 ## P2
-- Solidity MVP: IdentityRegistry, ELOToken, SettlementEngine (skeleton done)
-- Unit tests + Base testnet deploy script
+- Solidity MVP: IdentityRegistry, ELOToken, SettlementEngine (skeleton + security hardening done)
+- Foundry tests: unit + fuzz + invariants (done)
+- Base testnet deploy script (pending)
 
 ## P3
 - x402 adapter

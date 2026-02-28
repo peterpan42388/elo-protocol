@@ -8,7 +8,9 @@
     "test": "node --test",
     "demo": "node src/demo.js",
     "compile:solidity": "node scripts/compile-solidity.mjs",
-    "start": "node src/apiServer.js"
+    "start": "node src/apiServer.js",
+    "test:contracts": "forge test -vv",
+    "test:contracts:extreme": "forge test -vvv"
   },
   "devDependencies": {
     "solc": "^0.8.30"
