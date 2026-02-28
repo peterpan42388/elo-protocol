@@ -7,7 +7,8 @@
   "scripts": {
     "test": "node --test",
     "demo": "node src/demo.js",
-    "compile:solidity": "node scripts/compile-solidity.mjs"
+    "compile:solidity": "node scripts/compile-solidity.mjs",
+    "start": "node src/apiServer.js"
   },
   "devDependencies": {
     "solc": "^0.8.30"

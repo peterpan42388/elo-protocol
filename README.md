@@ -35,6 +35,7 @@ npm install
 npm test
 npm run demo
 npm run compile:solidity
+npm start
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -46,6 +47,9 @@ npm run compile:solidity
 
 ## Notes / Questions to be completed later
 See [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md).
+
+## Prototype API
+See [docs/API.md](docs/API.md).
 
 ## Temporary Blocker
 GitHub SSH is valid, but `gh` token in local keyring is invalid, which blocks API-based repository creation.
