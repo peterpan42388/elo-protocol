@@ -82,6 +82,9 @@ contract SettlementEngine {
 
         require(amount > 0, "amount required");
         require(elo.transferFrom(consumer, provider, amount), "transfer failed");
+        if (address(riskPolicy) != address(0)) {
+            riskPolicy.recordSettlement(provider, consumer, msg.sender, amount, requestId, usageRef);
+        }
         emit Settled(provider, consumer, amount, true, requestId, usageRef);
     }
 }

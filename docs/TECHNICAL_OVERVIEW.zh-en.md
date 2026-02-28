@@ -52,6 +52,7 @@ It addresses:
 - 角色控制：仅 registrar 可注册 Agent，仅 minter 可增发 ELO。
 - 反盗刷：仅 `consumer` 可发起自身消费结算。
 - 防重放：`requestId` 必须唯一，重复请求拒绝。
+- 风控插件钩子：`validateSettlement` + `recordSettlement`，支持私有策略状态化控制（如频率窗口）。
 
 待增强项：
 - 基于签名的委托结算（relayer / meta-tx）；
@@ -63,6 +64,7 @@ Implemented controls:
 - Role control: only registrar can register agents, only minter can mint ELO.
 - Anti-drain: only the `consumer` can initiate spending settlement.
 - Replay protection: `requestId` must be unique.
+- Risk plugin hooks: `validateSettlement` + `recordSettlement` for stateful private policy controls (e.g. rate windows).
 
 Pending hardening:
 - signature-based delegated settlement (relayer/meta-tx),
