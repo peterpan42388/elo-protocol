@@ -28,6 +28,7 @@ test("API should settle paid and free paths correctly", async () => {
   const paid = await post(base, "/settle", {
     providerAgentId: "a",
     consumerAgentId: "b",
+    requestId: "api-cross-001",
     computeUnits: 200,
     energyKwh: 0.1,
     marketMultiplier: 2,
@@ -41,6 +42,7 @@ test("API should settle paid and free paths correctly", async () => {
   const free = await post(base, "/settle", {
     providerAgentId: "a",
     consumerAgentId: "c",
+    requestId: "api-same-001",
     computeUnits: 999,
     energyKwh: 2,
     marketMultiplier: 4,
@@ -54,6 +56,19 @@ test("API should settle paid and free paths correctly", async () => {
   const balResp = await fetch(`${base}/balance/a`);
   const bal = await balResp.json();
   assert.ok(bal.balance > 0);
+
+  const dup = await post(base, "/settle", {
+    providerAgentId: "a",
+    consumerAgentId: "b",
+    requestId: "api-cross-001",
+    computeUnits: 200,
+    energyKwh: 0.1,
+    marketMultiplier: 2,
+    reputationFactor: 1,
+    usageRef: "cross-001",
+  });
+  assert.equal(dup.status, 400);
+  assert.match(dup.body.error, /duplicate requestId/);
 
   await new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
 });

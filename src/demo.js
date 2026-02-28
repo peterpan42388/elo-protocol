@@ -24,6 +24,7 @@ console.log(
   engine.settle({
     providerAgentId: "agentA",
     consumerAgentId: "agentB",
+    requestId: "req-cross-001",
     computeUnits: 500,
     energyKwh: 0.2,
     marketMultiplier: 1.8,
@@ -38,6 +39,7 @@ console.log(
   engine.settle({
     providerAgentId: "agentA",
     consumerAgentId: "agentC",
+    requestId: "req-same-001",
     computeUnits: 120,
     energyKwh: 0.03,
     marketMultiplier: 2,

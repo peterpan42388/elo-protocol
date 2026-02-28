@@ -30,6 +30,7 @@ test("cross_owner_paid should transfer balances", () => {
   const result = engine.settle({
     providerAgentId: "provider",
     consumerAgentId: "consumer",
+    requestId: "req-1",
     computeUnits: 500,
     energyKwh: 0.5,
     marketMultiplier: 1.5,
@@ -53,11 +54,43 @@ test("insufficient balance should fail cross-owner settlement", () => {
       engine.settle({
         providerAgentId: "provider",
         consumerAgentId: "consumer",
+        requestId: "req-2",
         computeUnits: 1_000_000,
         energyKwh: 100,
         marketMultiplier: 5,
         reputationFactor: 2,
       }),
     /insufficient balance/,
+  );
+});
+
+test("duplicate requestId should fail", () => {
+  const engine = new SettlementEngine();
+  engine.registerAgent("provider", "ownerP");
+  engine.registerAgent("consumer", "ownerC");
+  engine.recharge("consumer", 10);
+
+  engine.settle({
+    providerAgentId: "provider",
+    consumerAgentId: "consumer",
+    requestId: "req-dup",
+    computeUnits: 100,
+    energyKwh: 0.1,
+    marketMultiplier: 1,
+    reputationFactor: 1,
+  });
+
+  assert.throws(
+    () =>
+      engine.settle({
+        providerAgentId: "provider",
+        consumerAgentId: "consumer",
+        requestId: "req-dup",
+        computeUnits: 100,
+        energyKwh: 0.1,
+        marketMultiplier: 1,
+        reputationFactor: 1,
+      }),
+    /duplicate requestId/,
   );
 });

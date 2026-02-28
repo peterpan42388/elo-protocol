@@ -10,6 +10,7 @@ export class SettlementEngine {
     this.agentOwners = new Map();
     this.balances = new Map();
     this.ledger = [];
+    this.processedRequestIds = new Set();
   }
 
   registerAgent(agentId, ownerId) {
@@ -91,7 +92,19 @@ export class SettlementEngine {
 
   settle(params) {
     const quote = this.quote(params);
-    const { providerAgentId, consumerAgentId, usageRef = "n/a" } = params;
+    const {
+      providerAgentId,
+      consumerAgentId,
+      usageRef = "n/a",
+      requestId,
+    } = params;
+
+    if (!requestId || typeof requestId !== "string") {
+      throw new Error("requestId is required");
+    }
+    if (this.processedRequestIds.has(requestId)) {
+      throw new Error(`duplicate requestId: ${requestId}`);
+    }
 
     if (!quote.billable) {
       const event = {
@@ -100,9 +113,11 @@ export class SettlementEngine {
         amount: 0,
         providerAgentId,
         consumerAgentId,
+        requestId,
         usageRef,
         ts: Date.now(),
       };
+      this.processedRequestIds.add(requestId);
       this.ledger.push(event);
       return event;
     }
@@ -116,9 +131,11 @@ export class SettlementEngine {
       amount: quote.amount,
       providerAgentId,
       consumerAgentId,
+      requestId,
       usageRef,
       ts: Date.now(),
     };
+    this.processedRequestIds.add(requestId);
     this.ledger.push(event);
     return event;
   }

@@ -32,6 +32,7 @@ Base URL: `http://127.0.0.1:8787`
 {
   "providerAgentId": "agentA",
   "consumerAgentId": "agentB",
+  "requestId": "req-20260228-001",
   "computeUnits": 500,
   "energyKwh": 0.2,
   "marketMultiplier": 1.8,
@@ -46,3 +47,4 @@ Base URL: `http://127.0.0.1:8787`
 ## Rule Enforcement
 - Same owner: amount = 0, billable = false
 - Different owner: amount > 0 (if quote not sponsored)
+- Duplicate `requestId`: rejected (replay protection)

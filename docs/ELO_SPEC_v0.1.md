@@ -63,6 +63,10 @@ Decision:
 - deterministic rounding policy
 - audit log append-only format
 
+Replay rule:
+- every settlement MUST include a unique `requestId`
+- duplicate `requestId` MUST be rejected
+
 ## 9. Immediate Next Steps
 1. implement Solidity interfaces and minimal contracts
 2. map local engine fields to contract calldata
