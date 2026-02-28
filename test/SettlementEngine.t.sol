@@ -6,12 +6,48 @@ import {OwnerRegistry} from "../contracts/OwnerRegistry.sol";
 import {ELOToken} from "../contracts/ELOToken.sol";
 import {SettlementEngine} from "../contracts/SettlementEngine.sol";
 import {ThresholdRiskPolicy} from "../contracts/ThresholdRiskPolicy.sol";
+import {IRiskPolicy} from "../contracts/IRiskPolicy.sol";
+
+contract RecordingRiskPolicy is IRiskPolicy {
+    bool public allow = true;
+    uint256 public recordCount;
+    bytes32 public lastRecordedRequestId;
+
+    function setAllow(bool allow_) external {
+        allow = allow_;
+    }
+
+    function validateSettlement(
+        address,
+        address,
+        address,
+        uint256,
+        bytes32,
+        bytes32
+    ) external view override returns (bool allowed, bytes32 reasonCode) {
+        if (!allow) return (false, bytes32("DENY"));
+        return (true, bytes32("ALLOW"));
+    }
+
+    function recordSettlement(
+        address,
+        address,
+        address,
+        uint256,
+        bytes32 requestId,
+        bytes32
+    ) external override {
+        recordCount += 1;
+        lastRecordedRequestId = requestId;
+    }
+}
 
 contract SettlementEngineTest is Test {
     OwnerRegistry internal registry;
     ELOToken internal elo;
     SettlementEngine internal settlement;
     ThresholdRiskPolicy internal policy;
+    RecordingRiskPolicy internal recordingPolicy;
 
     address internal provider = address(0xA11CE);
     address internal consumer = address(0xB0B);
@@ -26,6 +62,7 @@ contract SettlementEngineTest is Test {
         elo = new ELOToken();
         settlement = new SettlementEngine(address(registry), address(elo));
         policy = new ThresholdRiskPolicy(100 ether);
+        recordingPolicy = new RecordingRiskPolicy();
 
         registry.registerAgent(provider, providerOwner);
         registry.registerAgent(consumer, consumerOwner);
@@ -150,5 +187,25 @@ contract SettlementEngineTest is Test {
 
         assertEq(elo.balanceOf(provider), 1 ether);
         assertEq(elo.balanceOf(consumer), 1_000_000 ether - 1 ether);
+    }
+
+    function testRiskPolicyRecordHookCalledOnPaidSettlement() public {
+        settlement.setRiskPolicy(address(recordingPolicy));
+
+        bytes32 requestId = keccak256("record-hook");
+        vm.prank(consumer);
+        settlement.settle(provider, consumer, 1 ether, requestId, keccak256("usage"));
+
+        assertEq(recordingPolicy.recordCount(), 1);
+        assertEq(recordingPolicy.lastRecordedRequestId(), requestId);
+    }
+
+    function testRiskPolicyRecordHookNotCalledOnSameOwnerFreeSettlement() public {
+        settlement.setRiskPolicy(address(recordingPolicy));
+
+        vm.prank(sameOwnerConsumer);
+        settlement.settle(provider, sameOwnerConsumer, 1 ether, keccak256("same-owner-no-record"), keccak256("usage"));
+
+        assertEq(recordingPolicy.recordCount(), 0);
     }
 }

@@ -44,4 +44,15 @@ contract ThresholdRiskPolicy is IRiskPolicy {
         if (amount > maxAmount) return (false, bytes32("AMOUNT_EXCEEDS_MAX"));
         return (true, bytes32("ALLOW"));
     }
+
+    function recordSettlement(
+        address,
+        address,
+        address,
+        uint256,
+        bytes32,
+        bytes32
+    ) external pure {
+        // Stateless reference policy: no-op hook for interface compatibility.
+    }
 }
