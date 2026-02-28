@@ -10,7 +10,9 @@
     "compile:solidity": "node scripts/compile-solidity.mjs",
     "start": "node src/apiServer.js",
     "test:contracts": "forge test -vv",
-    "test:contracts:extreme": "forge test -vvv"
+    "test:contracts:extreme": "forge test -vvv",
+    "deploy:local": "bash scripts/deploy-local-anvil.sh",
+    "deploy:base-sepolia": "bash scripts/deploy-base-sepolia.sh"
   },
   "devDependencies": {
     "solc": "^0.8.30"

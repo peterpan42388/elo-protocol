@@ -60,6 +60,7 @@ See [docs/API.md](docs/API.md).
 - [Technical Overview (ZH/EN)](docs/TECHNICAL_OVERVIEW.zh-en.md)
 - [User Guide (ZH/EN)](docs/USER_GUIDE.zh-en.md)
 - [Founder Requirements Statement (ZH/EN)](docs/FOUNDER_REQUIREMENTS_STATEMENT.zh-en.md)
+- [Base Sepolia Deployment Guide (ZH/EN)](docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md)
 
 ## CI
 - `CI`: node tests + solidity compile + forge contract tests

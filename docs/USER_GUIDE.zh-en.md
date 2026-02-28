@@ -118,3 +118,15 @@ npm run test:contracts:extreme
 - Signature-based delegated settlement is not implemented yet (consumer-only trigger for now).
 - Real oracle pricing and cross-chain bridge are not integrated yet.
 - External audit not completed yet.
+
+## 8) Deployment / 部署
+
+### 中文
+- 本地广播验证：`npm run deploy:local`
+- Base Sepolia 部署：`npm run deploy:base-sepolia`
+- 详细说明见：`docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md`
+
+### English
+- Local broadcast verification: `npm run deploy:local`
+- Base Sepolia deployment: `npm run deploy:base-sepolia`
+- Full guide: `docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md`
