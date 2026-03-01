@@ -41,6 +41,7 @@ npm run compile:solidity
 npm start
 npm run test:contracts
 npm run test:contracts:extreme
+npm run integrate:risk:local
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -62,6 +63,7 @@ See [docs/API.md](docs/API.md).
 - [Founder Requirements Statement (ZH/EN)](docs/FOUNDER_REQUIREMENTS_STATEMENT.zh-en.md)
 - [Base Sepolia Deployment Guide (ZH/EN)](docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md)
 - [Risk Plugin Interface (ZH/EN)](docs/RISK_PLUGIN_INTERFACE.zh-en.md)
+- [Private Risk Integration Runbook (ZH/EN)](docs/PRIVATE_RISK_INTEGRATION_RUNBOOK.zh-en.md)
 
 ## CI
 - `CI`: node tests + solidity compile + forge contract tests
