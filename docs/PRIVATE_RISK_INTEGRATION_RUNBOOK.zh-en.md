@@ -35,6 +35,12 @@ npm run integrate:risk:base-sepolia
 - `RISK_HIGH_USAGE_THRESHOLD`
 - `RISK_HIGH_USAGE_MULTIPLIER_BPS`
 
+### 待补资料（你回来后补）
+- `BASE_SEPOLIA_RPC_URL`
+- `DEPLOYER_PRIVATE_KEY`
+- 可选：`BASESCAN_API_KEY`（用于合约验证）
+- 如需固定参与方地址：`PROVIDER_ADDR`、`CONSUMER_ADDR`
+
 ## English
 
 ### Goal
@@ -69,3 +75,9 @@ Optional variables:
 - `RISK_MAX_TX_PER_WINDOW`
 - `RISK_HIGH_USAGE_THRESHOLD`
 - `RISK_HIGH_USAGE_MULTIPLIER_BPS`
+
+### Pending inputs (for when you are back)
+- `BASE_SEPOLIA_RPC_URL`
+- `DEPLOYER_PRIVATE_KEY`
+- Optional: `BASESCAN_API_KEY` (contract verification)
+- If fixed participants are needed: `PROVIDER_ADDR`, `CONSUMER_ADDR`
