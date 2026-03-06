@@ -1,5 +1,6 @@
 import http from "node:http";
 import { SettlementEngine } from "./settlementEngine.js";
+import { ELOMarket } from "./eloMarket.js";
 
 function json(res, status, payload) {
   res.writeHead(status, { "Content-Type": "application/json" });
@@ -13,7 +14,7 @@ async function readJson(req) {
   return JSON.parse(raw);
 }
 
-export function createApiServer(engine = new SettlementEngine()) {
+export function createApiServer(engine = new SettlementEngine(), market = new ELOMarket(engine)) {
   const server = http.createServer(async (req, res) => {
     try {
       if (!req.url || !req.method) return json(res, 400, { error: "bad request" });
@@ -42,6 +43,34 @@ export function createApiServer(engine = new SettlementEngine()) {
         return json(res, 200, result);
       }
 
+      if (req.method === "POST" && req.url === "/market/offers/publish") {
+        const body = await readJson(req);
+        const offer = market.publishOffer(body);
+        return json(res, 200, offer);
+      }
+
+      if (req.method === "GET" && req.url === "/market/offers") {
+        return json(res, 200, { offers: market.listOffers() });
+      }
+
+      if (req.method === "POST" && req.url === "/market/quote") {
+        const body = await readJson(req);
+        const quote = market.quotePurchase(body);
+        return json(res, 200, quote);
+      }
+
+      if (req.method === "POST" && req.url === "/market/purchase") {
+        const body = await readJson(req);
+        const result = market.purchase(body);
+        return json(res, 200, result);
+      }
+
+      if (req.method === "POST" && req.url === "/market/savings-simulate") {
+        const body = await readJson(req);
+        const result = market.simulateOptimization(body);
+        return json(res, 200, result);
+      }
+
       if (req.method === "GET" && req.url.startsWith("/balance/")) {
         const agentId = decodeURIComponent(req.url.slice("/balance/".length));
         return json(res, 200, { agentId, balance: engine.balanceOf(agentId) });
@@ -53,7 +82,7 @@ export function createApiServer(engine = new SettlementEngine()) {
     }
   });
 
-  return { server, engine };
+  return { server, engine, market };
 }
 
 if (process.argv[1] && process.argv[1].endsWith("apiServer.js")) {

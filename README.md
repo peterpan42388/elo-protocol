@@ -22,7 +22,7 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 4. Pricing must include both objective production cost and market value.
 5. Human fiat/stablecoin only appears in recharge/withdraw boundary.
 
-## Current Stage (P0 + P2 in progress)
+## Current Stage (P0 + P2 verified, P3 scaffold in progress)
 - [x] Requirement consolidation and phased roadmap
 - [x] ELO spec draft v0.1
 - [x] Local simulation engine for same-owner free / cross-owner paid
@@ -30,7 +30,10 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] Solidity contract skeleton + local compile pipeline
 - [x] Foundry contract tests (unit + fuzz + invariants)
 - [x] GitHub public repository creation and push
-- [ ] On-chain contract MVP (next)
+- [x] Virtual wallet bootstrap + local test funding script
+- [x] P0/P2 market scenario tests (token-saving simulation)
+- [x] P3 market API scaffold (publish/quote/purchase/savings simulation)
+- [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start
 ```bash
@@ -42,6 +45,9 @@ npm start
 npm run test:contracts
 npm run test:contracts:extreme
 npm run integrate:risk:local
+npm run wallet:virtual
+npm run test:p0p2:local
+npm run demo:market
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -64,6 +70,7 @@ See [docs/API.md](docs/API.md).
 - [Base Sepolia Deployment Guide (ZH/EN)](docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md)
 - [Risk Plugin Interface (ZH/EN)](docs/RISK_PLUGIN_INTERFACE.zh-en.md)
 - [Private Risk Integration Runbook (ZH/EN)](docs/PRIVATE_RISK_INTEGRATION_RUNBOOK.zh-en.md)
+- [ELO Market Execution Plan (ZH/EN)](docs/ELO_MARKET_EXECUTION_PLAN.zh-en.md)
 
 ## CI
 - `CI`: node tests + solidity compile + forge contract tests

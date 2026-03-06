@@ -15,7 +15,11 @@
     "deploy:local": "bash scripts/deploy-local-anvil.sh",
     "deploy:base-sepolia": "bash scripts/deploy-base-sepolia.sh",
     "integrate:risk:local": "bash scripts/integrate-private-risk-local.sh",
-    "integrate:risk:base-sepolia": "bash scripts/integrate-private-risk-base-sepolia.sh"
+    "integrate:risk:base-sepolia": "bash scripts/integrate-private-risk-base-sepolia.sh",
+    "wallet:virtual": "bash scripts/bootstrap-virtual-wallets.sh",
+    "test:p0p2": "node --test tests/eloMarket.p0-p2.test.js",
+    "test:p0p2:local": "bash scripts/run-p0-p2-local.sh",
+    "demo:market": "node src/eloMarketDemo.js"
   },
   "devDependencies": {
     "solc": "^0.8.30"

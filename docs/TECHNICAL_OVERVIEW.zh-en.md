@@ -35,6 +35,7 @@ It addresses:
 - `SettlementEngine.sol`: 结算引擎，执行免费/付费分流，并支持可插拔 `IRiskPolicy`。
 - `ThresholdRiskPolicy.sol`: 开源示例风控策略（阈值/封禁）。
 - `src/settlementEngine.js`: 本地模拟引擎（产品规则验证）。
+- `src/eloMarket.js`: 轻量市场层（商品发布/报价/购买/节省模拟）。
 - `src/apiServer.js`: REST 原型接口层。
 
 ### English
@@ -43,6 +44,7 @@ It addresses:
 - `SettlementEngine.sol`: Settlement logic for free/paid routing with pluggable `IRiskPolicy`.
 - `ThresholdRiskPolicy.sol`: open reference risk policy (threshold/blocklist).
 - `src/settlementEngine.js`: local simulation engine for rapid validation.
+- `src/eloMarket.js`: lightweight market layer (publish/quote/purchase/savings simulation).
 - `src/apiServer.js`: REST prototype layer.
 
 ## 4) Security Model / 安全模型
