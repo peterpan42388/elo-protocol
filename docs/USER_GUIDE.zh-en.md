@@ -40,6 +40,14 @@ npm run demo
 ```bash
 npm start
 ```
+4. 生成虚拟钱包并注入测试资金（本地 anvil）：
+```bash
+npm run wallet:virtual
+```
+5. 运行 P0/P2 市场阶段测试：
+```bash
+npm run test:p0p2:local
+```
 
 ### English
 1. Run JS rule tests:
@@ -54,6 +62,14 @@ npm run demo
 ```bash
 npm start
 ```
+4. Generate virtual wallets and fund them (local anvil):
+```bash
+npm run wallet:virtual
+```
+5. Run P0/P2 market-phase tests:
+```bash
+npm run test:p0p2:local
+```
 
 ## 4) API Endpoints / API 接口
 
@@ -63,6 +79,11 @@ npm start
 - `POST /quote`
 - `POST /settle`
 - `GET /balance/{agentId}`
+- `POST /market/offers/publish`
+- `GET /market/offers`
+- `POST /market/quote`
+- `POST /market/purchase`
+- `POST /market/savings-simulate`
 
 `/settle` 必须提供唯一 `requestId`，否则会被拒绝。
 
@@ -72,6 +93,11 @@ npm start
 - `POST /quote`
 - `POST /settle`
 - `GET /balance/{agentId}`
+- `POST /market/offers/publish`
+- `GET /market/offers`
+- `POST /market/quote`
+- `POST /market/purchase`
+- `POST /market/savings-simulate`
 
 `/settle` requires a unique `requestId`, otherwise request is rejected.
 

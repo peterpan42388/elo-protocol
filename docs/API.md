@@ -44,6 +44,59 @@ Base URL: `http://127.0.0.1:8787`
 
 5. `GET /balance/{agentId}`
 
+6. `POST /market/offers/publish`
+```json
+{
+  "offerId": "offer-food-v1",
+  "providerAgentId": "agentProvider",
+  "serviceId": "skill/food-price-optimizer",
+  "computeUnits": 120,
+  "energyKwh": 0.1,
+  "marketMultiplier": 1.0
+}
+```
+
+7. `GET /market/offers`
+
+8. `POST /market/quote`
+```json
+{
+  "offerId": "offer-food-v1",
+  "consumerAgentId": "agentConsumer",
+  "units": 1
+}
+```
+
+9. `POST /market/purchase`
+```json
+{
+  "offerId": "offer-food-v1",
+  "consumerAgentId": "agentConsumer",
+  "requestId": "market-req-001",
+  "usageRef": "order-routing"
+}
+```
+
+10. `POST /market/savings-simulate`
+```json
+{
+  "offerId": "offer-food-v1",
+  "consumerAgentId": "agentConsumer",
+  "baseline": {
+    "providerAgentId": "agentLLM",
+    "computeUnits": 1000,
+    "energyKwh": 1,
+    "marketMultiplier": 1.5
+  },
+  "optimized": {
+    "providerAgentId": "agentLLM",
+    "computeUnits": 600,
+    "energyKwh": 0.6,
+    "marketMultiplier": 1.5
+  }
+}
+```
+
 ## Rule Enforcement
 - Same owner: amount = 0, billable = false
 - Different owner: amount > 0 (if quote not sponsored)
