@@ -231,6 +231,7 @@ npm run verify:p4c-security-review
 
 ### 中文
 - POST 接口必须使用 `application/json`，否则返回 `415`。
+- 设置 `API_AUTH_BEARER_TOKEN` 后，所有 POST 接口都需 `Authorization: Bearer <token>`，否则返回 `401`。
 - 请求体超过阈值返回 `413`。
 - 达到限流阈值返回 `429`。
 - 可通过环境变量调整：
@@ -245,9 +246,11 @@ npm run verify:p4c-security-review
   - `ACP_MAX_INTENTS`（默认 `5000`）
   - `ACP_MAX_ESCROWS`（默认 `5000`）
   - `ACP_TERMINAL_RETENTION_MS`（默认 `3600000`）
+  - `API_AUTH_BEARER_TOKEN`（可选；设置后所有 POST 端点强制 Bearer 鉴权）
 
 ### English
 - POST endpoints require `application/json` (`415` otherwise).
+- If `API_AUTH_BEARER_TOKEN` is set, all POST endpoints require `Authorization: Bearer <token>` (`401` otherwise).
 - Oversized request bodies return `413`.
 - Rate-limit overflow returns `429`.
 - Runtime env configs:
@@ -262,3 +265,4 @@ npm run verify:p4c-security-review
   - `ACP_MAX_INTENTS` (default `5000`)
   - `ACP_MAX_ESCROWS` (default `5000`)
   - `ACP_TERMINAL_RETENTION_MS` (default `3600000`)
+  - `API_AUTH_BEARER_TOKEN` (optional; enforces Bearer auth on all POST endpoints when set)

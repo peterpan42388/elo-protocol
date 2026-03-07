@@ -32,6 +32,7 @@ Use GitHub Security Advisories (private reporting) for this repository.
 - `ACP_MAX_INTENTS` (default: `5000`)
 - `ACP_MAX_ESCROWS` (default: `5000`)
 - `ACP_TERMINAL_RETENTION_MS` (default: `3600000`)
+- `API_AUTH_BEARER_TOKEN` (optional; when set, all `POST` APIs require `Authorization: Bearer <token>`)
 
 These controls are intended as baseline protections for prototype and staging environments.
 Production deployments should layer additional controls (WAF, reverse-proxy rate limit, authn/authz, structured audit logging, and external security review).

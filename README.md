@@ -42,6 +42,7 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] P4-A security hardening baseline (rate limit, body size guard, input validation)
 - [x] P4-B audit prep baseline (threat model, risk matrix, checklist, regression gates)
 - [x] P4-C security review drill report (findings + mitigations)
+- [x] P4-D optional API bearer-auth baseline (`API_AUTH_BEARER_TOKEN`)
 - [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start

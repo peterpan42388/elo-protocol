@@ -70,6 +70,10 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - 代码级审查发现输出
    - 高优先级发现即时修复
    - 安全审查报告归档
+15. P4-D API 鉴权基线：
+   - 可选 Bearer 鉴权开关（`API_AUTH_BEARER_TOKEN`）
+   - POST 写接口统一鉴权
+   - 安全回归覆盖 401 路径
 
 ### 运行方式
 ```bash
@@ -164,6 +168,10 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - code-level findings report
    - immediate remediation for high-priority issues
    - archived security review report
+15. P4-D API auth baseline:
+   - optional Bearer auth gate (`API_AUTH_BEARER_TOKEN`)
+   - unified auth for POST mutation endpoints
+   - security regression coverage for 401 paths
 
 ### How to run
 ```bash

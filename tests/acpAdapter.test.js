@@ -82,12 +82,12 @@ test("ACP adapter should allow same-owner execution without escrow funding", () 
   assert.equal(executed.trade.amount, 0);
 });
 
-test("ACP adapter should enforce intent queue cap and cleanup stale proposed intents", async () => {
+test("ACP adapter should enforce intent queue cap and cleanup stale proposed intents", () => {
   const engine = new SettlementEngine();
   const market = new ELOMarket(engine);
   const acp = new ACPAdapter(market, engine, {
     maxIntents: 1,
-    terminalRetentionMs: 1,
+    terminalRetentionMs: 50,
   });
 
   engine.registerAgent("provider", "ownerP");
@@ -103,7 +103,7 @@ test("ACP adapter should enforce intent queue cap and cleanup stale proposed int
     marketMultiplier: 1,
   });
 
-  acp.openIntent({
+  const firstIntent = acp.openIntent({
     offerId: "offer-acp-cap",
     buyerAgentId: "buyer",
   });
@@ -117,7 +117,9 @@ test("ACP adapter should enforce intent queue cap and cleanup stale proposed int
     /queue is full/
   );
 
-  await new Promise((resolve) => setTimeout(resolve, 5));
+  // Force staleness deterministically to avoid timing flakes in CI.
+  const internalIntent = acp.intents.get(firstIntent.intentId);
+  if (internalIntent) internalIntent.createdAt = Date.now() - 500;
 
   const reopened = acp.openIntent({
     offerId: "offer-acp-cap",

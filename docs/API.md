@@ -270,3 +270,4 @@ Market v1 schema docs:
 - `ACP_MAX_INTENTS` (default `5000`)
 - `ACP_MAX_ESCROWS` (default `5000`)
 - `ACP_TERMINAL_RETENTION_MS` (default `3600000`)
+- `API_AUTH_BEARER_TOKEN` (optional; if set, all `POST` endpoints require `Authorization: Bearer <token>`)
