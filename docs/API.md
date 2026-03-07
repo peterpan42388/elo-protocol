@@ -67,7 +67,43 @@ Base URL: `http://127.0.0.1:8787`
 
 7. `GET /market/offers`
 
-8. `POST /market/x402/challenge`
+8. `POST /market/acp/intents/open`
+```json
+{
+  "offerId": "offer-food-v1",
+  "buyerAgentId": "agentConsumer",
+  "units": 1,
+  "maxAmountElo": 0.2
+}
+```
+
+9. `POST /market/acp/intents/{intentId}/accept`
+```json
+{
+  "providerAgentId": "agentProvider"
+}
+```
+
+10. `GET /market/acp/intents/{intentId}`
+
+11. `POST /market/acp/escrow/{escrowId}/fund`
+```json
+{
+  "buyerAgentId": "agentConsumer"
+}
+```
+
+12. `POST /market/acp/escrow/{escrowId}/execute`
+```json
+{
+  "requestId": "market-req-001",
+  "usageRef": "acp-market-flow"
+}
+```
+
+13. `GET /market/acp/escrow/{escrowId}`
+
+14. `POST /market/x402/challenge`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -77,7 +113,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-9. `POST /market/x402/settle`
+15. `POST /market/x402/settle`
 ```json
 {
   "paymentId": "x402-uuid",
@@ -85,9 +121,9 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-10. `GET /market/x402/payments/{paymentId}`
+16. `GET /market/x402/payments/{paymentId}`
 
-11. `POST /market/search`
+17. `POST /market/search`
 ```json
 {
   "schemaVersion": "query.dsl.v1",
@@ -104,7 +140,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-12. `POST /market/quote`
+18. `POST /market/quote`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -113,7 +149,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-13. `POST /market/purchase`
+19. `POST /market/purchase`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -123,7 +159,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-14. `POST /market/savings-simulate`
+20. `POST /market/savings-simulate`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -143,7 +179,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-15. `POST /market/reviews/submit`
+21. `POST /market/reviews/submit`
 ```json
 {
   "listingId": "offer-food-v1",
@@ -154,13 +190,13 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-16. `GET /market/reviews?listingId=offer-food-v1`
+22. `GET /market/reviews?listingId=offer-food-v1`
 
-17. `GET /market/ratings/listing/{listingId}`
+23. `GET /market/ratings/listing/{listingId}`
 
-18. `GET /market/ratings/provider/{ownerId}`
+24. `GET /market/ratings/provider/{ownerId}`
 
-19. `POST /market/evaluations/submit`
+25. `POST /market/evaluations/submit`
 ```json
 {
   "listingId": "offer-food-v1",
@@ -173,23 +209,23 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-20. `GET /market/evaluations?listingId=offer-food-v1`
+26. `GET /market/evaluations?listingId=offer-food-v1`
 
-21. `GET /market/outcomes/listing/{listingId}`
+27. `GET /market/outcomes/listing/{listingId}`
 
-22. `GET /market/outcomes/provider/{ownerId}`
+28. `GET /market/outcomes/provider/{ownerId}`
 
-23. `GET /dashboard/schema`
+29. `GET /dashboard/schema`
 
-24. `GET /dashboard/summary`
+30. `GET /dashboard/summary`
 
-25. `GET /dashboard/agents`
+31. `GET /dashboard/agents`
 
-26. `GET /dashboard/offers`
+32. `GET /dashboard/offers`
 
-27. `GET /dashboard/trades?limit=100`
+33. `GET /dashboard/trades?limit=100`
 
-28. `GET /dashboard/savings`
+34. `GET /dashboard/savings`
 
 Dashboard v1 contract doc:
 - `docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
@@ -200,6 +236,8 @@ Market v1 schema docs:
 - `docs/schemas/review.v1.json`
 - `docs/schemas/event.v1.json`
 - `docs/schemas/query.dsl.v1.json`
+- `docs/schemas/acp.intent.v1.json`
+- `docs/schemas/acp.escrow.v1.json`
 - `docs/schemas/x402.challenge.v1.json`
 - `docs/schemas/x402.settlement.v1.json`
 

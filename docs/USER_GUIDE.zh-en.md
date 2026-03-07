@@ -81,6 +81,12 @@ npm run test:p0p2:local
 - `GET /balance/{agentId}`
 - `POST /market/offers/publish`
 - `GET /market/offers`
+- `POST /market/acp/intents/open`
+- `POST /market/acp/intents/{intentId}/accept`
+- `GET /market/acp/intents/{intentId}`
+- `POST /market/acp/escrow/{escrowId}/fund`
+- `POST /market/acp/escrow/{escrowId}/execute`
+- `GET /market/acp/escrow/{escrowId}`
 - `POST /market/x402/challenge`
 - `POST /market/x402/settle`
 - `GET /market/x402/payments/{paymentId}`
@@ -113,6 +119,12 @@ npm run test:p0p2:local
 - `GET /balance/{agentId}`
 - `POST /market/offers/publish`
 - `GET /market/offers`
+- `POST /market/acp/intents/open`
+- `POST /market/acp/intents/{intentId}/accept`
+- `GET /market/acp/intents/{intentId}`
+- `POST /market/acp/escrow/{escrowId}/fund`
+- `POST /market/acp/escrow/{escrowId}/execute`
+- `GET /market/acp/escrow/{escrowId}`
 - `POST /market/x402/challenge`
 - `POST /market/x402/settle`
 - `GET /market/x402/payments/{paymentId}`
