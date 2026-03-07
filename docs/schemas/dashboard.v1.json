@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/dashboard.v1.json",
+  "title": "Dashboard API v1",
+  "type": "object",
+  "properties": {
+    "schemaVersion": { "const": "dashboard.v1" },
+    "generatedAt": { "type": "integer" }
+  },
+  "required": ["schemaVersion"],
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "required": ["schemaVersion", "generatedAt", "kpis"],
+      "properties": {
+        "schemaVersion": { "const": "dashboard.v1" },
+        "generatedAt": { "type": "integer" },
+        "kpis": {
+          "type": "object",
+          "required": [
+            "ownerCount",
+            "agentCount",
+            "offerCount",
+            "tradeCount",
+            "billableSettlementCount",
+            "freeSettlementCount",
+            "settlementVolumeElo",
+            "rechargeVolumeElo",
+            "withdrawVolumeElo"
+          ]
+        }
+      }
+    },
+    "agents": {
+      "type": "object",
+      "required": ["schemaVersion", "generatedAt", "items"]
+    },
+    "offers": {
+      "type": "object",
+      "required": ["schemaVersion", "generatedAt", "items"]
+    },
+    "trades": {
+      "type": "object",
+      "required": ["schemaVersion", "generatedAt", "total", "limit", "aggregates", "items"]
+    },
+    "savings": {
+      "type": "object",
+      "required": ["schemaVersion", "generatedAt", "total", "aggregates", "items"]
+    }
+  }
+}

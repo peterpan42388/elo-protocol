@@ -5,6 +5,7 @@ export class ELOMarket {
     this.engine = engine;
     this.offers = new Map();
     this.trades = [];
+    this.savingsReports = [];
   }
 
   publishOffer(params) {
@@ -119,6 +120,7 @@ export class ELOMarket {
     this.trades.push({
       offerId,
       serviceId: offer.serviceId,
+      providerAgentId: offer.providerAgentId,
       consumerAgentId,
       requestId,
       amount: result.amount,
@@ -179,16 +181,21 @@ export class ELOMarket {
     const savingsAmount = this._round(baselineQuote.amount - totalWithMarket);
     const savingsRate = baselineQuote.amount > 0 ? this._round(savingsAmount / baselineQuote.amount) : 0;
 
-    return {
+    const report = {
       offerId,
       serviceId: offer.serviceId,
+      providerAgentId: offer.providerAgentId,
+      consumerAgentId,
       baselineAmount: baselineQuote.amount,
       purchaseAmount: purchaseQuote.amount,
       optimizedAmount: optimizedQuote.amount,
       totalWithMarket,
       savingsAmount,
       savingsRate,
+      ts: Date.now(),
     };
+    this.savingsReports.push(report);
+    return report;
   }
 
   _offer(offerId) {

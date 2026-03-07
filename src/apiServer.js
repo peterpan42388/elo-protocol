@@ -1,6 +1,14 @@
 import http from "node:http";
 import { SettlementEngine } from "./settlementEngine.js";
 import { ELOMarket } from "./eloMarket.js";
+import {
+  buildDashboardAgents,
+  buildDashboardOffers,
+  buildDashboardSavings,
+  buildDashboardSchemaDescriptor,
+  buildDashboardSummary,
+  buildDashboardTrades,
+} from "./dashboardContract.js";
 
 function json(res, status, payload) {
   res.writeHead(status, { "Content-Type": "application/json" });
@@ -18,61 +26,88 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
   const server = http.createServer(async (req, res) => {
     try {
       if (!req.url || !req.method) return json(res, 400, { error: "bad request" });
+      const requestUrl = new URL(req.url, "http://127.0.0.1");
+      const path = requestUrl.pathname;
 
-      if (req.method === "POST" && req.url === "/register-agent") {
+      if (req.method === "POST" && path === "/register-agent") {
         const body = await readJson(req);
         engine.registerAgent(body.agentId, body.ownerId);
         return json(res, 200, { ok: true });
       }
 
-      if (req.method === "POST" && req.url === "/recharge") {
+      if (req.method === "POST" && path === "/recharge") {
         const body = await readJson(req);
         engine.recharge(body.agentId, Number(body.amount), body.source ?? "api");
         return json(res, 200, { ok: true, balance: engine.balanceOf(body.agentId) });
       }
 
-      if (req.method === "POST" && req.url === "/quote") {
+      if (req.method === "POST" && path === "/quote") {
         const body = await readJson(req);
         const quote = engine.quote(body);
         return json(res, 200, quote);
       }
 
-      if (req.method === "POST" && req.url === "/settle") {
+      if (req.method === "POST" && path === "/settle") {
         const body = await readJson(req);
         const result = engine.settle(body);
         return json(res, 200, result);
       }
 
-      if (req.method === "POST" && req.url === "/market/offers/publish") {
+      if (req.method === "POST" && path === "/market/offers/publish") {
         const body = await readJson(req);
         const offer = market.publishOffer(body);
         return json(res, 200, offer);
       }
 
-      if (req.method === "GET" && req.url === "/market/offers") {
+      if (req.method === "GET" && path === "/market/offers") {
         return json(res, 200, { offers: market.listOffers() });
       }
 
-      if (req.method === "POST" && req.url === "/market/quote") {
+      if (req.method === "POST" && path === "/market/quote") {
         const body = await readJson(req);
         const quote = market.quotePurchase(body);
         return json(res, 200, quote);
       }
 
-      if (req.method === "POST" && req.url === "/market/purchase") {
+      if (req.method === "POST" && path === "/market/purchase") {
         const body = await readJson(req);
         const result = market.purchase(body);
         return json(res, 200, result);
       }
 
-      if (req.method === "POST" && req.url === "/market/savings-simulate") {
+      if (req.method === "POST" && path === "/market/savings-simulate") {
         const body = await readJson(req);
         const result = market.simulateOptimization(body);
         return json(res, 200, result);
       }
 
-      if (req.method === "GET" && req.url.startsWith("/balance/")) {
-        const agentId = decodeURIComponent(req.url.slice("/balance/".length));
+      if (req.method === "GET" && path === "/dashboard/summary") {
+        return json(res, 200, buildDashboardSummary(engine, market));
+      }
+
+      if (req.method === "GET" && path === "/dashboard/agents") {
+        return json(res, 200, buildDashboardAgents(engine));
+      }
+
+      if (req.method === "GET" && path === "/dashboard/offers") {
+        return json(res, 200, buildDashboardOffers(engine, market));
+      }
+
+      if (req.method === "GET" && path === "/dashboard/trades") {
+        const limit = Number(requestUrl.searchParams.get("limit") ?? "100");
+        return json(res, 200, buildDashboardTrades(engine, market, limit));
+      }
+
+      if (req.method === "GET" && path === "/dashboard/savings") {
+        return json(res, 200, buildDashboardSavings(market));
+      }
+
+      if (req.method === "GET" && path === "/dashboard/schema") {
+        return json(res, 200, buildDashboardSchemaDescriptor());
+      }
+
+      if (req.method === "GET" && path.startsWith("/balance/")) {
+        const agentId = decodeURIComponent(path.slice("/balance/".length));
         return json(res, 200, { agentId, balance: engine.balanceOf(agentId) });
       }
 
