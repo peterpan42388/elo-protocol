@@ -79,8 +79,8 @@ See [docs/API.md](docs/API.md).
 - [P3-A Architecture Freeze (ZH/EN)](docs/architecture/P3A_ARCHITECTURE_FREEZE.zh-en.md)
 
 ## CI
-- `CI`: node tests + solidity compile + forge contract tests
-- `Extreme Contract Tests`: scheduled + manual full `forge test -vvv`
+- `CI`: node tests + solidity compile + core forge contract tests (`SettlementEngine`)
+- `Extreme Contract Tests`: scheduled + manual full profile (fuzz + invariants)
 - `Security Policy Check`: secret leakage scan (gitleaks)
 
 ## Open Scope Policy

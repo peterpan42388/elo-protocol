@@ -20,4 +20,4 @@ jobs:
           version: stable
 
       - name: Run extreme contract test suite
-        run: forge test -vvv
+        run: FOUNDRY_PROFILE=extreme timeout 60m forge test -vvv

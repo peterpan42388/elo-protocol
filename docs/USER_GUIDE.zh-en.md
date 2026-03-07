@@ -134,6 +134,7 @@ npm run test:contracts
 ```bash
 npm run test:contracts:extreme
 ```
+说明：标准测试只覆盖核心结算合约路径，极限测试覆盖 fuzz + invariant。
 
 ### English
 Standard contract tests:
@@ -144,15 +145,16 @@ Extreme contract tests (verbose):
 ```bash
 npm run test:contracts:extreme
 ```
+Note: standard tests cover core settlement paths, while extreme tests cover fuzz + invariants.
 
 ## 6) CI / 持续集成
 
 ### 中文
-- `CI` 工作流：Node 测试 + Solidity 编译 + Foundry 合约测试。
+- `CI` 工作流：Node 测试 + Solidity 编译 + Foundry 核心合约测试（快速反馈）。
 - `Extreme Contract Tests`：可手动触发，也可定时触发。
 
 ### English
-- `CI` workflow: Node tests + Solidity compile + Foundry contract tests.
+- `CI` workflow: Node tests + Solidity compile + core Foundry contract tests (fast feedback).
 - `Extreme Contract Tests`: manual and scheduled runs.
 
 ## 7) Known Gaps / 当前缺口
