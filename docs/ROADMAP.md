@@ -21,7 +21,7 @@
 - P3-A architecture freeze package (done)
 - P3-B composite search baseline (done)
 - P3-C outcome evaluator baseline (done)
-- x402 adapter
+- P3-D x402 adapter baseline (done)
 - ACP-style negotiation and escrow
 - advanced evaluator plugin (third-party evaluator + anti-sybil weighting)
 - Human-facing dashboard integration layer (API scaffold done)

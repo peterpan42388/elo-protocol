@@ -1,6 +1,7 @@
 import http from "node:http";
 import { SettlementEngine } from "./settlementEngine.js";
 import { ELOMarket } from "./eloMarket.js";
+import { X402Adapter } from "./x402Adapter.js";
 import {
   buildDashboardAgents,
   buildDashboardOffers,
@@ -23,6 +24,7 @@ async function readJson(req) {
 }
 
 export function createApiServer(engine = new SettlementEngine(), market = new ELOMarket(engine)) {
+  const x402 = new X402Adapter(market);
   const server = http.createServer(async (req, res) => {
     try {
       if (!req.url || !req.method) return json(res, 400, { error: "bad request" });
@@ -61,6 +63,23 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
 
       if (req.method === "GET" && path === "/market/offers") {
         return json(res, 200, { offers: market.listOffers() });
+      }
+
+      if (req.method === "POST" && path === "/market/x402/challenge") {
+        const body = await readJson(req);
+        const challenge = x402.createChallenge(body);
+        return json(res, challenge.httpStatus, challenge.payload);
+      }
+
+      if (req.method === "POST" && path === "/market/x402/settle") {
+        const body = await readJson(req);
+        const result = x402.settlePayment(body);
+        return json(res, 200, result);
+      }
+
+      if (req.method === "GET" && path.startsWith("/market/x402/payments/")) {
+        const paymentId = decodeURIComponent(path.slice("/market/x402/payments/".length));
+        return json(res, 200, x402.getPayment(paymentId));
       }
 
       if (req.method === "POST" && path === "/market/search") {

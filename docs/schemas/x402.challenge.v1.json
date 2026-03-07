@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/x402.challenge.v1.json",
+  "title": "x402 Challenge Envelope v1",
+  "type": "object",
+  "required": ["schemaVersion", "code", "requiresPayment", "payment", "instructions"],
+  "properties": {
+    "schemaVersion": { "const": "x402.challenge.v1" },
+    "code": { "type": "string", "enum": ["x402_payment_required", "x402_not_required"] },
+    "requiresPayment": { "type": "boolean" },
+    "payment": {
+      "type": "object",
+      "required": [
+        "paymentId",
+        "offerId",
+        "serviceId",
+        "providerAgentId",
+        "consumerAgentId",
+        "units",
+        "usageRef",
+        "amountElo",
+        "billable",
+        "reason",
+        "currency",
+        "createdAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "paymentId": { "type": "string" },
+        "offerId": { "type": "string" },
+        "serviceId": { "type": "string" },
+        "providerAgentId": { "type": "string" },
+        "consumerAgentId": { "type": "string" },
+        "units": { "type": "integer", "minimum": 1 },
+        "usageRef": { "type": "string" },
+        "amountElo": { "type": "number", "minimum": 0 },
+        "billable": { "type": "boolean" },
+        "reason": { "type": "string" },
+        "currency": { "const": "ELO" },
+        "createdAt": { "type": "integer" },
+        "expiresAt": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "instructions": {
+      "type": "object",
+      "required": ["settlePath", "method"],
+      "properties": {
+        "settlePath": { "type": "string" },
+        "method": { "type": "string", "enum": ["POST"] }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

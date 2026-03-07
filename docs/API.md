@@ -67,7 +67,27 @@ Base URL: `http://127.0.0.1:8787`
 
 7. `GET /market/offers`
 
-8. `POST /market/search`
+8. `POST /market/x402/challenge`
+```json
+{
+  "offerId": "offer-food-v1",
+  "consumerAgentId": "agentConsumer",
+  "units": 1,
+  "usageRef": "agent-http-request"
+}
+```
+
+9. `POST /market/x402/settle`
+```json
+{
+  "paymentId": "x402-uuid",
+  "requestId": "market-req-001"
+}
+```
+
+10. `GET /market/x402/payments/{paymentId}`
+
+11. `POST /market/search`
 ```json
 {
   "schemaVersion": "query.dsl.v1",
@@ -84,7 +104,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-9. `POST /market/quote`
+12. `POST /market/quote`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -93,7 +113,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-10. `POST /market/purchase`
+13. `POST /market/purchase`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -103,7 +123,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-11. `POST /market/savings-simulate`
+14. `POST /market/savings-simulate`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -123,7 +143,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-12. `POST /market/reviews/submit`
+15. `POST /market/reviews/submit`
 ```json
 {
   "listingId": "offer-food-v1",
@@ -134,13 +154,13 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-13. `GET /market/reviews?listingId=offer-food-v1`
+16. `GET /market/reviews?listingId=offer-food-v1`
 
-14. `GET /market/ratings/listing/{listingId}`
+17. `GET /market/ratings/listing/{listingId}`
 
-15. `GET /market/ratings/provider/{ownerId}`
+18. `GET /market/ratings/provider/{ownerId}`
 
-16. `POST /market/evaluations/submit`
+19. `POST /market/evaluations/submit`
 ```json
 {
   "listingId": "offer-food-v1",
@@ -153,23 +173,23 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-17. `GET /market/evaluations?listingId=offer-food-v1`
+20. `GET /market/evaluations?listingId=offer-food-v1`
 
-18. `GET /market/outcomes/listing/{listingId}`
+21. `GET /market/outcomes/listing/{listingId}`
 
-19. `GET /market/outcomes/provider/{ownerId}`
+22. `GET /market/outcomes/provider/{ownerId}`
 
-20. `GET /dashboard/schema`
+23. `GET /dashboard/schema`
 
-21. `GET /dashboard/summary`
+24. `GET /dashboard/summary`
 
-22. `GET /dashboard/agents`
+25. `GET /dashboard/agents`
 
-23. `GET /dashboard/offers`
+26. `GET /dashboard/offers`
 
-24. `GET /dashboard/trades?limit=100`
+27. `GET /dashboard/trades?limit=100`
 
-25. `GET /dashboard/savings`
+28. `GET /dashboard/savings`
 
 Dashboard v1 contract doc:
 - `docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
@@ -180,6 +200,8 @@ Market v1 schema docs:
 - `docs/schemas/review.v1.json`
 - `docs/schemas/event.v1.json`
 - `docs/schemas/query.dsl.v1.json`
+- `docs/schemas/x402.challenge.v1.json`
+- `docs/schemas/x402.settlement.v1.json`
 
 ## Rule Enforcement
 - Same owner: amount = 0, billable = false
