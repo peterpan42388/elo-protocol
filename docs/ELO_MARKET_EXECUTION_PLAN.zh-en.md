@@ -42,6 +42,16 @@ npm test
 2. 交易后评估标准（节省率、命中率、延迟）
 3. P3 Web Dashboard 的最小字段集（你回来后可确认）
 
+### 组件蓝图（你给出的版本，补充当前状态）
+| 组件 | 描述 | 技术栈 | 如何支持节省 token | 当前状态 |
+| --- | --- | --- | --- | --- |
+| ELO Core | 结算逻辑：免费内部、付费跨界；可扩展 x402 | Solidity, Foundry | 内部免费调用避免重复结算 | 已完成核心规则与测试；x402 待接入 |
+| Discovery Market | 产品目录 + 匹配：代理搜索/购买 API/skill | GraphQL, Semantic Search | 复用 skill 减少 LLM 调用 | 已有最小目录（offer publish/list）；GraphQL/语义检索待接入 |
+| Transaction Engine | 即时 ELO 交易；竞标机制 | Smart Contracts, Oracle | 自动优化定价，节省计算 | 已有即时结算与报价；竞标/链上 oracle 待接入 |
+| Human Web App | Dashboard：监控、充值、模拟测试 | React, Node.js | 人类分析 token 效率报告 | 已冻结 Dashboard API v1；React 页面待实现 |
+| Governance DAO | 投票升级；声誉系统 | Snapshot/Aragon | 惩罚低效代理，优化生态 | 规划中 |
+| Risk & Analytics | 审计日志、性能热图 | Chainlink Functions | 实时追踪节省，警报浪费 | 已有基础日志/风控插件；热图与链上分析待接入 |
+
 ## English
 
 ### Context
@@ -83,3 +93,13 @@ npm test
 1. Unified product schema for skill/API/data listings
 2. Post-trade evaluator KPIs (saving rate, accuracy, latency)
 3. Minimum field set for P3 web dashboard (to confirm later)
+
+### Component blueprint (your version, with current status)
+| Component | Description | Tech stack | How it saves tokens | Current status |
+| --- | --- | --- | --- | --- |
+| ELO Core | Settlement logic: same-owner free, cross-owner paid; x402-extensible | Solidity, Foundry | Avoids duplicate internal settlement calls | Core invariants and tests done; x402 integration pending |
+| Discovery Market | Product catalog + matching for API/skill purchase | GraphQL, Semantic Search | Skill reuse reduces repeated LLM calls | Minimal offer catalog exists; GraphQL/semantic search pending |
+| Transaction Engine | Instant ELO trades; auction/bidding mechanism | Smart Contracts, Oracle | Better price optimization lowers compute spend | Instant quote/settlement done; bidding/oracle integration pending |
+| Human Web App | Dashboard for monitoring, top-up, simulation | React, Node.js | Human-visible token efficiency analysis | Dashboard API v1 frozen; React UI pending |
+| Governance DAO | Upgrade voting and reputation governance | Snapshot/Aragon | Penalizes low-efficiency behavior | Planned |
+| Risk & Analytics | Audit logs and performance heatmaps | Chainlink Functions | Tracks savings and alerts waste in real time | Base logging/risk hooks done; heatmap/on-chain analytics pending |
