@@ -18,6 +18,7 @@
 - P0/P2 local scenario tests for market savings (done)
 
 ## P3
+- P3-A architecture freeze package (done)
 - x402 adapter
 - ACP-style negotiation and escrow
 - reputation/outcome evaluator plugin

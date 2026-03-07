@@ -20,7 +20,8 @@
     "test:p0p2": "node --test tests/eloMarket.p0-p2.test.js",
     "test:p0p2:local": "bash scripts/run-p0-p2-local.sh",
     "demo:market": "node src/eloMarketDemo.js",
-    "test:dashboard-contract": "node --test tests/dashboard.api-contract.test.js"
+    "test:dashboard-contract": "node --test tests/dashboard.api-contract.test.js",
+    "verify:p3a-freeze": "node scripts/verify-p3a-freeze.mjs"
   },
   "devDependencies": {
     "solc": "^0.8.30"

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/event.v1.json",
+  "title": "ELO Market Event Envelope v1",
+  "type": "object",
+  "required": ["schemaVersion", "eventId", "eventType", "occurredAt", "payload"],
+  "properties": {
+    "schemaVersion": { "const": "event.v1" },
+    "eventId": { "type": "string", "minLength": 1 },
+    "eventType": {
+      "type": "string",
+      "enum": [
+        "SearchRequested",
+        "QuoteCreated",
+        "OrderCreated",
+        "ExecutionStarted",
+        "ExecutionSucceeded",
+        "ExecutionFailed",
+        "SettlementSucceeded",
+        "SettlementFailed",
+        "ReviewSubmitted",
+        "RatingUpdated",
+        "RankUpdated"
+      ]
+    },
+    "traceId": { "type": "string" },
+    "occurredAt": { "type": "integer" },
+    "payload": { "type": "object" }
+  }
+}

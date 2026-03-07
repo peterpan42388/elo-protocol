@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/listing.v1.json",
+  "title": "ELO Market Listing v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "listingId",
+    "kind",
+    "title",
+    "ownerId",
+    "operatorEndpoint",
+    "pricingMode",
+    "priceElo",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "listing.v1" },
+    "listingId": { "type": "string", "minLength": 1 },
+    "kind": { "type": "string", "enum": ["api", "skill", "workflow"] },
+    "title": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "category": { "type": "string" },
+    "ownerId": { "type": "string", "minLength": 1 },
+    "operatorEndpoint": { "type": "string", "minLength": 1 },
+    "inputSchema": { "type": "object" },
+    "outputSchema": { "type": "object" },
+    "pricingMode": { "type": "string", "enum": ["free", "per_call", "subscription"] },
+    "priceElo": { "type": "number", "minimum": 0 },
+    "tokenSavingEstimate": { "type": "number", "minimum": 0, "maximum": 1 },
+    "latencyP50Ms": { "type": "number", "minimum": 0 },
+    "uptimeSla": { "type": "number", "minimum": 0, "maximum": 1 },
+    "license": { "type": "string" },
+    "sourceUrl": { "type": "string" },
+    "status": { "type": "string", "enum": ["active", "deprecated", "suspended"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "pricingMode": { "const": "free" } } },
+      "then": { "properties": { "priceElo": { "const": 0 } } }
+    }
+  ]
+}

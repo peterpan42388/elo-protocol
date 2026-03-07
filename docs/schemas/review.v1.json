@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/review.v1.json",
+  "title": "ELO Market Review v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "reviewId",
+    "listingId",
+    "providerOwnerId",
+    "reviewerAgentId",
+    "rating",
+    "usageReceiptRef",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "review.v1" },
+    "reviewId": { "type": "string", "minLength": 1 },
+    "listingId": { "type": "string", "minLength": 1 },
+    "providerOwnerId": { "type": "string", "minLength": 1 },
+    "reviewerAgentId": { "type": "string", "minLength": 1 },
+    "rating": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "comment": { "type": "string" },
+    "tokenSavingObserved": { "type": "number", "minimum": 0, "maximum": 1 },
+    "latencyScore": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "reliabilityScore": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "usageReceiptRef": { "type": "string", "minLength": 1 },
+    "createdAt": { "type": "integer" }
+  }
+}
