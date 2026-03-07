@@ -48,17 +48,43 @@ Base URL: `http://127.0.0.1:8787`
 ```json
 {
   "offerId": "offer-food-v1",
+  "kind": "workflow",
+  "title": "Food price optimizer",
+  "summary": "Optimize food search and routing decisions",
+  "tags": ["food", "optimizer"],
+  "category": "commerce",
   "providerAgentId": "agentProvider",
   "serviceId": "skill/food-price-optimizer",
   "computeUnits": 120,
   "energyKwh": 0.1,
-  "marketMultiplier": 1.0
+  "marketMultiplier": 1.0,
+  "pricingMode": "free",
+  "priceElo": 0,
+  "tokenSavingEstimate": 0.35,
+  "uptimeSla": 0.99
 }
 ```
 
 7. `GET /market/offers`
 
-8. `POST /market/quote`
+8. `POST /market/search`
+```json
+{
+  "schemaVersion": "query.dsl.v1",
+  "query": "seo query optimizer",
+  "filters": {
+    "kind": ["workflow"],
+    "categories": ["marketing"],
+    "pricingMode": ["free"],
+    "priceMaxElo": 0,
+    "requireHealthy": true
+  },
+  "sort": { "mode": "hybrid", "direction": "desc" },
+  "page": { "offset": 0, "limit": 10 }
+}
+```
+
+9. `POST /market/quote`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -67,7 +93,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-9. `POST /market/purchase`
+10. `POST /market/purchase`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -77,7 +103,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-10. `POST /market/savings-simulate`
+11. `POST /market/savings-simulate`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -97,21 +123,44 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-11. `GET /dashboard/schema`
+12. `POST /market/reviews/submit`
+```json
+{
+  "listingId": "offer-food-v1",
+  "reviewerAgentId": "agentConsumer",
+  "rating": 5,
+  "usageReceiptRef": "market-req-001",
+  "tokenSavingObserved": 0.32
+}
+```
 
-12. `GET /dashboard/summary`
+13. `GET /market/reviews?listingId=offer-food-v1`
 
-13. `GET /dashboard/agents`
+14. `GET /market/ratings/listing/{listingId}`
 
-14. `GET /dashboard/offers`
+15. `GET /market/ratings/provider/{ownerId}`
 
-15. `GET /dashboard/trades?limit=100`
+16. `GET /dashboard/schema`
 
-16. `GET /dashboard/savings`
+17. `GET /dashboard/summary`
+
+18. `GET /dashboard/agents`
+
+19. `GET /dashboard/offers`
+
+20. `GET /dashboard/trades?limit=100`
+
+21. `GET /dashboard/savings`
 
 Dashboard v1 contract doc:
 - `docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
 - `docs/schemas/dashboard.v1.json`
+
+Market v1 schema docs:
+- `docs/schemas/listing.v1.json`
+- `docs/schemas/review.v1.json`
+- `docs/schemas/event.v1.json`
+- `docs/schemas/query.dsl.v1.json`
 
 ## Rule Enforcement
 - Same owner: amount = 0, billable = false

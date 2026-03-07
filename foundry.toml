@@ -10,3 +10,10 @@ ffi = false
 
 [fuzz]
 runs = 10000
+
+[profile.extreme.fuzz]
+runs = 20000
+
+[profile.extreme.invariant]
+runs = 256
+depth = 200

@@ -39,4 +39,4 @@ jobs:
         run: npm run compile:solidity
 
       - name: Run contract tests
-        run: npm run test:contracts
+        run: timeout 20m npm run test:contracts

@@ -63,6 +63,12 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
         return json(res, 200, { offers: market.listOffers() });
       }
 
+      if (req.method === "POST" && path === "/market/search") {
+        const body = await readJson(req);
+        const result = market.searchListings(body);
+        return json(res, 200, result);
+      }
+
       if (req.method === "POST" && path === "/market/quote") {
         const body = await readJson(req);
         const quote = market.quotePurchase(body);
@@ -79,6 +85,28 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
         const body = await readJson(req);
         const result = market.simulateOptimization(body);
         return json(res, 200, result);
+      }
+
+      if (req.method === "POST" && path === "/market/reviews/submit") {
+        const body = await readJson(req);
+        const result = market.submitReview(body);
+        return json(res, 200, result);
+      }
+
+      if (req.method === "GET" && path === "/market/reviews") {
+        const listingId = requestUrl.searchParams.get("listingId") ?? undefined;
+        const providerOwnerId = requestUrl.searchParams.get("providerOwnerId") ?? undefined;
+        return json(res, 200, { reviews: market.listReviews({ listingId, providerOwnerId }) });
+      }
+
+      if (req.method === "GET" && path.startsWith("/market/ratings/listing/")) {
+        const listingId = decodeURIComponent(path.slice("/market/ratings/listing/".length));
+        return json(res, 200, { listingId, ...market.getListingRating(listingId) });
+      }
+
+      if (req.method === "GET" && path.startsWith("/market/ratings/provider/")) {
+        const providerOwnerId = decodeURIComponent(path.slice("/market/ratings/provider/".length));
+        return json(res, 200, { providerOwnerId, ...market.getProviderRating(providerOwnerId) });
       }
 
       if (req.method === "GET" && path === "/dashboard/summary") {

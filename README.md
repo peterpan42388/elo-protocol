@@ -33,6 +33,8 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] Virtual wallet bootstrap + local test funding script
 - [x] P0/P2 market scenario tests (token-saving simulation)
 - [x] P3 market API scaffold (publish/quote/purchase/savings simulation)
+- [x] P3-A architecture freeze package (ADR + v1 schemas)
+- [x] P3-B search/review baseline (`/market/search`, usage-linked reviews)
 - [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start
@@ -77,8 +79,8 @@ See [docs/API.md](docs/API.md).
 - [P3-A Architecture Freeze (ZH/EN)](docs/architecture/P3A_ARCHITECTURE_FREEZE.zh-en.md)
 
 ## CI
-- `CI`: node tests + solidity compile + forge contract tests
-- `Extreme Contract Tests`: scheduled + manual full `forge test -vvv`
+- `CI`: node tests + solidity compile + core forge contract tests (`SettlementEngine`)
+- `Extreme Contract Tests`: scheduled + manual full profile (fuzz + invariants)
 - `Security Policy Check`: secret leakage scan (gitleaks)
 
 ## Open Scope Policy
