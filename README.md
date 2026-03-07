@@ -33,6 +33,8 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] Virtual wallet bootstrap + local test funding script
 - [x] P0/P2 market scenario tests (token-saving simulation)
 - [x] P3 market API scaffold (publish/quote/purchase/savings simulation)
+- [x] P3-A architecture freeze package (ADR + v1 schemas)
+- [x] P3-B search/review baseline (`/market/search`, usage-linked reviews)
 - [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start

@@ -35,6 +35,10 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - `docs/schemas/review.v1.json`
    - `docs/schemas/event.v1.json`
    - `docs/schemas/query.dsl.v1.json`
+7. P3-B 检索与评价基础：
+   - `POST /market/search`（query.dsl.v1）
+   - 复合过滤 + 混合排序（相关度/评级/节省率/价格）
+   - `POST /market/reviews/submit`（要求 usageReceiptRef）
 
 ### 运行方式
 ```bash
@@ -94,6 +98,10 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - `docs/schemas/review.v1.json`
    - `docs/schemas/event.v1.json`
    - `docs/schemas/query.dsl.v1.json`
+7. P3-B search/review baseline:
+   - `POST /market/search` (query.dsl.v1)
+   - composite filtering + hybrid ranking (relevance/rating/saving/price)
+   - `POST /market/reviews/submit` with required `usageReceiptRef`
 
 ### How to run
 ```bash

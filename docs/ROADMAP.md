@@ -19,6 +19,7 @@
 
 ## P3
 - P3-A architecture freeze package (done)
+- P3-B composite search baseline (in progress)
 - x402 adapter
 - ACP-style negotiation and escrow
 - reputation/outcome evaluator plugin

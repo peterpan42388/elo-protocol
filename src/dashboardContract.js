@@ -1,4 +1,14 @@
 export const DASHBOARD_SCHEMA_VERSION = "dashboard.v1";
+const DASHBOARD_OFFER_FIELDS_V1 = [
+  "offerId",
+  "providerAgentId",
+  "serviceId",
+  "computeUnits",
+  "energyKwh",
+  "marketMultiplier",
+  "createdAt",
+  "metadata",
+];
 
 function round(v) {
   return Math.round(v * 1_000_000) / 1_000_000;
@@ -122,10 +132,14 @@ export function buildDashboardAgents(engine) {
 
 export function buildDashboardOffers(engine, market) {
   const generatedAt = nowTs();
-  const items = market.listOffers().map((offer) => ({
-    ...offer,
-    providerOwnerId: engine.ownerOf(offer.providerAgentId),
-  }));
+  const items = market.listOffers().map((offer) => {
+    const projected = {};
+    for (const key of DASHBOARD_OFFER_FIELDS_V1) projected[key] = offer[key];
+    return {
+      ...projected,
+      providerOwnerId: engine.ownerOf(offer.providerAgentId),
+    };
+  });
   return {
     schemaVersion: DASHBOARD_SCHEMA_VERSION,
     generatedAt,
