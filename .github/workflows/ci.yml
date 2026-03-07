@@ -32,6 +32,9 @@ jobs:
       - name: Repo policy check
         run: npm run policy:check
 
+      - name: Verify audit-prep artifacts
+        run: npm run verify:p4b-audit-prep
+
       - name: Run unit tests
         run: npm test
 

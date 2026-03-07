@@ -61,6 +61,11 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - 请求体大小上限（413）
    - POST JSON content-type 强校验（415）
    - 关键 ID/数值输入校验
+13. P4-B 审计准备基线：
+   - 威胁模型（Threat Model）
+   - 风险矩阵（Risk Matrix）
+   - 安全审查检查清单（Checklist）
+   - 安全回归策略与门禁（Regression Gates）
 
 ### 运行方式
 ```bash
@@ -146,6 +151,11 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - request body size guard (`413`)
    - POST JSON content-type enforcement (`415`)
    - strict validation for critical IDs and numeric fields
+13. P4-B audit-prep baseline:
+   - threat model
+   - risk matrix
+   - security review checklist
+   - security regression strategy and gates
 
 ### How to run
 ```bash

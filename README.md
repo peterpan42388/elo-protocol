@@ -40,6 +40,7 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] P3-E ACP negotiation + escrow baseline (`intent -> accept -> fund -> execute`)
 - [x] P3-F dashboard analytics extension (`/dashboard/market-efficiency`, `/dashboard/outcomes`)
 - [x] P4-A security hardening baseline (rate limit, body size guard, input validation)
+- [x] P4-B audit prep baseline (threat model, risk matrix, checklist, regression gates)
 - [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start
@@ -57,6 +58,7 @@ npm run test:p0p2:local
 npm run demo:market
 npm run test:dashboard-contract
 npm run verify:p3a-freeze
+npm run verify:p4b-audit-prep
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -82,6 +84,11 @@ See [docs/API.md](docs/API.md).
 - [ELO Market Execution Plan (ZH/EN)](docs/ELO_MARKET_EXECUTION_PLAN.zh-en.md)
 - [Dashboard API Contract v1 (ZH/EN)](docs/DASHBOARD_API_CONTRACT.v1.zh-en.md)
 - [P3-A Architecture Freeze (ZH/EN)](docs/architecture/P3A_ARCHITECTURE_FREEZE.zh-en.md)
+- [P4-B Audit Prep (ZH/EN)](docs/security/P4B_AUDIT_PREP.zh-en.md)
+- [Threat Model (ZH/EN)](docs/security/THREAT_MODEL.zh-en.md)
+- [Risk Matrix (ZH/EN)](docs/security/RISK_MATRIX.zh-en.md)
+- [Security Review Checklist (ZH/EN)](docs/security/SECURITY_REVIEW_CHECKLIST.zh-en.md)
+- [Regression Strategy (ZH/EN)](docs/security/REGRESSION_STRATEGY.zh-en.md)
 
 ## CI
 - `CI`: node tests + solidity compile + core forge contract tests (`SettlementEngine`)

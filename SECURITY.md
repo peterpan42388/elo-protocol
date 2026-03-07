@@ -26,3 +26,10 @@ Use GitHub Security Advisories (private reporting) for this repository.
 
 These controls are intended as baseline protections for prototype and staging environments.
 Production deployments should layer additional controls (WAF, reverse-proxy rate limit, authn/authz, structured audit logging, and external security review).
+
+## Audit Prep Assets (P4-B)
+- `docs/security/P4B_AUDIT_PREP.zh-en.md`
+- `docs/security/THREAT_MODEL.zh-en.md`
+- `docs/security/RISK_MATRIX.zh-en.md`
+- `docs/security/SECURITY_REVIEW_CHECKLIST.zh-en.md`
+- `docs/security/REGRESSION_STRATEGY.zh-en.md`
