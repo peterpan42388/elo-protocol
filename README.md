@@ -39,6 +39,7 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] P3-D x402 adapter baseline (`/market/x402/challenge` -> `/market/x402/settle`)
 - [x] P3-E ACP negotiation + escrow baseline (`intent -> accept -> fund -> execute`)
 - [x] P3-F dashboard analytics extension (`/dashboard/market-efficiency`, `/dashboard/outcomes`)
+- [x] P4-A security hardening baseline (rate limit, body size guard, input validation)
 - [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start

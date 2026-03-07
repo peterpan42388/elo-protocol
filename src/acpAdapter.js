@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { assertBoundedText, assertFiniteNumber, assertToken } from "./inputGuards.js";
 
 export class ACPAdapter {
   constructor(market, engine = market?.engine, options = {}) {
@@ -11,15 +12,11 @@ export class ACPAdapter {
   }
 
   openIntent(params) {
-    const offerId = String(params?.offerId ?? "");
-    const buyerAgentId = String(params?.buyerAgentId ?? "");
+    const offerId = assertToken("offerId", params?.offerId, 128);
+    const buyerAgentId = assertToken("buyerAgentId", params?.buyerAgentId, 128);
     const units = this._units(params?.units);
     const maxAmountElo = params?.maxAmountElo;
-    const note = String(params?.note ?? "");
-
-    if (!offerId || !buyerAgentId) {
-      throw new Error("offerId and buyerAgentId are required");
-    }
+    const note = assertBoundedText("note", String(params?.note ?? ""), 1000);
     this.engine.ownerOf(buyerAgentId);
 
     const quote = this.market.quotePurchase({
@@ -28,7 +25,11 @@ export class ACPAdapter {
       units,
     });
 
-    if (Number.isFinite(maxAmountElo) && quote.billable && quote.amount > Number(maxAmountElo)) {
+    const safeMaxAmount =
+      maxAmountElo === undefined || maxAmountElo === null
+        ? undefined
+        : assertFiniteNumber("maxAmountElo", maxAmountElo, { min: 0 });
+    if (Number.isFinite(safeMaxAmount) && quote.billable && quote.amount > Number(safeMaxAmount)) {
       throw new Error("quote amount exceeds maxAmountElo");
     }
 
@@ -58,7 +59,7 @@ export class ACPAdapter {
       throw new Error("intent is not in proposed status");
     }
 
-    const providerAgentId = String(params?.providerAgentId ?? intent.providerAgentId);
+    const providerAgentId = assertToken("providerAgentId", params?.providerAgentId ?? intent.providerAgentId, 128);
     if (providerAgentId !== intent.providerAgentId) {
       throw new Error("providerAgentId does not match listing provider");
     }
@@ -109,7 +110,7 @@ export class ACPAdapter {
       throw new Error("escrow expired");
     }
 
-    const buyerAgentId = String(params?.buyerAgentId ?? escrow.buyerAgentId);
+    const buyerAgentId = assertToken("buyerAgentId", params?.buyerAgentId ?? escrow.buyerAgentId, 128);
     if (buyerAgentId !== escrow.buyerAgentId) {
       throw new Error("buyerAgentId does not match escrow buyer");
     }
@@ -131,12 +132,8 @@ export class ACPAdapter {
   executeEscrow(escrowId, params = {}) {
     const escrow = this._escrow(escrowId);
     const intent = this._intent(escrow.intentId);
-    const requestId = String(params?.requestId ?? "");
-    const usageRef = String(params?.usageRef ?? "acp_escrow");
-
-    if (!requestId) {
-      throw new Error("requestId is required");
-    }
+    const requestId = assertToken("requestId", params?.requestId, 128);
+    const usageRef = assertBoundedText("usageRef", String(params?.usageRef ?? "acp_escrow"), 256) || "acp_escrow";
     if (escrow.state === "executed") {
       throw new Error("escrow already executed");
     }
@@ -198,25 +195,24 @@ export class ACPAdapter {
   }
 
   _intent(intentId) {
-    const id = String(intentId ?? "");
-    if (!id) throw new Error("intentId is required");
+    const id = assertToken("intentId", intentId, 256);
     const intent = this.intents.get(id);
     if (!intent) throw new Error("unknown intentId");
     return intent;
   }
 
   _escrow(escrowId) {
-    const id = String(escrowId ?? "");
-    if (!id) throw new Error("escrowId is required");
+    const id = assertToken("escrowId", escrowId, 256);
     const escrow = this.escrows.get(id);
     if (!escrow) throw new Error("unknown escrowId");
     return escrow;
   }
 
   _offer(offerId) {
-    const offer = this.market.listOffers().find((x) => x.offerId === offerId);
+    const safeOfferId = assertToken("offerId", offerId, 128);
+    const offer = this.market.listOffers().find((x) => x.offerId === safeOfferId);
     if (!offer) {
-      throw new Error(`unknown offerId: ${offerId}`);
+      throw new Error(`unknown offerId: ${safeOfferId}`);
     }
     return offer;
   }

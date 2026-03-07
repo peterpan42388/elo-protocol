@@ -210,3 +210,23 @@ Note: standard tests cover core settlement paths, while extreme tests cover fuzz
 - Local broadcast verification: `npm run deploy:local`
 - Base Sepolia deployment: `npm run deploy:base-sepolia`
 - Full guide: `docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md`
+
+## 9) Security Baseline / 安全基线
+
+### 中文
+- POST 接口必须使用 `application/json`，否则返回 `415`。
+- 请求体超过阈值返回 `413`。
+- 达到限流阈值返回 `429`。
+- 可通过环境变量调整：
+  - `API_RATE_LIMIT_MAX`（默认 `2000`）
+  - `API_RATE_LIMIT_WINDOW_MS`（默认 `60000`）
+  - `API_BODY_MAX_BYTES`（默认 `65536`）
+
+### English
+- POST endpoints require `application/json` (`415` otherwise).
+- Oversized request bodies return `413`.
+- Rate-limit overflow returns `429`.
+- Runtime env configs:
+  - `API_RATE_LIMIT_MAX` (default `2000`)
+  - `API_RATE_LIMIT_WINDOW_MS` (default `60000`)
+  - `API_BODY_MAX_BYTES` (default `65536`)
