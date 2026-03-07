@@ -1,13 +1,17 @@
 import { SettlementEngine } from "./settlementEngine.js";
+import { DefaultOutcomeEvaluator } from "./outcomeEvaluator.js";
 
 export class ELOMarket {
-  constructor(engine = new SettlementEngine()) {
+  constructor(engine = new SettlementEngine(), outcomeEvaluator = new DefaultOutcomeEvaluator()) {
     this.engine = engine;
+    this.outcomeEvaluator = outcomeEvaluator;
     this.offers = new Map();
     this.trades = [];
     this.savingsReports = [];
     this.reviews = [];
     this.reviewReceiptIndex = new Set();
+    this.evaluations = [];
+    this.evaluationReceiptIndex = new Set();
   }
 
   publishOffer(params) {
@@ -129,8 +133,8 @@ export class ELOMarket {
 
     const mode = sort.mode ?? "hybrid";
     const direction = sort.direction ?? (mode === "price" ? "asc" : "desc");
-    if (!["hybrid", "price", "rating", "saving"].includes(mode)) {
-      throw new Error("sort.mode must be hybrid/price/rating/saving");
+    if (!["hybrid", "price", "rating", "saving", "outcome"].includes(mode)) {
+      throw new Error("sort.mode must be hybrid/price/rating/saving/outcome");
     }
     if (!["asc", "desc"].includes(direction)) {
       throw new Error("sort.direction must be asc/desc");
@@ -150,14 +154,16 @@ export class ELOMarket {
       const ratingScore = this._round((listingRating + providerRating) / 10);
       const savingScore = offer.tokenSavingEstimate;
       const reliabilityScore = offer.uptimeSla;
+      const outcomeScore = this.getListingOutcome(offer.offerId).avgOutcomeScore;
       const pricePenalty = this._round(offer.priceElo / maxPrice);
 
       const hybridScore = this._round(
-        0.45 * semanticScore +
-        0.25 * keywordScore +
+        0.4 * semanticScore +
+        0.2 * keywordScore +
         0.15 * ratingScore +
         0.1 * savingScore +
-        0.1 * reliabilityScore -
+        0.05 * reliabilityScore +
+        0.1 * outcomeScore -
         0.05 * pricePenalty
       );
 
@@ -169,6 +175,7 @@ export class ELOMarket {
           ratingScore,
           savingScore,
           reliabilityScore,
+          outcomeScore,
           pricePenalty,
           hybridScore,
         },
@@ -179,6 +186,7 @@ export class ELOMarket {
       if (mode === "price") return item.offer.priceElo;
       if (mode === "rating") return this._round(item.score.ratingScore * 5);
       if (mode === "saving") return item.score.savingScore;
+      if (mode === "outcome") return item.score.outcomeScore;
       return item.score.hybridScore;
     };
 
@@ -424,10 +432,111 @@ export class ELOMarket {
     return this._ratingSummary(rows);
   }
 
+  evaluateTrade(params) {
+    const {
+      evaluationId,
+      listingId,
+      evaluatorAgentId,
+      usageReceiptRef,
+      baselineAmount,
+      actualAmount,
+      tokenSavingObserved,
+      latencyScore,
+      reliabilityScore,
+      notes = "",
+    } = params;
+
+    const offer = this._offer(listingId);
+    this.engine.ownerOf(evaluatorAgentId);
+
+    if (!usageReceiptRef || typeof usageReceiptRef !== "string") {
+      throw new Error("usageReceiptRef is required");
+    }
+
+    const trade = this.trades.find((x) => x.requestId === usageReceiptRef && x.offerId === listingId);
+    if (!trade) {
+      throw new Error("usageReceiptRef is invalid or not linked to listing");
+    }
+    if (trade.consumerAgentId !== evaluatorAgentId) {
+      throw new Error("evaluatorAgentId must match usage consumer");
+    }
+
+    const evaluationKey = `${listingId}:${usageReceiptRef}:${evaluatorAgentId}`;
+    if (this.evaluationReceiptIndex.has(evaluationKey)) {
+      throw new Error("duplicate evaluation for usage receipt");
+    }
+
+    const verdict = this.outcomeEvaluator.evaluate({
+      baselineAmount,
+      actualAmount: actualAmount ?? trade.amount,
+      tokenSavingObserved,
+      latencyScore,
+      reliabilityScore,
+    });
+
+    const evaluation = {
+      schemaVersion: "event.v1",
+      evaluationId: evaluationId ?? `eval-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
+      eventType: "RatingUpdated",
+      listingId,
+      providerOwnerId: offer.ownerId,
+      evaluatorAgentId,
+      usageReceiptRef,
+      notes,
+      ...verdict,
+      createdAt: Date.now(),
+    };
+
+    this.evaluations.push(evaluation);
+    this.evaluationReceiptIndex.add(evaluationKey);
+    return evaluation;
+  }
+
+  listEvaluations(filters = {}) {
+    return this.evaluations
+      .filter((x) => {
+        if (filters.listingId && x.listingId !== filters.listingId) return false;
+        if (filters.providerOwnerId && x.providerOwnerId !== filters.providerOwnerId) return false;
+        return true;
+      })
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  getListingOutcome(listingId) {
+    const rows = this.evaluations.filter((x) => x.listingId === listingId);
+    return this._outcomeSummary(rows);
+  }
+
+  getProviderOutcome(providerOwnerId) {
+    const rows = this.evaluations.filter((x) => x.providerOwnerId === providerOwnerId);
+    return this._outcomeSummary(rows);
+  }
+
   _ratingSummary(rows) {
     if (!rows.length) return { count: 0, avg: 0 };
     const total = rows.reduce((acc, x) => acc + x.rating, 0);
     return { count: rows.length, avg: this._round(total / rows.length) };
+  }
+
+  _outcomeSummary(rows) {
+    if (!rows.length) {
+      return {
+        count: 0,
+        avgOutcomeScore: 0,
+        avgOutcomeBonus: 0,
+        avgSavingRate: 0,
+      };
+    }
+    const count = rows.length;
+    const totalOutcomeScore = rows.reduce((acc, x) => acc + x.outcomeScore, 0);
+    const totalOutcomeBonus = rows.reduce((acc, x) => acc + x.outcomeBonus, 0);
+    const totalSavingRate = rows.reduce((acc, x) => acc + x.savingRate, 0);
+    return {
+      count,
+      avgOutcomeScore: this._round(totalOutcomeScore / count),
+      avgOutcomeBonus: this._round(totalOutcomeBonus / count),
+      avgSavingRate: this._round(totalSavingRate / count),
+    };
   }
 
   _offer(offerId) {

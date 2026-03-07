@@ -140,17 +140,36 @@ Base URL: `http://127.0.0.1:8787`
 
 15. `GET /market/ratings/provider/{ownerId}`
 
-16. `GET /dashboard/schema`
+16. `POST /market/evaluations/submit`
+```json
+{
+  "listingId": "offer-food-v1",
+  "evaluatorAgentId": "agentConsumer",
+  "usageReceiptRef": "market-req-001",
+  "baselineAmount": 10,
+  "actualAmount": 3,
+  "latencyScore": 4,
+  "reliabilityScore": 5
+}
+```
 
-17. `GET /dashboard/summary`
+17. `GET /market/evaluations?listingId=offer-food-v1`
 
-18. `GET /dashboard/agents`
+18. `GET /market/outcomes/listing/{listingId}`
 
-19. `GET /dashboard/offers`
+19. `GET /market/outcomes/provider/{ownerId}`
 
-20. `GET /dashboard/trades?limit=100`
+20. `GET /dashboard/schema`
 
-21. `GET /dashboard/savings`
+21. `GET /dashboard/summary`
+
+22. `GET /dashboard/agents`
+
+23. `GET /dashboard/offers`
+
+24. `GET /dashboard/trades?limit=100`
+
+25. `GET /dashboard/savings`
 
 Dashboard v1 contract doc:
 - `docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`

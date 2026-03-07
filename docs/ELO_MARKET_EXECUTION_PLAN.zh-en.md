@@ -39,6 +39,11 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - `POST /market/search`（query.dsl.v1）
    - 复合过滤 + 混合排序（相关度/评级/节省率/价格）
    - `POST /market/reviews/submit`（要求 usageReceiptRef）
+8. P3-C 结果评估基础：
+   - `POST /market/evaluations/submit`（要求 usageReceiptRef + baselineAmount）
+   - `GET /market/outcomes/listing/{listingId}`
+   - `GET /market/outcomes/provider/{ownerId}`
+   - 检索排序新增 `sort.mode=outcome`
 
 ### 运行方式
 ```bash
@@ -102,6 +107,11 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - `POST /market/search` (query.dsl.v1)
    - composite filtering + hybrid ranking (relevance/rating/saving/price)
    - `POST /market/reviews/submit` with required `usageReceiptRef`
+8. P3-C outcome evaluator baseline:
+   - `POST /market/evaluations/submit` (usageReceiptRef + baselineAmount required)
+   - `GET /market/outcomes/listing/{listingId}`
+   - `GET /market/outcomes/provider/{ownerId}`
+   - search ranking supports `sort.mode=outcome`
 
 ### How to run
 ```bash
@@ -113,7 +123,7 @@ npm test
 
 ### Pending inputs/questions
 1. Unified product schema for skill/API/data listings
-2. Post-trade evaluator KPIs (saving rate, accuracy, latency)
+2. Post-trade evaluator KPI extension (accuracy, freshness, retry cost)
 3. Minimum field set for P3 web dashboard (to confirm later)
 
 ### Component blueprint (your version, with current status)

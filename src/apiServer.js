@@ -109,6 +109,28 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
         return json(res, 200, { providerOwnerId, ...market.getProviderRating(providerOwnerId) });
       }
 
+      if (req.method === "POST" && path === "/market/evaluations/submit") {
+        const body = await readJson(req);
+        const result = market.evaluateTrade(body);
+        return json(res, 200, result);
+      }
+
+      if (req.method === "GET" && path === "/market/evaluations") {
+        const listingId = requestUrl.searchParams.get("listingId") ?? undefined;
+        const providerOwnerId = requestUrl.searchParams.get("providerOwnerId") ?? undefined;
+        return json(res, 200, { evaluations: market.listEvaluations({ listingId, providerOwnerId }) });
+      }
+
+      if (req.method === "GET" && path.startsWith("/market/outcomes/listing/")) {
+        const listingId = decodeURIComponent(path.slice("/market/outcomes/listing/".length));
+        return json(res, 200, { listingId, ...market.getListingOutcome(listingId) });
+      }
+
+      if (req.method === "GET" && path.startsWith("/market/outcomes/provider/")) {
+        const providerOwnerId = decodeURIComponent(path.slice("/market/outcomes/provider/".length));
+        return json(res, 200, { providerOwnerId, ...market.getProviderOutcome(providerOwnerId) });
+      }
+
       if (req.method === "GET" && path === "/dashboard/summary") {
         return json(res, 200, buildDashboardSummary(engine, market));
       }
