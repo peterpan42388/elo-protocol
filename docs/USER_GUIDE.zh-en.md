@@ -169,6 +169,10 @@ npm run test:contracts:extreme
 ```bash
 npm run verify:p4b-audit-prep
 ```
+安全审查报告工件校验：
+```bash
+npm run verify:p4c-security-review
+```
 
 ### English
 Standard contract tests:
@@ -183,6 +187,10 @@ Note: standard tests cover core settlement paths, while extreme tests cover fuzz
 Audit-prep artifact verification:
 ```bash
 npm run verify:p4b-audit-prep
+```
+Security-review artifact verification:
+```bash
+npm run verify:p4c-security-review
 ```
 
 ## 6) CI / 持续集成
@@ -229,6 +237,14 @@ npm run verify:p4b-audit-prep
   - `API_RATE_LIMIT_MAX`（默认 `2000`）
   - `API_RATE_LIMIT_WINDOW_MS`（默认 `60000`）
   - `API_BODY_MAX_BYTES`（默认 `65536`）
+  - `API_RATE_LIMIT_MAX_CLIENTS`（默认 `10000`）
+  - `X402_DEFAULT_TTL_MS`（默认 `120000`）
+  - `X402_MAX_PENDING`（默认 `5000`）
+  - `X402_MAX_SETTLED`（默认 `10000`）
+  - `ACP_DEFAULT_ESCROW_TTL_MS`（默认 `300000`）
+  - `ACP_MAX_INTENTS`（默认 `5000`）
+  - `ACP_MAX_ESCROWS`（默认 `5000`）
+  - `ACP_TERMINAL_RETENTION_MS`（默认 `3600000`）
 
 ### English
 - POST endpoints require `application/json` (`415` otherwise).
@@ -238,3 +254,11 @@ npm run verify:p4b-audit-prep
   - `API_RATE_LIMIT_MAX` (default `2000`)
   - `API_RATE_LIMIT_WINDOW_MS` (default `60000`)
   - `API_BODY_MAX_BYTES` (default `65536`)
+  - `API_RATE_LIMIT_MAX_CLIENTS` (default `10000`)
+  - `X402_DEFAULT_TTL_MS` (default `120000`)
+  - `X402_MAX_PENDING` (default `5000`)
+  - `X402_MAX_SETTLED` (default `10000`)
+  - `ACP_DEFAULT_ESCROW_TTL_MS` (default `300000`)
+  - `ACP_MAX_INTENTS` (default `5000`)
+  - `ACP_MAX_ESCROWS` (default `5000`)
+  - `ACP_TERMINAL_RETENTION_MS` (default `3600000`)

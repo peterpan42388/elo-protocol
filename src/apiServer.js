@@ -43,6 +43,11 @@ function positiveInt(value, fallback) {
   return Math.floor(n);
 }
 
+function mergeAdapterOptions(base, override) {
+  if (!override || typeof override !== "object") return base;
+  return { ...base, ...override };
+}
+
 function getClientKey(req) {
   const forwarded = req.headers["x-forwarded-for"];
   if (typeof forwarded === "string" && forwarded.trim()) {
@@ -51,7 +56,7 @@ function getClientKey(req) {
   return req.socket?.remoteAddress ?? "unknown";
 }
 
-function createRateLimiter({ windowMs, maxRequests }) {
+function createRateLimiter({ windowMs, maxRequests, maxTrackedClients }) {
   const buckets = new Map();
   let tick = 0;
 
@@ -70,6 +75,12 @@ function createRateLimiter({ windowMs, maxRequests }) {
       const now = Date.now();
       let bucket = buckets.get(key);
       if (!bucket || bucket.resetAt <= now) {
+        if (!bucket && Number.isFinite(maxTrackedClients) && maxTrackedClients > 0 && buckets.size >= maxTrackedClients) {
+          cleanup(now);
+          if (buckets.size >= maxTrackedClients) {
+            return { allowed: false, remaining: 0, retryAfterMs: windowMs };
+          }
+        }
         bucket = { count: 0, resetAt: now + windowMs };
         buckets.set(key, bucket);
       }
@@ -136,14 +147,39 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
       : parseIntSafe(process.env.API_RATE_LIMIT_MAX, 2000),
     2000
   );
+  const rateLimitMaxClients = positiveInt(
+    Number.isFinite(options.rateLimitMaxClients)
+      ? Number(options.rateLimitMaxClients)
+      : parseIntSafe(process.env.API_RATE_LIMIT_MAX_CLIENTS, 10_000),
+    10_000
+  );
 
   const limiter = createRateLimiter({
     windowMs: rateLimitWindowMs,
     maxRequests: rateLimitMaxRequests,
+    maxTrackedClients: rateLimitMaxClients,
   });
 
-  const x402 = new X402Adapter(market);
-  const acp = new ACPAdapter(market, engine);
+  const x402Options = mergeAdapterOptions(
+    {
+      defaultTtlMs: positiveInt(parseIntSafe(process.env.X402_DEFAULT_TTL_MS, 120_000), 120_000),
+      maxPendingPayments: positiveInt(parseIntSafe(process.env.X402_MAX_PENDING, 5_000), 5_000),
+      maxSettledPayments: positiveInt(parseIntSafe(process.env.X402_MAX_SETTLED, 10_000), 10_000),
+    },
+    options.x402
+  );
+  const acpOptions = mergeAdapterOptions(
+    {
+      defaultEscrowTtlMs: positiveInt(parseIntSafe(process.env.ACP_DEFAULT_ESCROW_TTL_MS, 300_000), 300_000),
+      maxIntents: positiveInt(parseIntSafe(process.env.ACP_MAX_INTENTS, 5_000), 5_000),
+      maxEscrows: positiveInt(parseIntSafe(process.env.ACP_MAX_ESCROWS, 5_000), 5_000),
+      terminalRetentionMs: positiveInt(parseIntSafe(process.env.ACP_TERMINAL_RETENTION_MS, 3_600_000), 3_600_000),
+    },
+    options.acp
+  );
+
+  const x402 = new X402Adapter(market, x402Options);
+  const acp = new ACPAdapter(market, engine, acpOptions);
   const server = http.createServer(async (req, res) => {
     try {
       if (!req.url || !req.method) return json(res, 400, { error: "bad request" });

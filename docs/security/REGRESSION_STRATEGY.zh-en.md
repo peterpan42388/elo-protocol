@@ -11,6 +11,7 @@
 3. `npm run policy:check`
 4. `npm run verify:p3a-freeze`
 5. `npm run verify:p4b-audit-prep`
+6. `npm run verify:p4c-security-review`
 
 ### 安全回归重点
 1. API 防护：429/413/415 行为稳定。
@@ -34,6 +35,7 @@ Make security behavior a mandatory regression gate so functional passes cannot h
 3. `npm run policy:check`
 4. `npm run verify:p3a-freeze`
 5. `npm run verify:p4b-audit-prep`
+6. `npm run verify:p4c-security-review`
 
 ### Security regression focus
 1. API controls: stable behavior for 429/413/415.

@@ -5,7 +5,9 @@ export class X402Adapter {
   constructor(market, options = {}) {
     if (!market) throw new Error("market is required");
     this.market = market;
-    this.defaultTtlMs = Number(options.defaultTtlMs ?? 120_000);
+    this.defaultTtlMs = this._positiveInt(options.defaultTtlMs, 120_000);
+    this.maxPendingPayments = this._positiveInt(options.maxPendingPayments, 5_000);
+    this.maxSettledPayments = this._positiveInt(options.maxSettledPayments, 10_000);
     this.pendingPayments = new Map();
     this.settledPayments = new Map();
   }
@@ -62,6 +64,11 @@ export class X402Adapter {
       };
     }
 
+    this._cleanup(createdAt);
+    if (this.pendingPayments.size >= this.maxPendingPayments) {
+      throw new Error("x402 pending queue is full");
+    }
+
     this.pendingPayments.set(paymentId, payment);
     return {
       httpStatus: 402,
@@ -81,6 +88,7 @@ export class X402Adapter {
   settlePayment(params) {
     const paymentId = assertToken("paymentId", params?.paymentId, 256);
     const requestId = assertToken("requestId", params?.requestId, 128);
+    this._cleanup(Date.now());
 
     if (this.settledPayments.has(paymentId)) {
       throw new Error("payment already settled");
@@ -120,12 +128,18 @@ export class X402Adapter {
       settledAt: Date.now(),
       trade,
     };
+    while (this.settledPayments.size >= this.maxSettledPayments) {
+      const oldest = this.settledPayments.keys().next().value;
+      if (!oldest) break;
+      this.settledPayments.delete(oldest);
+    }
     this.settledPayments.set(paymentId, receipt);
     return receipt;
   }
 
   getPayment(paymentId) {
     const id = assertToken("paymentId", paymentId, 256);
+    this._cleanup(Date.now());
     const settled = this.settledPayments.get(id);
     if (settled) {
       return {
@@ -176,5 +190,19 @@ export class X402Adapter {
 
   _round(v) {
     return Math.round(Number(v) * 1_000_000) / 1_000_000;
+  }
+
+  _positiveInt(value, fallback) {
+    const n = Number(value);
+    if (!Number.isInteger(n) || n <= 0) return fallback;
+    return n;
+  }
+
+  _cleanup(now) {
+    for (const [id, payment] of this.pendingPayments.entries()) {
+      if (payment.expiresAt <= now) {
+        this.pendingPayments.delete(id);
+      }
+    }
   }
 }
