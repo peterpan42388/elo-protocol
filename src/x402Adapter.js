@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { assertBoundedText, assertToken } from "./inputGuards.js";
 
 export class X402Adapter {
   constructor(market, options = {}) {
@@ -10,15 +11,11 @@ export class X402Adapter {
   }
 
   createChallenge(params) {
-    const offerId = String(params?.offerId ?? "");
-    const consumerAgentId = String(params?.consumerAgentId ?? "");
+    const offerId = assertToken("offerId", params?.offerId, 128);
+    const consumerAgentId = assertToken("consumerAgentId", params?.consumerAgentId, 128);
     const units = this._units(params?.units);
-    const usageRef = String(params?.usageRef ?? "x402");
+    const usageRef = assertBoundedText("usageRef", String(params?.usageRef ?? "x402"), 256) || "x402";
     const ttlMs = this._ttl(params?.ttlMs);
-
-    if (!offerId || !consumerAgentId) {
-      throw new Error("offerId and consumerAgentId are required");
-    }
 
     const quote = this.market.quotePurchase({
       offerId,
@@ -82,12 +79,8 @@ export class X402Adapter {
   }
 
   settlePayment(params) {
-    const paymentId = String(params?.paymentId ?? "");
-    const requestId = String(params?.requestId ?? "");
-
-    if (!paymentId || !requestId) {
-      throw new Error("paymentId and requestId are required");
-    }
+    const paymentId = assertToken("paymentId", params?.paymentId, 256);
+    const requestId = assertToken("requestId", params?.requestId, 128);
 
     if (this.settledPayments.has(paymentId)) {
       throw new Error("payment already settled");
@@ -132,8 +125,7 @@ export class X402Adapter {
   }
 
   getPayment(paymentId) {
-    const id = String(paymentId ?? "");
-    if (!id) throw new Error("paymentId is required");
+    const id = assertToken("paymentId", paymentId, 256);
     const settled = this.settledPayments.get(id);
     if (settled) {
       return {

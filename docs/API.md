@@ -251,3 +251,14 @@ Market v1 schema docs:
 - Same owner: amount = 0, billable = false
 - Different owner: amount > 0 (if quote not sponsored)
 - Duplicate `requestId`: rejected (replay protection)
+
+## Security Baseline (P4-A)
+- POST endpoints require `Content-Type: application/json` (`415` if invalid)
+- Request body size limit is enforced (`413` if exceeded)
+- API rate limiting is enforced (`429` when exceeded)
+- Critical IDs and numeric fields are validated before settlement/market state mutation
+
+### Runtime Security Config
+- `API_RATE_LIMIT_MAX` (default `2000`)
+- `API_RATE_LIMIT_WINDOW_MS` (default `60000`)
+- `API_BODY_MAX_BYTES` (default `65536`)

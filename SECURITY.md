@@ -11,3 +11,18 @@ Use GitHub Security Advisories (private reporting) for this repository.
 - No plaintext secrets in repository.
 - No private keys, certificates, or wallet seeds in commits.
 - All settlement-critical changes must include regression tests.
+
+## Baseline Controls (P4-A)
+- API rate limiting (in-memory, per client key/IP)
+- Request JSON content-type enforcement on POST endpoints
+- Request body size guard to mitigate oversized payload abuse
+- Input validation on settlement and market critical identifiers and numeric fields
+- Replay protection on settlement request IDs (existing invariant)
+
+## API Security Config
+- `API_RATE_LIMIT_MAX` (default: `2000`)
+- `API_RATE_LIMIT_WINDOW_MS` (default: `60000`)
+- `API_BODY_MAX_BYTES` (default: `65536`)
+
+These controls are intended as baseline protections for prototype and staging environments.
+Production deployments should layer additional controls (WAF, reverse-proxy rate limit, authn/authz, structured audit logging, and external security review).

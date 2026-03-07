@@ -1,5 +1,6 @@
 import { SettlementEngine } from "./settlementEngine.js";
 import { DefaultOutcomeEvaluator } from "./outcomeEvaluator.js";
+import { assertBoundedText, assertToken } from "./inputGuards.js";
 
 export class ELOMarket {
   constructor(engine = new SettlementEngine(), outcomeEvaluator = new DefaultOutcomeEvaluator()) {
@@ -41,14 +42,14 @@ export class ELOMarket {
       status,
     } = params;
 
-    if (!offerId || !providerAgentId || !serviceId) {
-      throw new Error("offerId, providerAgentId and serviceId are required");
-    }
-    if (this.offers.has(offerId)) {
-      throw new Error(`duplicate offerId: ${offerId}`);
+    const safeOfferId = assertToken("offerId", offerId, 128);
+    const safeProviderAgentId = assertToken("providerAgentId", providerAgentId, 128);
+    const safeServiceId = assertToken("serviceId", serviceId, 256);
+    if (this.offers.has(safeOfferId)) {
+      throw new Error(`duplicate offerId: ${safeOfferId}`);
     }
 
-    const ownerId = this.engine.ownerOf(providerAgentId);
+    const ownerId = this.engine.ownerOf(safeProviderAgentId);
 
     if (!Number.isFinite(computeUnits) || computeUnits < 0) {
       throw new Error("computeUnits must be >= 0");
@@ -86,15 +87,15 @@ export class ELOMarket {
     }
 
     const offer = {
-      offerId,
+      offerId: safeOfferId,
       kind: resolvedKind,
-      title: title ?? serviceId,
-      summary: summary ?? metadata.summary ?? "",
+      title: assertBoundedText("title", String(title ?? safeServiceId), 128) || safeServiceId,
+      summary: assertBoundedText("summary", String(summary ?? metadata.summary ?? ""), 1000),
       tags: Array.isArray(tags) ? tags : (Array.isArray(metadata.tags) ? metadata.tags : []),
       category: category ?? metadata.category ?? "general",
       ownerId,
-      providerAgentId,
-      serviceId,
+      providerAgentId: safeProviderAgentId,
+      serviceId: safeServiceId,
       operatorEndpoint: operatorEndpoint ?? metadata.operatorEndpoint ?? "local",
       inputSchema: inputSchema ?? metadata.inputSchema ?? {},
       outputSchema: outputSchema ?? metadata.outputSchema ?? {},
@@ -113,7 +114,7 @@ export class ELOMarket {
       createdAt: Date.now(),
     };
 
-    this.offers.set(offerId, offer);
+    this.offers.set(safeOfferId, offer);
     return offer;
   }
 
@@ -226,8 +227,10 @@ export class ELOMarket {
       marketMultiplier,
     } = params;
 
-    const offer = this._offer(offerId);
-    this.engine.ownerOf(consumerAgentId);
+    const safeOfferId = assertToken("offerId", offerId, 128);
+    const safeConsumerAgentId = assertToken("consumerAgentId", consumerAgentId, 128);
+    const offer = this._offer(safeOfferId);
+    this.engine.ownerOf(safeConsumerAgentId);
 
     if (!Number.isInteger(units) || units <= 0) {
       throw new Error("units must be a positive integer");
@@ -235,7 +238,7 @@ export class ELOMarket {
 
     const quote = this.engine.quote({
       providerAgentId: offer.providerAgentId,
-      consumerAgentId,
+      consumerAgentId: safeConsumerAgentId,
       computeUnits: offer.computeUnits * units,
       energyKwh: offer.energyKwh * units,
       marketMultiplier: marketMultiplier ?? offer.marketMultiplier,
@@ -245,7 +248,7 @@ export class ELOMarket {
 
     return {
       ...quote,
-      offerId,
+      offerId: safeOfferId,
       serviceId: offer.serviceId,
       units,
     };
@@ -263,12 +266,16 @@ export class ELOMarket {
       marketMultiplier,
     } = params;
 
-    const offer = this._offer(offerId);
+    const safeOfferId = assertToken("offerId", offerId, 128);
+    const safeConsumerAgentId = assertToken("consumerAgentId", consumerAgentId, 128);
+    const safeRequestId = assertToken("requestId", requestId, 128);
+    const safeUsageRef = assertBoundedText("usageRef", String(usageRef ?? "market_purchase"), 256) || "market_purchase";
+    const offer = this._offer(safeOfferId);
     const result = this.engine.settle({
       providerAgentId: offer.providerAgentId,
-      consumerAgentId,
-      requestId,
-      usageRef,
+      consumerAgentId: safeConsumerAgentId,
+      requestId: safeRequestId,
+      usageRef: safeUsageRef,
       computeUnits: offer.computeUnits * units,
       energyKwh: offer.energyKwh * units,
       marketMultiplier: marketMultiplier ?? offer.marketMultiplier,
@@ -277,11 +284,11 @@ export class ELOMarket {
     });
 
     this.trades.push({
-      offerId,
+      offerId: safeOfferId,
       serviceId: offer.serviceId,
       providerAgentId: offer.providerAgentId,
-      consumerAgentId,
-      requestId,
+      consumerAgentId: safeConsumerAgentId,
+      requestId: safeRequestId,
       amount: result.amount,
       billable: result.billable,
       ts: result.ts,
@@ -306,10 +313,12 @@ export class ELOMarket {
       throw new Error("baseline and optimized workloads are required");
     }
 
-    const offer = this._offer(offerId);
+    const safeOfferId = assertToken("offerId", offerId, 128);
+    const safeConsumerAgentId = assertToken("consumerAgentId", consumerAgentId, 128);
+    const offer = this._offer(safeOfferId);
     const purchaseQuote = this.quotePurchase({
-      offerId,
-      consumerAgentId,
+      offerId: safeOfferId,
+      consumerAgentId: safeConsumerAgentId,
       units,
       reputationFactor,
       outcomeBonus,
@@ -318,7 +327,7 @@ export class ELOMarket {
 
     const baselineQuote = this.engine.quote({
       providerAgentId: baseline.providerAgentId,
-      consumerAgentId,
+      consumerAgentId: safeConsumerAgentId,
       computeUnits: baseline.computeUnits,
       energyKwh: baseline.energyKwh,
       marketMultiplier: baseline.marketMultiplier,
@@ -328,7 +337,7 @@ export class ELOMarket {
 
     const optimizedQuote = this.engine.quote({
       providerAgentId: optimized.providerAgentId,
-      consumerAgentId,
+      consumerAgentId: safeConsumerAgentId,
       computeUnits: optimized.computeUnits,
       energyKwh: optimized.energyKwh,
       marketMultiplier: optimized.marketMultiplier,
@@ -341,10 +350,10 @@ export class ELOMarket {
     const savingsRate = baselineQuote.amount > 0 ? this._round(savingsAmount / baselineQuote.amount) : 0;
 
     const report = {
-      offerId,
+      offerId: safeOfferId,
       serviceId: offer.serviceId,
       providerAgentId: offer.providerAgentId,
-      consumerAgentId,
+      consumerAgentId: safeConsumerAgentId,
       baselineAmount: baselineQuote.amount,
       purchaseAmount: purchaseQuote.amount,
       optimizedAmount: optimizedQuote.amount,
@@ -370,24 +379,23 @@ export class ELOMarket {
       usageReceiptRef,
     } = params;
 
-    const offer = this._offer(listingId);
+    const safeListingId = assertToken("listingId", listingId, 128);
+    const safeReviewerAgentId = assertToken("reviewerAgentId", reviewerAgentId, 128);
+    const safeUsageReceiptRef = assertToken("usageReceiptRef", usageReceiptRef, 128);
+    const offer = this._offer(safeListingId);
     const score = Number(rating);
     if (!Number.isInteger(score) || score < 1 || score > 5) {
       throw new Error("rating must be an integer between 1 and 5");
     }
-    if (!usageReceiptRef || typeof usageReceiptRef !== "string") {
-      throw new Error("usageReceiptRef is required");
-    }
-
-    const trade = this.trades.find((x) => x.requestId === usageReceiptRef && x.offerId === listingId);
+    const trade = this.trades.find((x) => x.requestId === safeUsageReceiptRef && x.offerId === safeListingId);
     if (!trade) {
       throw new Error("usageReceiptRef is invalid or not linked to listing");
     }
-    if (trade.consumerAgentId !== reviewerAgentId) {
+    if (trade.consumerAgentId !== safeReviewerAgentId) {
       throw new Error("reviewerAgentId must match usage consumer");
     }
 
-    const reviewKey = `${listingId}:${usageReceiptRef}:${reviewerAgentId}`;
+    const reviewKey = `${safeListingId}:${safeUsageReceiptRef}:${safeReviewerAgentId}`;
     if (this.reviewReceiptIndex.has(reviewKey)) {
       throw new Error("duplicate review for usage receipt");
     }
@@ -395,15 +403,15 @@ export class ELOMarket {
     const review = {
       schemaVersion: "review.v1",
       reviewId: reviewId ?? `review-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
-      listingId,
+      listingId: safeListingId,
       providerOwnerId: offer.ownerId,
-      reviewerAgentId,
+      reviewerAgentId: safeReviewerAgentId,
       rating: score,
-      comment,
+      comment: assertBoundedText("comment", String(comment ?? ""), 1000),
       tokenSavingObserved: this._optionalRate(tokenSavingObserved),
       latencyScore: this._optionalScore(latencyScore),
       reliabilityScore: this._optionalScore(reliabilityScore),
-      usageReceiptRef,
+      usageReceiptRef: safeUsageReceiptRef,
       createdAt: Date.now(),
     };
 
@@ -446,22 +454,21 @@ export class ELOMarket {
       notes = "",
     } = params;
 
-    const offer = this._offer(listingId);
-    this.engine.ownerOf(evaluatorAgentId);
+    const safeListingId = assertToken("listingId", listingId, 128);
+    const safeEvaluatorAgentId = assertToken("evaluatorAgentId", evaluatorAgentId, 128);
+    const safeUsageReceiptRef = assertToken("usageReceiptRef", usageReceiptRef, 128);
+    const offer = this._offer(safeListingId);
+    this.engine.ownerOf(safeEvaluatorAgentId);
 
-    if (!usageReceiptRef || typeof usageReceiptRef !== "string") {
-      throw new Error("usageReceiptRef is required");
-    }
-
-    const trade = this.trades.find((x) => x.requestId === usageReceiptRef && x.offerId === listingId);
+    const trade = this.trades.find((x) => x.requestId === safeUsageReceiptRef && x.offerId === safeListingId);
     if (!trade) {
       throw new Error("usageReceiptRef is invalid or not linked to listing");
     }
-    if (trade.consumerAgentId !== evaluatorAgentId) {
+    if (trade.consumerAgentId !== safeEvaluatorAgentId) {
       throw new Error("evaluatorAgentId must match usage consumer");
     }
 
-    const evaluationKey = `${listingId}:${usageReceiptRef}:${evaluatorAgentId}`;
+    const evaluationKey = `${safeListingId}:${safeUsageReceiptRef}:${safeEvaluatorAgentId}`;
     if (this.evaluationReceiptIndex.has(evaluationKey)) {
       throw new Error("duplicate evaluation for usage receipt");
     }
@@ -478,11 +485,11 @@ export class ELOMarket {
       schemaVersion: "event.v1",
       evaluationId: evaluationId ?? `eval-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
       eventType: "RatingUpdated",
-      listingId,
+      listingId: safeListingId,
       providerOwnerId: offer.ownerId,
-      evaluatorAgentId,
-      usageReceiptRef,
-      notes,
+      evaluatorAgentId: safeEvaluatorAgentId,
+      usageReceiptRef: safeUsageReceiptRef,
+      notes: assertBoundedText("notes", String(notes ?? ""), 1000),
       ...verdict,
       createdAt: Date.now(),
     };
@@ -540,9 +547,10 @@ export class ELOMarket {
   }
 
   _offer(offerId) {
-    const offer = this.offers.get(offerId);
+    const safeOfferId = assertToken("offerId", offerId, 128);
+    const offer = this.offers.get(safeOfferId);
     if (!offer) {
-      throw new Error(`unknown offerId: ${offerId}`);
+      throw new Error(`unknown offerId: ${safeOfferId}`);
     }
     return offer;
   }

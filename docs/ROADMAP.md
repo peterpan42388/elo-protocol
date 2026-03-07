@@ -29,6 +29,7 @@
 - Dashboard API v1 contract freeze (done)
 
 ## P4
+- P4-A security hardening baseline (done)
 - security review
 - audit prep
 - community governance and contribution standards

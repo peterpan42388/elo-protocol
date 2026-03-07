@@ -1,3 +1,5 @@
+import { assertBoundedText, assertFiniteNumber, assertToken } from "./inputGuards.js";
+
 const DEFAULT_PRICING = {
   computeUnitRate: 0.00002,
   energyKwhRate: 0.03,
@@ -14,9 +16,10 @@ export class SettlementEngine {
   }
 
   registerAgent(agentId, ownerId) {
-    if (!agentId || !ownerId) throw new Error("agentId and ownerId are required");
-    this.agentOwners.set(agentId, ownerId);
-    if (!this.balances.has(agentId)) this.balances.set(agentId, 0);
+    const safeAgentId = assertToken("agentId", agentId, 128);
+    const safeOwnerId = assertToken("ownerId", ownerId, 128);
+    this.agentOwners.set(safeAgentId, safeOwnerId);
+    if (!this.balances.has(safeAgentId)) this.balances.set(safeAgentId, 0);
   }
 
   ownerOf(agentId) {
@@ -30,25 +33,29 @@ export class SettlementEngine {
   }
 
   recharge(agentId, amount, source = "manual") {
-    if (amount <= 0) throw new Error("recharge amount must be > 0");
-    this._addBalance(agentId, amount);
+    const safeAgentId = assertToken("agentId", agentId, 128);
+    const safeAmount = assertFiniteNumber("amount", amount, { min: 0.000001 });
+    const safeSource = assertBoundedText("source", String(source ?? "manual"), 128) || "manual";
+    this._addBalance(safeAgentId, safeAmount);
     this.ledger.push({
       type: "RECHARGE",
-      agentId,
-      amount,
-      source,
+      agentId: safeAgentId,
+      amount: safeAmount,
+      source: safeSource,
       ts: Date.now(),
     });
   }
 
   withdraw(agentId, amount, target = "manual") {
-    if (amount <= 0) throw new Error("withdraw amount must be > 0");
-    this._subBalance(agentId, amount);
+    const safeAgentId = assertToken("agentId", agentId, 128);
+    const safeAmount = assertFiniteNumber("amount", amount, { min: 0.000001 });
+    const safeTarget = assertBoundedText("target", String(target ?? "manual"), 128) || "manual";
+    this._subBalance(safeAgentId, safeAmount);
     this.ledger.push({
       type: "WITHDRAW",
-      agentId,
-      amount,
-      target,
+      agentId: safeAgentId,
+      amount: safeAmount,
+      target: safeTarget,
       ts: Date.now(),
     });
   }
@@ -64,6 +71,14 @@ export class SettlementEngine {
       outcomeBonus = 0,
     } = params;
 
+    assertToken("providerAgentId", providerAgentId, 128);
+    assertToken("consumerAgentId", consumerAgentId, 128);
+    const safeComputeUnits = assertFiniteNumber("computeUnits", computeUnits, { min: 0 });
+    const safeEnergyKwh = assertFiniteNumber("energyKwh", energyKwh, { min: 0 });
+    const safeMarketMultiplier = assertFiniteNumber("marketMultiplier", marketMultiplier, { min: 0.000001 });
+    const safeReputationFactor = assertFiniteNumber("reputationFactor", reputationFactor, { min: 0.000001 });
+    const safeOutcomeBonus = assertFiniteNumber("outcomeBonus", outcomeBonus);
+
     if (this.isSameOwner(providerAgentId, consumerAgentId)) {
       return {
         billable: false,
@@ -72,15 +87,11 @@ export class SettlementEngine {
       };
     }
 
-    if (marketMultiplier <= 0 || reputationFactor <= 0) {
-      throw new Error("marketMultiplier and reputationFactor must be > 0");
-    }
-
-    const baseFromCompute = computeUnits * this.pricing.computeUnitRate;
-    const baseFromEnergy = energyKwh * this.pricing.energyKwhRate;
+    const baseFromCompute = safeComputeUnits * this.pricing.computeUnitRate;
+    const baseFromEnergy = safeEnergyKwh * this.pricing.energyKwhRate;
     const baseCost = Math.max(this.pricing.minBaseCost, baseFromCompute + baseFromEnergy);
 
-    const amount = Math.max(0, baseCost * marketMultiplier * reputationFactor + outcomeBonus);
+    const amount = Math.max(0, baseCost * safeMarketMultiplier * safeReputationFactor + safeOutcomeBonus);
 
     return {
       billable: true,
@@ -98,12 +109,11 @@ export class SettlementEngine {
       usageRef = "n/a",
       requestId,
     } = params;
+    const safeRequestId = assertToken("requestId", requestId, 128);
+    const safeUsageRef = assertBoundedText("usageRef", String(usageRef ?? "n/a"), 256) || "n/a";
 
-    if (!requestId || typeof requestId !== "string") {
-      throw new Error("requestId is required");
-    }
-    if (this.processedRequestIds.has(requestId)) {
-      throw new Error(`duplicate requestId: ${requestId}`);
+    if (this.processedRequestIds.has(safeRequestId)) {
+      throw new Error(`duplicate requestId: ${safeRequestId}`);
     }
 
     if (!quote.billable) {
@@ -113,11 +123,11 @@ export class SettlementEngine {
         amount: 0,
         providerAgentId,
         consumerAgentId,
-        requestId,
-        usageRef,
+        requestId: safeRequestId,
+        usageRef: safeUsageRef,
         ts: Date.now(),
       };
-      this.processedRequestIds.add(requestId);
+      this.processedRequestIds.add(safeRequestId);
       this.ledger.push(event);
       return event;
     }
@@ -131,11 +141,11 @@ export class SettlementEngine {
       amount: quote.amount,
       providerAgentId,
       consumerAgentId,
-      requestId,
-      usageRef,
+      requestId: safeRequestId,
+      usageRef: safeUsageRef,
       ts: Date.now(),
     };
-    this.processedRequestIds.add(requestId);
+    this.processedRequestIds.add(safeRequestId);
     this.ledger.push(event);
     return event;
   }

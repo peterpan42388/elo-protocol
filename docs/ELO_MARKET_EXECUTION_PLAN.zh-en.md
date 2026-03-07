@@ -56,6 +56,11 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
 11. P3-F Dashboard 扩展分析：
    - `GET /dashboard/market-efficiency`（市场效率聚合）
    - `GET /dashboard/outcomes`（结果评分与 bonus 聚合）
+12. P4-A 安全加固基线：
+   - API 限流（429）
+   - 请求体大小上限（413）
+   - POST JSON content-type 强校验（415）
+   - 关键 ID/数值输入校验
 
 ### 运行方式
 ```bash
@@ -136,6 +141,11 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
 11. P3-F dashboard analytics extension:
    - `GET /dashboard/market-efficiency` (market efficiency aggregates)
    - `GET /dashboard/outcomes` (outcome score and bonus aggregates)
+12. P4-A security hardening baseline:
+   - API rate limiting (`429`)
+   - request body size guard (`413`)
+   - POST JSON content-type enforcement (`415`)
+   - strict validation for critical IDs and numeric fields
 
 ### How to run
 ```bash
