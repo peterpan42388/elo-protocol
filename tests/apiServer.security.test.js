@@ -126,3 +126,40 @@ test("API should reject invalid numeric and token fields", async () => {
     await app.close();
   }
 });
+
+test("API should enforce optional bearer auth on POST endpoints", async () => {
+  const app = await startServer({ authBearerToken: "elo-test-token" });
+  try {
+    const noAuth = await fetch(`${app.base}/register-agent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ agentId: "agent-sec-1", ownerId: "owner-sec-1" }),
+    });
+    assert.equal(noAuth.status, 401);
+
+    const wrongAuth = await fetch(`${app.base}/register-agent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer wrong-token",
+      },
+      body: JSON.stringify({ agentId: "agent-sec-2", ownerId: "owner-sec-2" }),
+    });
+    assert.equal(wrongAuth.status, 401);
+
+    const ok = await fetch(`${app.base}/register-agent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer elo-test-token",
+      },
+      body: JSON.stringify({ agentId: "agent-sec-3", ownerId: "owner-sec-3" }),
+    });
+    assert.equal(ok.status, 200);
+
+    const readOnly = await fetch(`${app.base}/dashboard/schema`);
+    assert.equal(readOnly.status, 200);
+  } finally {
+    await app.close();
+  }
+});

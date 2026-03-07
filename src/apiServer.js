@@ -105,6 +105,20 @@ function ensureJsonRequest(req) {
   }
 }
 
+function normalizeToken(value) {
+  if (typeof value !== "string") return "";
+  return value.trim();
+}
+
+function ensureAuthorized(req, authBearerToken) {
+  if (!authBearerToken) return;
+  const header = String(req.headers.authorization ?? "");
+  const expected = `Bearer ${authBearerToken}`;
+  if (header !== expected) {
+    throw new HttpError(401, "missing or invalid authorization token");
+  }
+}
+
 async function readJson(req, maxBytes) {
   let raw = "";
   let total = 0;
@@ -153,6 +167,9 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
       : parseIntSafe(process.env.API_RATE_LIMIT_MAX_CLIENTS, 10_000),
     10_000
   );
+  const authBearerToken = normalizeToken(
+    typeof options.authBearerToken === "string" ? options.authBearerToken : process.env.API_AUTH_BEARER_TOKEN
+  );
 
   const limiter = createRateLimiter({
     windowMs: rateLimitWindowMs,
@@ -196,7 +213,10 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
         );
       }
 
-      if (req.method === "POST") ensureJsonRequest(req);
+      if (req.method === "POST") {
+        ensureAuthorized(req, authBearerToken);
+        ensureJsonRequest(req);
+      }
 
       if (req.method === "POST" && path === "/register-agent") {
         const body = await readJson(req, bodyMaxBytes);

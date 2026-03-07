@@ -32,5 +32,6 @@
 - P4-A security hardening baseline (done)
 - P4-B audit prep baseline (done)
 - P4-C security review drill and findings report (done)
+- P4-D optional API bearer-auth baseline (done)
 - external audit execution
 - community governance and contribution standards
