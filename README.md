@@ -48,6 +48,7 @@ npm run integrate:risk:local
 npm run wallet:virtual
 npm run test:p0p2:local
 npm run demo:market
+npm run test:dashboard-contract
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -71,6 +72,7 @@ See [docs/API.md](docs/API.md).
 - [Risk Plugin Interface (ZH/EN)](docs/RISK_PLUGIN_INTERFACE.zh-en.md)
 - [Private Risk Integration Runbook (ZH/EN)](docs/PRIVATE_RISK_INTEGRATION_RUNBOOK.zh-en.md)
 - [ELO Market Execution Plan (ZH/EN)](docs/ELO_MARKET_EXECUTION_PLAN.zh-en.md)
+- [Dashboard API Contract v1 (ZH/EN)](docs/DASHBOARD_API_CONTRACT.v1.zh-en.md)
 
 ## CI
 - `CI`: node tests + solidity compile + forge contract tests

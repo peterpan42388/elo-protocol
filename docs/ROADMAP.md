@@ -22,6 +22,7 @@
 - ACP-style negotiation and escrow
 - reputation/outcome evaluator plugin
 - Human-facing dashboard integration layer (API scaffold done)
+- Dashboard API v1 contract freeze (done)
 
 ## P4
 - security review

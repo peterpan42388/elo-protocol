@@ -84,6 +84,12 @@ npm run test:p0p2:local
 - `POST /market/quote`
 - `POST /market/purchase`
 - `POST /market/savings-simulate`
+- `GET /dashboard/schema`
+- `GET /dashboard/summary`
+- `GET /dashboard/agents`
+- `GET /dashboard/offers`
+- `GET /dashboard/trades?limit=100`
+- `GET /dashboard/savings`
 
 `/settle` 必须提供唯一 `requestId`，否则会被拒绝。
 
@@ -98,6 +104,12 @@ npm run test:p0p2:local
 - `POST /market/quote`
 - `POST /market/purchase`
 - `POST /market/savings-simulate`
+- `GET /dashboard/schema`
+- `GET /dashboard/summary`
+- `GET /dashboard/agents`
+- `GET /dashboard/offers`
+- `GET /dashboard/trades?limit=100`
+- `GET /dashboard/savings`
 
 `/settle` requires a unique `requestId`, otherwise request is rejected.
 

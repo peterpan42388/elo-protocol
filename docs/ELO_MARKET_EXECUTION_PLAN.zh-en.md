@@ -20,6 +20,14 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - `POST /market/quote`
    - `POST /market/purchase`
    - `POST /market/savings-simulate`
+5. Dashboard 契约（P3最小闭环）：
+   - `GET /dashboard/schema`
+   - `GET /dashboard/summary`
+   - `GET /dashboard/agents`
+   - `GET /dashboard/offers`
+   - `GET /dashboard/trades?limit=100`
+   - `GET /dashboard/savings`
+   - 契约文档：`docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
 
 ### 运行方式
 ```bash
@@ -54,6 +62,14 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - `POST /market/quote`
    - `POST /market/purchase`
    - `POST /market/savings-simulate`
+5. Dashboard contract for P3 minimum loop:
+   - `GET /dashboard/schema`
+   - `GET /dashboard/summary`
+   - `GET /dashboard/agents`
+   - `GET /dashboard/offers`
+   - `GET /dashboard/trades?limit=100`
+   - `GET /dashboard/savings`
+   - contract doc: `docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
 
 ### How to run
 ```bash

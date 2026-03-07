@@ -97,6 +97,22 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
+11. `GET /dashboard/schema`
+
+12. `GET /dashboard/summary`
+
+13. `GET /dashboard/agents`
+
+14. `GET /dashboard/offers`
+
+15. `GET /dashboard/trades?limit=100`
+
+16. `GET /dashboard/savings`
+
+Dashboard v1 contract doc:
+- `docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
+- `docs/schemas/dashboard.v1.json`
+
 ## Rule Enforcement
 - Same owner: amount = 0, billable = false
 - Different owner: amount > 0 (if quote not sponsored)
