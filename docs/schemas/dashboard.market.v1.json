@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/dashboard.market.v1.json",
+  "title": "Dashboard Market Analytics v1",
+  "type": "object",
+  "required": ["schemaVersion", "generatedAt", "total", "limit", "aggregates", "items"],
+  "properties": {
+    "schemaVersion": { "const": "dashboard.market.v1" },
+    "generatedAt": { "type": "integer" },
+    "total": { "type": "integer", "minimum": 0 },
+    "limit": { "type": "integer", "minimum": 1 },
+    "aggregates": {
+      "type": "object",
+      "required": [
+        "offerCount",
+        "tradeCount",
+        "billableTradeCount",
+        "volumeElo",
+        "totalSavingsAmount",
+        "avgSavingsRate",
+        "avgOutcomeScore",
+        "avgRating"
+      ],
+      "properties": {
+        "offerCount": { "type": "integer", "minimum": 0 },
+        "tradeCount": { "type": "integer", "minimum": 0 },
+        "billableTradeCount": { "type": "integer", "minimum": 0 },
+        "volumeElo": { "type": "number", "minimum": 0 },
+        "totalSavingsAmount": { "type": "number" },
+        "avgSavingsRate": { "type": "number" },
+        "avgOutcomeScore": { "type": "number" },
+        "avgRating": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "items": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  },
+  "additionalProperties": false
+}

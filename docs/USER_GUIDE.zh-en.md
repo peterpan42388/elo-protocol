@@ -108,6 +108,8 @@ npm run test:p0p2:local
 - `GET /dashboard/offers`
 - `GET /dashboard/trades?limit=100`
 - `GET /dashboard/savings`
+- `GET /dashboard/market-efficiency?limit=20`
+- `GET /dashboard/outcomes?limit=100`
 
 `/settle` 必须提供唯一 `requestId`，否则会被拒绝。
 
@@ -146,6 +148,8 @@ npm run test:p0p2:local
 - `GET /dashboard/offers`
 - `GET /dashboard/trades?limit=100`
 - `GET /dashboard/savings`
+- `GET /dashboard/market-efficiency?limit=20`
+- `GET /dashboard/outcomes?limit=100`
 
 `/settle` requires a unique `requestId`, otherwise request is rejected.
 

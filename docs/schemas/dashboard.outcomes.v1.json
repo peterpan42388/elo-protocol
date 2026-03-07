@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/dashboard.outcomes.v1.json",
+  "title": "Dashboard Outcomes Analytics v1",
+  "type": "object",
+  "required": ["schemaVersion", "generatedAt", "total", "limit", "aggregates", "items"],
+  "properties": {
+    "schemaVersion": { "const": "dashboard.outcomes.v1" },
+    "generatedAt": { "type": "integer" },
+    "total": { "type": "integer", "minimum": 0 },
+    "limit": { "type": "integer", "minimum": 1 },
+    "aggregates": {
+      "type": "object",
+      "required": ["avgOutcomeScore", "avgOutcomeBonus", "avgSavingRate"],
+      "properties": {
+        "avgOutcomeScore": { "type": "number" },
+        "avgOutcomeBonus": { "type": "number" },
+        "avgSavingRate": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "items": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  },
+  "additionalProperties": false
+}
