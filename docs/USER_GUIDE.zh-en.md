@@ -165,6 +165,10 @@ npm run test:contracts
 npm run test:contracts:extreme
 ```
 说明：标准测试只覆盖核心结算合约路径，极限测试覆盖 fuzz + invariant。
+审计准备工件校验：
+```bash
+npm run verify:p4b-audit-prep
+```
 
 ### English
 Standard contract tests:
@@ -176,6 +180,10 @@ Extreme contract tests (verbose):
 npm run test:contracts:extreme
 ```
 Note: standard tests cover core settlement paths, while extreme tests cover fuzz + invariants.
+Audit-prep artifact verification:
+```bash
+npm run verify:p4b-audit-prep
+```
 
 ## 6) CI / 持续集成
 
