@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "elo.security.triage.v1",
+  "updatedAt": "2026-03-07T17:30:00Z",
+  "owner": "security-maintainers",
+  "source": "P4C/P4E closure baseline",
+  "findings": [
+    {
+      "id": "P4C-F1",
+      "title": "Limiter bucket growth under high-cardinality clients",
+      "severity": "high",
+      "status": "fixed",
+      "component": "src/apiServer.js",
+      "source": "internal-review",
+      "openedAt": "2026-03-07T16:50:00Z",
+      "slaDueAt": "2026-03-10T16:50:00Z",
+      "fixedAt": "2026-03-07T17:05:00Z",
+      "releaseBlock": false,
+      "tracking": {
+        "pr": 17,
+        "commit": "9be51d4f9b85be832f9fe40720d2192ecb4a8948"
+      }
+    },
+    {
+      "id": "P4C-F2",
+      "title": "Unbounded x402 pending/settled state growth",
+      "severity": "medium",
+      "status": "fixed",
+      "component": "src/x402Adapter.js",
+      "source": "internal-review",
+      "openedAt": "2026-03-07T16:50:00Z",
+      "slaDueAt": "2026-03-21T16:50:00Z",
+      "fixedAt": "2026-03-07T17:05:00Z",
+      "releaseBlock": false,
+      "tracking": {
+        "pr": 17,
+        "commit": "9be51d4f9b85be832f9fe40720d2192ecb4a8948"
+      }
+    },
+    {
+      "id": "P4C-F3",
+      "title": "Unbounded ACP intent/escrow state growth",
+      "severity": "medium",
+      "status": "fixed",
+      "component": "src/acpAdapter.js",
+      "source": "internal-review",
+      "openedAt": "2026-03-07T16:50:00Z",
+      "slaDueAt": "2026-03-21T16:50:00Z",
+      "fixedAt": "2026-03-07T17:05:00Z",
+      "releaseBlock": false,
+      "tracking": {
+        "pr": 17,
+        "commit": "9be51d4f9b85be832f9fe40720d2192ecb4a8948"
+      }
+    }
+  ]
+}

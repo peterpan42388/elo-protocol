@@ -13,12 +13,16 @@
 5. `npm run verify:p4b-audit-prep`
 6. `npm run verify:p4c-security-review`
 7. `npm run verify:p4e-audit-execution`
+8. `npm run verify:p4f-closure`
+9. `npm run security:sla:check`
+10. `npm run release:block:check`
 
 ### 安全回归重点
 1. API 防护：429/413/415/401 行为稳定。
 2. 输入校验：关键 token/number 校验不可被回退。
 3. 状态机幂等：x402/acp 的重复执行与过期逻辑稳定。
 4. 协议不变量：结算路径不破坏免费/付费分流。
+5. 发布安全门禁：不允许带阻断级发现发布。
 
 ### 发布前检查
 1. 变更说明是否列出安全影响面。
@@ -38,12 +42,16 @@ Make security behavior a mandatory regression gate so functional passes cannot h
 5. `npm run verify:p4b-audit-prep`
 6. `npm run verify:p4c-security-review`
 7. `npm run verify:p4e-audit-execution`
+8. `npm run verify:p4f-closure`
+9. `npm run security:sla:check`
+10. `npm run release:block:check`
 
 ### Security regression focus
 1. API controls: stable behavior for 429/413/415/401.
 2. Input guards: critical token/number validations remain enforced.
 3. State-machine idempotency: x402/acp duplicate and expiry handling remains correct.
 4. Protocol invariants: no breakage in free-vs-paid settlement routing.
+5. Release security gate: no blocking findings can pass release checks.
 
 ### Pre-release checks
 1. Security impact is explicitly stated in change notes.

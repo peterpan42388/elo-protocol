@@ -78,6 +78,10 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - 明确审计范围与交付物
    - 严重级别处理 SLA
    - 审计发现模板与工件门禁
+17. P4-F 审计发现闭环：
+   - triage board 机读看板
+   - SLA 执行脚本
+   - 发布阻断规则与 CI 强制门禁
 
 ### 运行方式
 ```bash
@@ -85,6 +89,9 @@ npm run wallet:virtual
 npm run test:p0p2:local
 npm run demo:market
 npm test
+npm run verify:p4f-closure
+npm run security:sla:check
+npm run release:block:check
 ```
 
 ### 待补资料/问题
@@ -180,6 +187,10 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - explicit audit scope and deliverables
    - severity handling SLA
    - finding template and artifact gate
+17. P4-F findings closure loop:
+   - machine-readable triage board
+   - SLA execution script
+   - release blocker rules and CI-required gate
 
 ### How to run
 ```bash
@@ -187,6 +198,9 @@ npm run wallet:virtual
 npm run test:p0p2:local
 npm run demo:market
 npm test
+npm run verify:p4f-closure
+npm run security:sla:check
+npm run release:block:check
 ```
 
 ### Pending inputs/questions

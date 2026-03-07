@@ -103,8 +103,10 @@ Recommended cross-owner pricing model:
 
 ### 中文
 - 已完成：协议草案、模拟器、API 原型、合约骨架、极限测试首批。
+- 已完成：P4-F 安全发现闭环（triage board + SLA 检查 + 发布阻断规则）。
 - 进行中：链上 MVP 功能拓展（签名委托、更完整结算策略）。
 
 ### English
 - Done: spec draft, simulator, API prototype, contract skeleton, first extreme test batch.
+- Done: P4-F security finding closure loop (triage board + SLA check + release blocking rules).
 - In progress: on-chain MVP expansion (delegated signing, richer settlement policies).
