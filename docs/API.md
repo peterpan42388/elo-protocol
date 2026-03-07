@@ -227,9 +227,15 @@ Base URL: `http://127.0.0.1:8787`
 
 34. `GET /dashboard/savings`
 
+35. `GET /dashboard/market-efficiency?limit=20`
+
+36. `GET /dashboard/outcomes?limit=100`
+
 Dashboard v1 contract doc:
 - `docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
 - `docs/schemas/dashboard.v1.json`
+- `docs/schemas/dashboard.market.v1.json`
+- `docs/schemas/dashboard.outcomes.v1.json`
 
 Market v1 schema docs:
 - `docs/schemas/listing.v1.json`

@@ -17,6 +17,9 @@
 4. `GET /dashboard/offers`
 5. `GET /dashboard/trades?limit=100`
 6. `GET /dashboard/savings`
+7. 扩展分析接口（不改变 `dashboard.v1` 主契约）：
+   - `GET /dashboard/market-efficiency?limit=20` (`dashboard.market.v1`)
+   - `GET /dashboard/outcomes?limit=100` (`dashboard.outcomes.v1`)
 
 ### `GET /dashboard/summary`
 ```json
@@ -155,5 +158,8 @@ Freeze a minimal dashboard contract for direct frontend integration. Schema vers
 4. `GET /dashboard/offers`
 5. `GET /dashboard/trades?limit=100`
 6. `GET /dashboard/savings`
+7. Extension analytics endpoints (without changing `dashboard.v1` core contract):
+   - `GET /dashboard/market-efficiency?limit=20` (`dashboard.market.v1`)
+   - `GET /dashboard/outcomes?limit=100` (`dashboard.outcomes.v1`)
 
 Field-level examples above are the normative v1 wire contract.

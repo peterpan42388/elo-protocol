@@ -23,6 +23,7 @@
 - P3-C outcome evaluator baseline (done)
 - P3-D x402 adapter baseline (done)
 - P3-E ACP-style negotiation and escrow baseline (done)
+- P3-F dashboard market/outcome analytics extension (done)
 - advanced evaluator plugin (third-party evaluator + anti-sybil weighting)
 - Human-facing dashboard integration layer (API scaffold done)
 - Dashboard API v1 contract freeze (done)

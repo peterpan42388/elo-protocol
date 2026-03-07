@@ -5,6 +5,8 @@ import { X402Adapter } from "./x402Adapter.js";
 import { ACPAdapter } from "./acpAdapter.js";
 import {
   buildDashboardAgents,
+  buildDashboardMarketEfficiency,
+  buildDashboardOutcomes,
   buildDashboardOffers,
   buildDashboardSavings,
   buildDashboardSchemaDescriptor,
@@ -208,6 +210,16 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
 
       if (req.method === "GET" && path === "/dashboard/savings") {
         return json(res, 200, buildDashboardSavings(market));
+      }
+
+      if (req.method === "GET" && path === "/dashboard/market-efficiency") {
+        const limit = Number(requestUrl.searchParams.get("limit") ?? "20");
+        return json(res, 200, buildDashboardMarketEfficiency(engine, market, limit));
+      }
+
+      if (req.method === "GET" && path === "/dashboard/outcomes") {
+        const limit = Number(requestUrl.searchParams.get("limit") ?? "100");
+        return json(res, 200, buildDashboardOutcomes(market, limit));
       }
 
       if (req.method === "GET" && path === "/dashboard/schema") {
