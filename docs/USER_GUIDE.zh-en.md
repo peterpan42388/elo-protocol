@@ -89,6 +89,10 @@ npm run test:p0p2:local
 - `GET /market/reviews`
 - `GET /market/ratings/listing/{listingId}`
 - `GET /market/ratings/provider/{ownerId}`
+- `POST /market/evaluations/submit`
+- `GET /market/evaluations`
+- `GET /market/outcomes/listing/{listingId}`
+- `GET /market/outcomes/provider/{ownerId}`
 - `GET /dashboard/schema`
 - `GET /dashboard/summary`
 - `GET /dashboard/agents`
@@ -114,6 +118,10 @@ npm run test:p0p2:local
 - `GET /market/reviews`
 - `GET /market/ratings/listing/{listingId}`
 - `GET /market/ratings/provider/{ownerId}`
+- `POST /market/evaluations/submit`
+- `GET /market/evaluations`
+- `GET /market/outcomes/listing/{listingId}`
+- `GET /market/outcomes/provider/{ownerId}`
 - `GET /dashboard/schema`
 - `GET /dashboard/summary`
 - `GET /dashboard/agents`

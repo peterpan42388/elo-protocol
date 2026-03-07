@@ -24,7 +24,7 @@
     "sort": {
       "type": "object",
       "properties": {
-        "mode": { "type": "string", "enum": ["hybrid", "price", "rating", "saving"] },
+        "mode": { "type": "string", "enum": ["hybrid", "price", "rating", "saving", "outcome"] },
         "direction": { "type": "string", "enum": ["asc", "desc"] }
       },
       "additionalProperties": false
