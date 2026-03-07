@@ -1,0 +1,65 @@
+name: Security Audit Finding
+about: Standardized intake for internal/external audit findings
+labels: [security, audit]
+body:
+  - type: input
+    id: finding_id
+    attributes:
+      label: Finding ID
+      description: Unique finding ID from auditor report
+      placeholder: AUD-2026-001
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+
+  - type: textarea
+    id: impacted_surface
+    attributes:
+      label: Impacted Surface
+      description: Files/modules/contracts and endpoint paths
+      placeholder: src/apiServer.js, /market/x402/settle
+    validations:
+      required: true
+
+  - type: textarea
+    id: risk_summary
+    attributes:
+      label: Risk Summary
+      description: One-paragraph impact statement
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction Steps
+      description: Minimal deterministic repro procedure
+    validations:
+      required: true
+
+  - type: textarea
+    id: remediation
+    attributes:
+      label: Remediation Suggestion
+      description: Suggested fix and validation strategy
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Verification Evidence
+      description: Test links, commit refs, logs
+    validations:
+      required: false

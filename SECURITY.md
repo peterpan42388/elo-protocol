@@ -44,3 +44,4 @@ Production deployments should layer additional controls (WAF, reverse-proxy rate
 - `docs/security/SECURITY_REVIEW_CHECKLIST.zh-en.md`
 - `docs/security/REGRESSION_STRATEGY.zh-en.md`
 - `docs/security/P4C_SECURITY_REVIEW_REPORT.zh-en.md`
+- `docs/security/P4E_EXTERNAL_AUDIT_EXECUTION.zh-en.md`

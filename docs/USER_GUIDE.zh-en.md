@@ -173,6 +173,10 @@ npm run verify:p4b-audit-prep
 ```bash
 npm run verify:p4c-security-review
 ```
+外部审计执行包工件校验：
+```bash
+npm run verify:p4e-audit-execution
+```
 
 ### English
 Standard contract tests:
@@ -191,6 +195,10 @@ npm run verify:p4b-audit-prep
 Security-review artifact verification:
 ```bash
 npm run verify:p4c-security-review
+```
+External-audit execution pack verification:
+```bash
+npm run verify:p4e-audit-execution
 ```
 
 ## 6) CI / 持续集成

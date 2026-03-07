@@ -43,6 +43,7 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] P4-B audit prep baseline (threat model, risk matrix, checklist, regression gates)
 - [x] P4-C security review drill report (findings + mitigations)
 - [x] P4-D optional API bearer-auth baseline (`API_AUTH_BEARER_TOKEN`)
+- [x] P4-E external audit execution pack (scope/SLA/template/gates)
 - [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start
@@ -62,6 +63,7 @@ npm run test:dashboard-contract
 npm run verify:p3a-freeze
 npm run verify:p4b-audit-prep
 npm run verify:p4c-security-review
+npm run verify:p4e-audit-execution
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -93,6 +95,7 @@ See [docs/API.md](docs/API.md).
 - [Security Review Checklist (ZH/EN)](docs/security/SECURITY_REVIEW_CHECKLIST.zh-en.md)
 - [Regression Strategy (ZH/EN)](docs/security/REGRESSION_STRATEGY.zh-en.md)
 - [P4-C Security Review Report (ZH/EN)](docs/security/P4C_SECURITY_REVIEW_REPORT.zh-en.md)
+- [P4-E External Audit Execution Pack (ZH/EN)](docs/security/P4E_EXTERNAL_AUDIT_EXECUTION.zh-en.md)
 
 ## CI
 - `CI`: node tests + solidity compile + core forge contract tests (`SettlementEngine`)

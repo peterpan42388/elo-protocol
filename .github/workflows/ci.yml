@@ -38,6 +38,9 @@ jobs:
       - name: Verify security-review artifacts
         run: npm run verify:p4c-security-review
 
+      - name: Verify external-audit execution artifacts
+        run: npm run verify:p4e-audit-execution
+
       - name: Run unit tests
         run: npm test
 

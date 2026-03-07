@@ -16,7 +16,7 @@
 | R5 | ACP 托管状态绕过 | 4 | 2 | 8 | 状态机 + 过期约束 | 合约化 escrow |
 | R6 | x402 challenge 重复结算 | 3 | 2 | 6 | paymentId 状态去重 | 统一幂等键与审计追踪 |
 | R7 | 横向扩容时限流失效 | 3 | 4 | 12 | 当前仅进程内限流 | Redis/edge 分布式限流 |
-| R8 | 缺少鉴权导致匿名滥用 | 5 | 3 | 15 | 无强鉴权（残余风险） | API key/签名认证层 |
+| R8 | 缺少强鉴权导致匿名滥用 | 5 | 3 | 15 | 可选 Bearer 鉴权（`API_AUTH_BEARER_TOKEN`） | API key/签名认证层 |
 
 高优先级（分数 >= 12）：R1, R4, R7, R8。
 
@@ -36,6 +36,6 @@ Scoring:
 | R5 | ACP escrow state bypass | 4 | 2 | 8 | state machine + expiry | on-chain escrow |
 | R6 | repeated x402 settlement | 3 | 2 | 6 | paymentId state dedupe | unified idempotency tracing |
 | R7 | limiter bypass in scaled deployment | 3 | 4 | 12 | process-local limiter only | distributed limiter (redis/edge) |
-| R8 | anonymous abuse without auth layer | 5 | 3 | 15 | no strong auth (residual) | API key/signature authentication |
+| R8 | anonymous abuse without strong auth | 5 | 3 | 15 | optional Bearer auth (`API_AUTH_BEARER_TOKEN`) | API key/signature authentication |
 
 High-priority (score >= 12): R1, R4, R7, R8.
