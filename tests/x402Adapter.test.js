@@ -100,6 +100,39 @@ test("x402 adapter should reject expired challenge", async () => {
         paymentId: challenge.payload.payment.paymentId,
         requestId: "x402-expired-1",
       }),
-    /expired/
+    /(expired|unknown paymentId)/
+  );
+});
+
+test("x402 adapter should enforce pending payment queue cap", () => {
+  const engine = new SettlementEngine();
+  const market = new ELOMarket(engine);
+  const x402 = new X402Adapter(market, { maxPendingPayments: 1 });
+
+  engine.registerAgent("provider", "ownerP");
+  engine.registerAgent("consumer", "ownerC");
+  engine.recharge("consumer", 20);
+
+  market.publishOffer({
+    offerId: "offer-x402-cap",
+    providerAgentId: "provider",
+    serviceId: "api/cap",
+    computeUnits: 100,
+    energyKwh: 0.1,
+    marketMultiplier: 1,
+  });
+
+  x402.createChallenge({
+    offerId: "offer-x402-cap",
+    consumerAgentId: "consumer",
+  });
+
+  assert.throws(
+    () =>
+      x402.createChallenge({
+        offerId: "offer-x402-cap",
+        consumerAgentId: "consumer",
+      }),
+    /queue is full/
   );
 });

@@ -81,3 +81,47 @@ test("ACP adapter should allow same-owner execution without escrow funding", () 
   assert.equal(executed.trade.billable, false);
   assert.equal(executed.trade.amount, 0);
 });
+
+test("ACP adapter should enforce intent queue cap and cleanup stale proposed intents", async () => {
+  const engine = new SettlementEngine();
+  const market = new ELOMarket(engine);
+  const acp = new ACPAdapter(market, engine, {
+    maxIntents: 1,
+    terminalRetentionMs: 1,
+  });
+
+  engine.registerAgent("provider", "ownerP");
+  engine.registerAgent("buyer", "ownerB");
+  engine.recharge("buyer", 10);
+
+  market.publishOffer({
+    offerId: "offer-acp-cap",
+    providerAgentId: "provider",
+    serviceId: "workflow/cap",
+    computeUnits: 100,
+    energyKwh: 0.1,
+    marketMultiplier: 1,
+  });
+
+  acp.openIntent({
+    offerId: "offer-acp-cap",
+    buyerAgentId: "buyer",
+  });
+
+  assert.throws(
+    () =>
+      acp.openIntent({
+        offerId: "offer-acp-cap",
+        buyerAgentId: "buyer",
+      }),
+    /queue is full/
+  );
+
+  await new Promise((resolve) => setTimeout(resolve, 5));
+
+  const reopened = acp.openIntent({
+    offerId: "offer-acp-cap",
+    buyerAgentId: "buyer",
+  });
+  assert.equal(reopened.status, "proposed");
+});

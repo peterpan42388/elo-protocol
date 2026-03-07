@@ -6,7 +6,10 @@ export class ACPAdapter {
     if (!market || !engine) throw new Error("market and engine are required");
     this.market = market;
     this.engine = engine;
-    this.defaultEscrowTtlMs = Number(options.defaultEscrowTtlMs ?? 300_000);
+    this.defaultEscrowTtlMs = this._positiveInt(options.defaultEscrowTtlMs, 300_000);
+    this.maxIntents = this._positiveInt(options.maxIntents, 5_000);
+    this.maxEscrows = this._positiveInt(options.maxEscrows, 5_000);
+    this.terminalRetentionMs = this._positiveInt(options.terminalRetentionMs, 3_600_000);
     this.intents = new Map();
     this.escrows = new Map();
   }
@@ -33,6 +36,11 @@ export class ACPAdapter {
       throw new Error("quote amount exceeds maxAmountElo");
     }
 
+    this._cleanup(Date.now());
+    if (this.intents.size >= this.maxIntents) {
+      throw new Error("acp intent queue is full");
+    }
+
     const offer = this._offer(offerId);
     const intentId = `acp-intent-${randomUUID()}`;
     const intent = {
@@ -54,6 +62,7 @@ export class ACPAdapter {
   }
 
   acceptIntent(intentId, params = {}) {
+    this._cleanup(Date.now());
     const intent = this._intent(intentId);
     if (intent.status !== "proposed") {
       throw new Error("intent is not in proposed status");
@@ -66,6 +75,9 @@ export class ACPAdapter {
 
     const ttlMs = this._ttl(params?.ttlMs);
     const now = Date.now();
+    if (this.escrows.size >= this.maxEscrows) {
+      throw new Error("acp escrow queue is full");
+    }
     const escrowId = `acp-escrow-${randomUUID()}`;
     const escrow = {
       schemaVersion: "acp.escrow.v1",
@@ -174,6 +186,7 @@ export class ACPAdapter {
   }
 
   getIntent(intentId) {
+    this._cleanup(Date.now());
     const intent = this._intent(intentId);
     return {
       schemaVersion: "acp.intent.v1",
@@ -182,6 +195,7 @@ export class ACPAdapter {
   }
 
   getEscrow(escrowId) {
+    this._cleanup(Date.now());
     const escrow = this._escrow(escrowId);
     if (escrow.state !== "executed" && escrow.state !== "expired" && escrow.expiresAt < Date.now()) {
       escrow.state = "expired";
@@ -231,5 +245,38 @@ export class ACPAdapter {
       throw new Error("ttlMs must be a positive integer");
     }
     return n;
+  }
+
+  _positiveInt(value, fallback) {
+    const n = Number(value);
+    if (!Number.isInteger(n) || n <= 0) return fallback;
+    return n;
+  }
+
+  _cleanup(now) {
+    for (const [escrowId, escrow] of this.escrows.entries()) {
+      const isTerminal = escrow.state === "executed" || escrow.state === "expired";
+      if (!isTerminal && escrow.expiresAt <= now) {
+        escrow.state = "expired";
+        const intent = this.intents.get(escrow.intentId);
+        if (intent && intent.status !== "completed") intent.status = "expired";
+      }
+
+      const terminalAt = escrow.executedAt ?? escrow.expiresAt;
+      if ((escrow.state === "executed" || escrow.state === "expired") && terminalAt + this.terminalRetentionMs <= now) {
+        this.escrows.delete(escrowId);
+        const intent = this.intents.get(escrow.intentId);
+        if (intent && (intent.status === "completed" || intent.status === "expired")) {
+          this.intents.delete(intent.intentId);
+        }
+      }
+    }
+
+    for (const [intentId, intent] of this.intents.entries()) {
+      const staleProposed = intent.status === "proposed" && intent.createdAt + this.terminalRetentionMs <= now;
+      if (staleProposed) {
+        this.intents.delete(intentId);
+      }
+    }
   }
 }

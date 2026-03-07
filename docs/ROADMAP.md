@@ -31,6 +31,6 @@
 ## P4
 - P4-A security hardening baseline (done)
 - P4-B audit prep baseline (done)
-- security review
+- P4-C security review drill and findings report (done)
 - external audit execution
 - community governance and contribution standards

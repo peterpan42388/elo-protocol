@@ -18,11 +18,20 @@ Use GitHub Security Advisories (private reporting) for this repository.
 - Request body size guard to mitigate oversized payload abuse
 - Input validation on settlement and market critical identifiers and numeric fields
 - Replay protection on settlement request IDs (existing invariant)
+- Bounded in-memory state queues and cleanup for x402/acp adapters
 
 ## API Security Config
 - `API_RATE_LIMIT_MAX` (default: `2000`)
 - `API_RATE_LIMIT_WINDOW_MS` (default: `60000`)
 - `API_BODY_MAX_BYTES` (default: `65536`)
+- `API_RATE_LIMIT_MAX_CLIENTS` (default: `10000`)
+- `X402_DEFAULT_TTL_MS` (default: `120000`)
+- `X402_MAX_PENDING` (default: `5000`)
+- `X402_MAX_SETTLED` (default: `10000`)
+- `ACP_DEFAULT_ESCROW_TTL_MS` (default: `300000`)
+- `ACP_MAX_INTENTS` (default: `5000`)
+- `ACP_MAX_ESCROWS` (default: `5000`)
+- `ACP_TERMINAL_RETENTION_MS` (default: `3600000`)
 
 These controls are intended as baseline protections for prototype and staging environments.
 Production deployments should layer additional controls (WAF, reverse-proxy rate limit, authn/authz, structured audit logging, and external security review).
@@ -33,3 +42,4 @@ Production deployments should layer additional controls (WAF, reverse-proxy rate
 - `docs/security/RISK_MATRIX.zh-en.md`
 - `docs/security/SECURITY_REVIEW_CHECKLIST.zh-en.md`
 - `docs/security/REGRESSION_STRATEGY.zh-en.md`
+- `docs/security/P4C_SECURITY_REVIEW_REPORT.zh-en.md`

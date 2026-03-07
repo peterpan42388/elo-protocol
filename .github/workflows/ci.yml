@@ -35,6 +35,9 @@ jobs:
       - name: Verify audit-prep artifacts
         run: npm run verify:p4b-audit-prep
 
+      - name: Verify security-review artifacts
+        run: npm run verify:p4c-security-review
+
       - name: Run unit tests
         run: npm test
 

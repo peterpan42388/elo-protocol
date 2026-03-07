@@ -66,6 +66,10 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - 风险矩阵（Risk Matrix）
    - 安全审查检查清单（Checklist）
    - 安全回归策略与门禁（Regression Gates）
+14. P4-C 安全审查演练：
+   - 代码级审查发现输出
+   - 高优先级发现即时修复
+   - 安全审查报告归档
 
 ### 运行方式
 ```bash
@@ -156,6 +160,10 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - risk matrix
    - security review checklist
    - security regression strategy and gates
+14. P4-C security review drill:
+   - code-level findings report
+   - immediate remediation for high-priority issues
+   - archived security review report
 
 ### How to run
 ```bash

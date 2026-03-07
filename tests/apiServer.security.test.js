@@ -30,6 +30,29 @@ test("API should enforce rate limiting", async () => {
   }
 });
 
+test("API should enforce max tracked clients cap in limiter", async () => {
+  const app = await startServer({
+    rateLimitWindowMs: 60_000,
+    rateLimitMaxRequests: 100,
+    rateLimitMaxClients: 1,
+  });
+  try {
+    const first = await fetch(`${app.base}/dashboard/schema`, {
+      headers: { "x-forwarded-for": "10.0.0.1" },
+    });
+    assert.equal(first.status, 200);
+
+    const second = await fetch(`${app.base}/dashboard/schema`, {
+      headers: { "x-forwarded-for": "10.0.0.2" },
+    });
+    assert.equal(second.status, 429);
+    const body = await second.json();
+    assert.match(body.error, /rate limit exceeded/);
+  } finally {
+    await app.close();
+  }
+});
+
 test("API should reject non-json content-type on POST", async () => {
   const app = await startServer();
   try {
