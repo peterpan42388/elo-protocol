@@ -44,6 +44,10 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - `GET /market/outcomes/listing/{listingId}`
    - `GET /market/outcomes/provider/{ownerId}`
    - 检索排序新增 `sort.mode=outcome`
+9. P3-D x402 适配基础：
+   - `POST /market/x402/challenge`（跨归属返回 402 支付挑战）
+   - `POST /market/x402/settle`（支付确认后执行结算）
+   - `GET /market/x402/payments/{paymentId}`（支付状态追踪）
 
 ### 运行方式
 ```bash
@@ -112,6 +116,10 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - `GET /market/outcomes/listing/{listingId}`
    - `GET /market/outcomes/provider/{ownerId}`
    - search ranking supports `sort.mode=outcome`
+9. P3-D x402 adapter baseline:
+   - `POST /market/x402/challenge` (cross-owner returns 402 challenge)
+   - `POST /market/x402/settle` (finalize settlement after payment)
+   - `GET /market/x402/payments/{paymentId}` (payment state tracking)
 
 ### How to run
 ```bash

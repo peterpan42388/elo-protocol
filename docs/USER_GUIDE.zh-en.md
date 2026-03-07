@@ -81,6 +81,9 @@ npm run test:p0p2:local
 - `GET /balance/{agentId}`
 - `POST /market/offers/publish`
 - `GET /market/offers`
+- `POST /market/x402/challenge`
+- `POST /market/x402/settle`
+- `GET /market/x402/payments/{paymentId}`
 - `POST /market/search`
 - `POST /market/quote`
 - `POST /market/purchase`
@@ -110,6 +113,9 @@ npm run test:p0p2:local
 - `GET /balance/{agentId}`
 - `POST /market/offers/publish`
 - `GET /market/offers`
+- `POST /market/x402/challenge`
+- `POST /market/x402/settle`
+- `GET /market/x402/payments/{paymentId}`
 - `POST /market/search`
 - `POST /market/quote`
 - `POST /market/purchase`

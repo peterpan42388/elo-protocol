@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/x402.settlement.v1.json",
+  "title": "x402 Settlement Receipt v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "paymentId",
+    "requestId",
+    "offerId",
+    "consumerAgentId",
+    "providerAgentId",
+    "amountElo",
+    "billable",
+    "settledAt",
+    "trade"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "x402.settlement.v1" },
+    "paymentId": { "type": "string" },
+    "requestId": { "type": "string" },
+    "offerId": { "type": "string" },
+    "consumerAgentId": { "type": "string" },
+    "providerAgentId": { "type": "string" },
+    "amountElo": { "type": "number", "minimum": 0 },
+    "billable": { "type": "boolean" },
+    "settledAt": { "type": "integer" },
+    "trade": { "type": "object" }
+  },
+  "additionalProperties": true
+}
