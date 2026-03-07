@@ -1,0 +1,239 @@
+import { randomUUID } from "node:crypto";
+
+export class ACPAdapter {
+  constructor(market, engine = market?.engine, options = {}) {
+    if (!market || !engine) throw new Error("market and engine are required");
+    this.market = market;
+    this.engine = engine;
+    this.defaultEscrowTtlMs = Number(options.defaultEscrowTtlMs ?? 300_000);
+    this.intents = new Map();
+    this.escrows = new Map();
+  }
+
+  openIntent(params) {
+    const offerId = String(params?.offerId ?? "");
+    const buyerAgentId = String(params?.buyerAgentId ?? "");
+    const units = this._units(params?.units);
+    const maxAmountElo = params?.maxAmountElo;
+    const note = String(params?.note ?? "");
+
+    if (!offerId || !buyerAgentId) {
+      throw new Error("offerId and buyerAgentId are required");
+    }
+    this.engine.ownerOf(buyerAgentId);
+
+    const quote = this.market.quotePurchase({
+      offerId,
+      consumerAgentId: buyerAgentId,
+      units,
+    });
+
+    if (Number.isFinite(maxAmountElo) && quote.billable && quote.amount > Number(maxAmountElo)) {
+      throw new Error("quote amount exceeds maxAmountElo");
+    }
+
+    const offer = this._offer(offerId);
+    const intentId = `acp-intent-${randomUUID()}`;
+    const intent = {
+      schemaVersion: "acp.intent.v1",
+      intentId,
+      offerId,
+      serviceId: offer.serviceId,
+      providerAgentId: offer.providerAgentId,
+      buyerAgentId,
+      units,
+      quote,
+      status: "proposed",
+      note,
+      createdAt: Date.now(),
+      escrowId: null,
+    };
+    this.intents.set(intentId, intent);
+    return intent;
+  }
+
+  acceptIntent(intentId, params = {}) {
+    const intent = this._intent(intentId);
+    if (intent.status !== "proposed") {
+      throw new Error("intent is not in proposed status");
+    }
+
+    const providerAgentId = String(params?.providerAgentId ?? intent.providerAgentId);
+    if (providerAgentId !== intent.providerAgentId) {
+      throw new Error("providerAgentId does not match listing provider");
+    }
+
+    const ttlMs = this._ttl(params?.ttlMs);
+    const now = Date.now();
+    const escrowId = `acp-escrow-${randomUUID()}`;
+    const escrow = {
+      schemaVersion: "acp.escrow.v1",
+      escrowId,
+      intentId,
+      offerId: intent.offerId,
+      providerAgentId: intent.providerAgentId,
+      buyerAgentId: intent.buyerAgentId,
+      units: intent.units,
+      amountElo: intent.quote.amount,
+      billable: intent.quote.billable,
+      state: intent.quote.billable ? "awaiting_fund" : "funded",
+      createdAt: now,
+      expiresAt: now + ttlMs,
+      fundedAt: intent.quote.billable ? null : now,
+      executedAt: null,
+      trade: null,
+    };
+
+    intent.status = "accepted";
+    intent.escrowId = escrowId;
+    intent.acceptedAt = now;
+    this.escrows.set(escrowId, escrow);
+
+    return {
+      schemaVersion: "acp.acceptance.v1",
+      intent,
+      escrow,
+    };
+  }
+
+  fundEscrow(escrowId, params = {}) {
+    const escrow = this._escrow(escrowId);
+    if (!escrow.billable) {
+      throw new Error("funding not required for non-billable escrow");
+    }
+    if (escrow.state !== "awaiting_fund") {
+      throw new Error("escrow is not awaiting fund");
+    }
+    if (escrow.expiresAt < Date.now()) {
+      escrow.state = "expired";
+      throw new Error("escrow expired");
+    }
+
+    const buyerAgentId = String(params?.buyerAgentId ?? escrow.buyerAgentId);
+    if (buyerAgentId !== escrow.buyerAgentId) {
+      throw new Error("buyerAgentId does not match escrow buyer");
+    }
+
+    const balance = this.engine.balanceOf(buyerAgentId);
+    if (balance < escrow.amountElo) {
+      throw new Error(`insufficient balance for escrow fund: needs ${escrow.amountElo}, has ${balance}`);
+    }
+
+    escrow.state = "funded";
+    escrow.fundedAt = Date.now();
+
+    return {
+      schemaVersion: "acp.escrow.v1",
+      ...escrow,
+    };
+  }
+
+  executeEscrow(escrowId, params = {}) {
+    const escrow = this._escrow(escrowId);
+    const intent = this._intent(escrow.intentId);
+    const requestId = String(params?.requestId ?? "");
+    const usageRef = String(params?.usageRef ?? "acp_escrow");
+
+    if (!requestId) {
+      throw new Error("requestId is required");
+    }
+    if (escrow.state === "executed") {
+      throw new Error("escrow already executed");
+    }
+    if (escrow.state !== "funded") {
+      throw new Error("escrow must be funded before execution");
+    }
+    if (escrow.expiresAt < Date.now()) {
+      escrow.state = "expired";
+      intent.status = "expired";
+      throw new Error("escrow expired");
+    }
+
+    const trade = this.market.purchase({
+      offerId: escrow.offerId,
+      consumerAgentId: escrow.buyerAgentId,
+      requestId,
+      usageRef,
+      units: escrow.units,
+    });
+
+    if (escrow.billable && trade.amount > escrow.amountElo) {
+      throw new Error("trade amount exceeds escrow amount");
+    }
+
+    escrow.state = "executed";
+    escrow.executedAt = Date.now();
+    escrow.trade = trade;
+    intent.status = "completed";
+    intent.completedAt = escrow.executedAt;
+
+    return {
+      schemaVersion: "acp.execution.v1",
+      intentId: intent.intentId,
+      escrowId: escrow.escrowId,
+      state: escrow.state,
+      trade,
+    };
+  }
+
+  getIntent(intentId) {
+    const intent = this._intent(intentId);
+    return {
+      schemaVersion: "acp.intent.v1",
+      ...intent,
+    };
+  }
+
+  getEscrow(escrowId) {
+    const escrow = this._escrow(escrowId);
+    if (escrow.state !== "executed" && escrow.state !== "expired" && escrow.expiresAt < Date.now()) {
+      escrow.state = "expired";
+      const intent = this.intents.get(escrow.intentId);
+      if (intent && intent.status !== "completed") intent.status = "expired";
+    }
+    return {
+      schemaVersion: "acp.escrow.v1",
+      ...escrow,
+    };
+  }
+
+  _intent(intentId) {
+    const id = String(intentId ?? "");
+    if (!id) throw new Error("intentId is required");
+    const intent = this.intents.get(id);
+    if (!intent) throw new Error("unknown intentId");
+    return intent;
+  }
+
+  _escrow(escrowId) {
+    const id = String(escrowId ?? "");
+    if (!id) throw new Error("escrowId is required");
+    const escrow = this.escrows.get(id);
+    if (!escrow) throw new Error("unknown escrowId");
+    return escrow;
+  }
+
+  _offer(offerId) {
+    const offer = this.market.listOffers().find((x) => x.offerId === offerId);
+    if (!offer) {
+      throw new Error(`unknown offerId: ${offerId}`);
+    }
+    return offer;
+  }
+
+  _units(v) {
+    const n = Number(v ?? 1);
+    if (!Number.isInteger(n) || n <= 0) {
+      throw new Error("units must be a positive integer");
+    }
+    return n;
+  }
+
+  _ttl(v) {
+    const n = Number(v ?? this.defaultEscrowTtlMs);
+    if (!Number.isInteger(n) || n <= 0) {
+      throw new Error("ttlMs must be a positive integer");
+    }
+    return n;
+  }
+}

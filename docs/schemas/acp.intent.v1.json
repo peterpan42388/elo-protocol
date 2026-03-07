@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/acp.intent.v1.json",
+  "title": "ACP Intent v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "intentId",
+    "offerId",
+    "serviceId",
+    "providerAgentId",
+    "buyerAgentId",
+    "units",
+    "quote",
+    "status",
+    "createdAt",
+    "escrowId"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "acp.intent.v1" },
+    "intentId": { "type": "string" },
+    "offerId": { "type": "string" },
+    "serviceId": { "type": "string" },
+    "providerAgentId": { "type": "string" },
+    "buyerAgentId": { "type": "string" },
+    "units": { "type": "integer", "minimum": 1 },
+    "quote": { "type": "object" },
+    "status": { "type": "string", "enum": ["proposed", "accepted", "completed", "expired"] },
+    "createdAt": { "type": "integer" },
+    "escrowId": { "type": ["string", "null"] }
+  },
+  "additionalProperties": true
+}

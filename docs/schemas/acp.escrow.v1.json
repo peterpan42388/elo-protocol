@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/acp.escrow.v1.json",
+  "title": "ACP Escrow v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "escrowId",
+    "intentId",
+    "offerId",
+    "providerAgentId",
+    "buyerAgentId",
+    "units",
+    "amountElo",
+    "billable",
+    "state",
+    "createdAt",
+    "expiresAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "acp.escrow.v1" },
+    "escrowId": { "type": "string" },
+    "intentId": { "type": "string" },
+    "offerId": { "type": "string" },
+    "providerAgentId": { "type": "string" },
+    "buyerAgentId": { "type": "string" },
+    "units": { "type": "integer", "minimum": 1 },
+    "amountElo": { "type": "number", "minimum": 0 },
+    "billable": { "type": "boolean" },
+    "state": { "type": "string", "enum": ["awaiting_fund", "funded", "executed", "expired"] },
+    "createdAt": { "type": "integer" },
+    "expiresAt": { "type": "integer" }
+  },
+  "additionalProperties": true
+}

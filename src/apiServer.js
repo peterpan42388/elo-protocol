@@ -2,6 +2,7 @@ import http from "node:http";
 import { SettlementEngine } from "./settlementEngine.js";
 import { ELOMarket } from "./eloMarket.js";
 import { X402Adapter } from "./x402Adapter.js";
+import { ACPAdapter } from "./acpAdapter.js";
 import {
   buildDashboardAgents,
   buildDashboardOffers,
@@ -25,6 +26,7 @@ async function readJson(req) {
 
 export function createApiServer(engine = new SettlementEngine(), market = new ELOMarket(engine)) {
   const x402 = new X402Adapter(market);
+  const acp = new ACPAdapter(market, engine);
   const server = http.createServer(async (req, res) => {
     try {
       if (!req.url || !req.method) return json(res, 400, { error: "bad request" });
@@ -63,6 +65,43 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
 
       if (req.method === "GET" && path === "/market/offers") {
         return json(res, 200, { offers: market.listOffers() });
+      }
+
+      if (req.method === "POST" && path === "/market/acp/intents/open") {
+        const body = await readJson(req);
+        const result = acp.openIntent(body);
+        return json(res, 200, result);
+      }
+
+      if (req.method === "POST" && path.startsWith("/market/acp/intents/") && path.endsWith("/accept")) {
+        const intentId = decodeURIComponent(path.slice("/market/acp/intents/".length, -"/accept".length));
+        const body = await readJson(req);
+        const result = acp.acceptIntent(intentId, body);
+        return json(res, 200, result);
+      }
+
+      if (req.method === "GET" && path.startsWith("/market/acp/intents/")) {
+        const intentId = decodeURIComponent(path.slice("/market/acp/intents/".length));
+        return json(res, 200, acp.getIntent(intentId));
+      }
+
+      if (req.method === "POST" && path.startsWith("/market/acp/escrow/") && path.endsWith("/fund")) {
+        const escrowId = decodeURIComponent(path.slice("/market/acp/escrow/".length, -"/fund".length));
+        const body = await readJson(req);
+        const result = acp.fundEscrow(escrowId, body);
+        return json(res, 200, result);
+      }
+
+      if (req.method === "POST" && path.startsWith("/market/acp/escrow/") && path.endsWith("/execute")) {
+        const escrowId = decodeURIComponent(path.slice("/market/acp/escrow/".length, -"/execute".length));
+        const body = await readJson(req);
+        const result = acp.executeEscrow(escrowId, body);
+        return json(res, 200, result);
+      }
+
+      if (req.method === "GET" && path.startsWith("/market/acp/escrow/")) {
+        const escrowId = decodeURIComponent(path.slice("/market/acp/escrow/".length));
+        return json(res, 200, acp.getEscrow(escrowId));
       }
 
       if (req.method === "POST" && path === "/market/x402/challenge") {
