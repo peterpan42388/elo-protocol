@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elo-protocol.local/schemas/query.dsl.v1.json",
+  "title": "ELO Market Query DSL v1",
+  "type": "object",
+  "required": ["schemaVersion", "query"],
+  "properties": {
+    "schemaVersion": { "const": "query.dsl.v1" },
+    "query": { "type": "string", "minLength": 1 },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "kind": { "type": "array", "items": { "type": "string", "enum": ["api", "skill", "workflow"] } },
+        "categories": { "type": "array", "items": { "type": "string" } },
+        "priceMaxElo": { "type": "number", "minimum": 0 },
+        "pricingMode": { "type": "array", "items": { "type": "string", "enum": ["free", "per_call", "subscription"] } },
+        "ownerId": { "type": "string" },
+        "minRating": { "type": "number", "minimum": 0, "maximum": 5 },
+        "minTokenSaving": { "type": "number", "minimum": 0, "maximum": 1 },
+        "requireHealthy": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "sort": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["hybrid", "price", "rating", "saving"] },
+        "direction": { "type": "string", "enum": ["asc", "desc"] }
+      },
+      "additionalProperties": false
+    },
+    "page": {
+      "type": "object",
+      "properties": {
+        "offset": { "type": "integer", "minimum": 0 },
+        "limit": { "type": "integer", "minimum": 1, "maximum": 100 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

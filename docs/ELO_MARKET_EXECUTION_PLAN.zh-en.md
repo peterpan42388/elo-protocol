@@ -28,6 +28,13 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - `GET /dashboard/trades?limit=100`
    - `GET /dashboard/savings`
    - 契约文档：`docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
+6. P3-A 架构冻结包：
+   - `docs/architecture/P3A_ARCHITECTURE_FREEZE.zh-en.md`
+   - `docs/architecture/adr/*`
+   - `docs/schemas/listing.v1.json`
+   - `docs/schemas/review.v1.json`
+   - `docs/schemas/event.v1.json`
+   - `docs/schemas/query.dsl.v1.json`
 
 ### 运行方式
 ```bash
@@ -80,6 +87,13 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - `GET /dashboard/trades?limit=100`
    - `GET /dashboard/savings`
    - contract doc: `docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
+6. P3-A architecture freeze pack:
+   - `docs/architecture/P3A_ARCHITECTURE_FREEZE.zh-en.md`
+   - `docs/architecture/adr/*`
+   - `docs/schemas/listing.v1.json`
+   - `docs/schemas/review.v1.json`
+   - `docs/schemas/event.v1.json`
+   - `docs/schemas/query.dsl.v1.json`
 
 ### How to run
 ```bash
