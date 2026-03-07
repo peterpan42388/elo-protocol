@@ -24,7 +24,10 @@
     "verify:p3a-freeze": "node scripts/verify-p3a-freeze.mjs",
     "verify:p4b-audit-prep": "node scripts/verify-p4b-audit-prep.mjs",
     "verify:p4c-security-review": "node scripts/verify-p4c-security-review.mjs",
-    "verify:p4e-audit-execution": "node scripts/verify-p4e-audit-execution.mjs"
+    "verify:p4e-audit-execution": "node scripts/verify-p4e-audit-execution.mjs",
+    "verify:p4f-closure": "node scripts/verify-p4f-closure.mjs",
+    "security:sla:check": "node scripts/check-security-sla.mjs",
+    "release:block:check": "node scripts/check-release-blockers.mjs"
   },
   "devDependencies": {
     "solc": "^0.8.30"

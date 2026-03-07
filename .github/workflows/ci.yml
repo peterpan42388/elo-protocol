@@ -41,6 +41,15 @@ jobs:
       - name: Verify external-audit execution artifacts
         run: npm run verify:p4e-audit-execution
 
+      - name: Verify P4-F closure artifacts
+        run: npm run verify:p4f-closure
+
+      - name: Check security SLA
+        run: npm run security:sla:check
+
+      - name: Check release blockers
+        run: npm run release:block:check
+
       - name: Run unit tests
         run: npm test
 

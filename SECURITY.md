@@ -37,7 +37,7 @@ Use GitHub Security Advisories (private reporting) for this repository.
 These controls are intended as baseline protections for prototype and staging environments.
 Production deployments should layer additional controls (WAF, reverse-proxy rate limit, authn/authz, structured audit logging, and external security review).
 
-## Audit Prep Assets (P4-B)
+## Security Artifacts (P4-B to P4-F)
 - `docs/security/P4B_AUDIT_PREP.zh-en.md`
 - `docs/security/THREAT_MODEL.zh-en.md`
 - `docs/security/RISK_MATRIX.zh-en.md`
@@ -45,3 +45,12 @@ Production deployments should layer additional controls (WAF, reverse-proxy rate
 - `docs/security/REGRESSION_STRATEGY.zh-en.md`
 - `docs/security/P4C_SECURITY_REVIEW_REPORT.zh-en.md`
 - `docs/security/P4E_EXTERNAL_AUDIT_EXECUTION.zh-en.md`
+- `docs/security/P4F_FINDING_CLOSURE.zh-en.md`
+- `docs/security/P4F_FINDINGS_TRIAGE_BOARD.zh-en.md`
+- `docs/security/P4F_RELEASE_BLOCK_RULES.zh-en.md`
+- `docs/security/findings/triage-board.v1.json`
+
+## P4-F Security Closure Gates
+- `npm run verify:p4f-closure`
+- `npm run security:sla:check`
+- `npm run release:block:check`

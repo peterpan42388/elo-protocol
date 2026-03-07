@@ -44,6 +44,7 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] P4-C security review drill report (findings + mitigations)
 - [x] P4-D optional API bearer-auth baseline (`API_AUTH_BEARER_TOKEN`)
 - [x] P4-E external audit execution pack (scope/SLA/template/gates)
+- [x] P4-F finding closure loop (triage board + SLA checker + release blocker gate)
 - [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start
@@ -64,6 +65,9 @@ npm run verify:p3a-freeze
 npm run verify:p4b-audit-prep
 npm run verify:p4c-security-review
 npm run verify:p4e-audit-execution
+npm run verify:p4f-closure
+npm run security:sla:check
+npm run release:block:check
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -81,6 +85,9 @@ See [docs/API.md](docs/API.md).
 
 ## Bilingual Docs
 - [Technical Overview (ZH/EN)](docs/TECHNICAL_OVERVIEW.zh-en.md)
+- [System Architecture (ZH/EN)](docs/SYSTEM_ARCHITECTURE.zh-en.md)
+- [Protocol Rules (ZH/EN)](docs/PROTOCOL_RULES.zh-en.md)
+- [Usage Playbook (ZH/EN)](docs/USAGE_PLAYBOOK.zh-en.md)
 - [User Guide (ZH/EN)](docs/USER_GUIDE.zh-en.md)
 - [Founder Requirements Statement (ZH/EN)](docs/FOUNDER_REQUIREMENTS_STATEMENT.zh-en.md)
 - [Base Sepolia Deployment Guide (ZH/EN)](docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md)
@@ -96,6 +103,9 @@ See [docs/API.md](docs/API.md).
 - [Regression Strategy (ZH/EN)](docs/security/REGRESSION_STRATEGY.zh-en.md)
 - [P4-C Security Review Report (ZH/EN)](docs/security/P4C_SECURITY_REVIEW_REPORT.zh-en.md)
 - [P4-E External Audit Execution Pack (ZH/EN)](docs/security/P4E_EXTERNAL_AUDIT_EXECUTION.zh-en.md)
+- [P4-F Finding Closure (ZH/EN)](docs/security/P4F_FINDING_CLOSURE.zh-en.md)
+- [P4-F Findings Triage Board (ZH/EN)](docs/security/P4F_FINDINGS_TRIAGE_BOARD.zh-en.md)
+- [P4-F Release Block Rules (ZH/EN)](docs/security/P4F_RELEASE_BLOCK_RULES.zh-en.md)
 
 ## CI
 - `CI`: node tests + solidity compile + core forge contract tests (`SettlementEngine`)

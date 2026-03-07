@@ -177,6 +177,15 @@ npm run verify:p4c-security-review
 ```bash
 npm run verify:p4e-audit-execution
 ```
+审计发现闭环工件校验：
+```bash
+npm run verify:p4f-closure
+```
+SLA 与发布阻断检查：
+```bash
+npm run security:sla:check
+npm run release:block:check
+```
 
 ### English
 Standard contract tests:
@@ -199,6 +208,15 @@ npm run verify:p4c-security-review
 External-audit execution pack verification:
 ```bash
 npm run verify:p4e-audit-execution
+```
+Finding-closure artifact verification:
+```bash
+npm run verify:p4f-closure
+```
+SLA and release blocker checks:
+```bash
+npm run security:sla:check
+npm run release:block:check
 ```
 
 ## 6) CI / 持续集成

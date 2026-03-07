@@ -34,5 +34,6 @@
 - P4-C security review drill and findings report (done)
 - P4-D optional API bearer-auth baseline (done)
 - P4-E external audit execution pack (done)
-- external auditor engagement + finding closure
+- P4-F finding closure loop (triage board + SLA + release blocker) (done)
+- external auditor engagement + findings lifecycle operation
 - community governance and contribution standards

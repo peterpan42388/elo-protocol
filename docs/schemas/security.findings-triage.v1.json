@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "elo/security/findings-triage.v1",
+  "title": "ELO Security Findings Triage Board",
+  "type": "object",
+  "required": ["schemaVersion", "updatedAt", "findings"],
+  "properties": {
+    "schemaVersion": { "const": "elo.security.triage.v1" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "owner": { "type": "string" },
+    "source": { "type": "string" },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "severity", "status", "openedAt", "slaDueAt", "releaseBlock"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+          "status": { "type": "string" },
+          "component": { "type": "string" },
+          "source": { "type": "string" },
+          "openedAt": { "type": "string", "format": "date-time" },
+          "slaDueAt": { "type": "string", "format": "date-time" },
+          "fixedAt": { "type": "string", "format": "date-time" },
+          "releaseBlock": { "type": "boolean" },
+          "acceptedRisk": {
+            "type": "object",
+            "properties": {
+              "approvedBy": { "type": "string" },
+              "approvedAt": { "type": "string", "format": "date-time" },
+              "reason": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

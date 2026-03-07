@@ -39,6 +39,7 @@
 1. Critical/High 为 0（或明确 accepted risk 且有签字记录）。
 2. 修复项均有回归测试或策略门禁覆盖。
 3. `SECURITY.md` 与用户文档完成同步更新。
+4. 执行 `npm run security:sla:check` 与 `npm run release:block:check` 通过。
 
 ## English
 
@@ -79,3 +80,4 @@ Move external security audit from planning to execution with a normalized scope,
 1. Zero Critical/High (or explicitly accepted with sign-off).
 2. Every fix is covered by tests or regression gates.
 3. `SECURITY.md` and user-facing docs are synchronized.
+4. `npm run security:sla:check` and `npm run release:block:check` must pass.
