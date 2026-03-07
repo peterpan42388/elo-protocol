@@ -33,5 +33,6 @@
 - P4-B audit prep baseline (done)
 - P4-C security review drill and findings report (done)
 - P4-D optional API bearer-auth baseline (done)
-- external audit execution
+- P4-E external audit execution pack (done)
+- external auditor engagement + finding closure
 - community governance and contribution standards

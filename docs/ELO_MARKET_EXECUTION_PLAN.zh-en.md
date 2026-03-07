@@ -74,6 +74,10 @@ ELO 将作为 AI 市场（ELO Market）的结算核心。目标不是在 ELO 协
    - 可选 Bearer 鉴权开关（`API_AUTH_BEARER_TOKEN`）
    - POST 写接口统一鉴权
    - 安全回归覆盖 401 路径
+16. P4-E 外部审计执行包：
+   - 明确审计范围与交付物
+   - 严重级别处理 SLA
+   - 审计发现模板与工件门禁
 
 ### 运行方式
 ```bash
@@ -172,6 +176,10 @@ ELO serves as the settlement core for ELO Market. The goal is to keep ELO protoc
    - optional Bearer auth gate (`API_AUTH_BEARER_TOKEN`)
    - unified auth for POST mutation endpoints
    - security regression coverage for 401 paths
+16. P4-E external-audit execution pack:
+   - explicit audit scope and deliverables
+   - severity handling SLA
+   - finding template and artifact gate
 
 ### How to run
 ```bash
