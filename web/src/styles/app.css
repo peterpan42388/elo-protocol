@@ -445,3 +445,245 @@ p {
     width: 100%;
   }
 }
+
+.status-error {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, var(--border));
+  background: color-mix(in srgb, var(--warning) 8%, white);
+  color: var(--warning);
+}
+
+.market-filters {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.checkbox-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.listing-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: white;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.listing-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(17, 17, 17, 0.08);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+
+.listing-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.listing-head h2 {
+  font-size: 1.02rem;
+}
+
+.listing-summary {
+  color: var(--muted);
+  min-height: 2.6em;
+}
+
+.listing-meta,
+.listing-score,
+.agent-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 15;
+  width: min(460px, 100vw);
+  height: 100vh;
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+  background: white;
+  box-shadow: -6px 0 24px rgba(17, 17, 17, 0.12);
+  padding: 20px;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.drawer-head,
+.drawer-actions,
+.trend-head,
+.inline-actions,
+.agent-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.drawer-meta,
+.modal-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.detail-grid .panel {
+  padding: 12px;
+}
+
+.step,
+.step-active {
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.step-active {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.summary-line {
+  color: #1f2937;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.table th {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.empty-cell {
+  color: var(--muted);
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.kpi-grid-compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.form-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.agent-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.sparkline {
+  width: 100%;
+  height: 130px;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, white), #ffffff);
+  padding: 8px;
+}
+
+.sparkline-empty {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 1080px) {
+  .market-filters,
+  .listing-grid,
+  .agent-grid,
+  .kpi-grid-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .market-filters,
+  .listing-grid,
+  .agent-grid,
+  .kpi-grid-compact {
+    grid-template-columns: 1fr;
+  }
+
+  .drawer {
+    width: 100vw;
+  }
+
+  .inline-actions,
+  .drawer-head,
+  .drawer-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .table {
+    min-width: 520px;
+  }
+}
