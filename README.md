@@ -95,6 +95,15 @@ See [docs/API.md](docs/API.md).
 ## Web Console
 See [web/README.md](web/README.md).
 
+## Engineering Rules
+- [Rules / 开源工程规则目录](docs/Rules)
+- [Spirit](docs/Rules/Spirit.md)
+- [Target](docs/Rules/Target.md)
+- [History](docs/Rules/History.md)
+- [Legality](docs/Rules/Legality.md)
+- [Rejection](docs/Rules/Rejection.md)
+- [MindJourney](docs/Rules/MindJourney.md)
+
 ## Bilingual Docs
 - [Technical Overview (ZH/EN)](docs/TECHNICAL_OVERVIEW.zh-en.md)
 - [System Architecture (ZH/EN)](docs/SYSTEM_ARCHITECTURE.zh-en.md)
