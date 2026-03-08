@@ -6,7 +6,7 @@
 在不牺牲协议透明度的前提下，控制交易规则被套利、滥用和攻击的风险。
 
 ### 管理策略
-1. 开放核心协议，不开放生产风控参数。
+1. 核心协议与风控扩展均开源；生产参数通过部署配置与密钥管理控制，不入库。
 2. 通过 CI 强制执行安全和策略检查。
 3. 对 `main` 采用受保护分支策略（评审 + 必过检查）。
 4. 安全漏洞走私密通道（GitHub Security Advisory）。
@@ -23,7 +23,7 @@
 Keep protocol transparency while reducing rule-arbitrage, abuse, and attack surface.
 
 ### Management Strategy
-1. Open the core protocol, keep production risk parameters private.
+1. Open both core protocol and risk extensions; keep runtime parameters controlled via deployment config and secret managers (not committed).
 2. Enforce security and policy checks via CI.
 3. Protect `main` with required reviews and required checks.
 4. Route vulnerabilities through private channels (GitHub Security Advisory).
