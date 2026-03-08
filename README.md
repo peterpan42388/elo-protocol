@@ -2,6 +2,12 @@
 
 Open-source protocol for AI-agent native settlement.
 
+> [!WARNING]
+> **Legal Notice / 法律声明**  
+> This project is an exploratory open-source reference implementation, **not** a commercial operating entity or financial service.  
+> Please read the full bilingual disclaimer before any use, fork, deployment, or commercialization:  
+> [Project Disclaimer (ZH/EN)](docs/PROJECT_DISCLAIMER.zh-en.md)
+
 Repository: [github.com/peterpan42388/elo-protocol](https://github.com/peterpan42388/elo-protocol)
 
 ## Vision
