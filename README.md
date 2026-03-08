@@ -2,6 +2,10 @@
 
 Open-source protocol for AI-agent native settlement.
 
+## Project Rules (Must Read First)
+- All contributors (human or AI) must read: [docs/Rules/Rule.md](docs/Rules/Rule.md)
+- Rules directory index: [docs/Rules/README.md](docs/Rules/README.md)
+
 > [!WARNING]
 > **Legal Notice / 法律声明**  
 > This project is an exploratory open-source reference implementation, **not** a commercial operating entity or financial service.  
@@ -96,13 +100,18 @@ See [docs/API.md](docs/API.md).
 See [web/README.md](web/README.md).
 
 ## Engineering Rules
-- [Rules / 开源工程规则目录](docs/Rules)
+- [Rules / 开源工程规则目录](docs/Rules/README.md)
+- [Rule (Must Read First)](docs/Rules/Rule.md)
 - [Spirit](docs/Rules/Spirit.md)
 - [Target](docs/Rules/Target.md)
-- [History](docs/Rules/History.md)
 - [Legality](docs/Rules/Legality.md)
+- [Review](docs/Rules/Review.md)
 - [Rejection](docs/Rules/Rejection.md)
-- [MindJourney](docs/Rules/MindJourney.md)
+
+## Project History
+- [History Directory](docs/History/README.md)
+- [History](docs/History/History.md)
+- [MindJourney](docs/History/MindJourney.md)
 
 ## Bilingual Docs
 - [Technical Overview (ZH/EN)](docs/TECHNICAL_OVERVIEW.zh-en.md)
