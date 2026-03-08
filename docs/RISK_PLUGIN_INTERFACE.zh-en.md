@@ -28,14 +28,14 @@ function recordSettlement(
 ### 设计原则
 1. 协议核心不变量不变。
 2. 风控决策可替换（插拔）。
-3. 生产策略可放私有仓库实现。
+3. 生产策略实现建议开源，生产参数通过部署配置管理。
 4. `validateSettlement` 做准入，`recordSettlement` 做状态更新（频率/窗口计数等）。
 
 ### 参考实现
 - `ThresholdRiskPolicy.sol`（公开示例）
 
-### 私有实现仓库
-- `peterpan42388/elo-risk-extension`（private）
+### 风控扩展实现（已并入）
+- `extensions/elo-risk-extension/`
 
 ## English
 
@@ -65,11 +65,11 @@ function recordSettlement(
 ### Design Principles
 1. Protocol invariants remain unchanged.
 2. Risk decisions are replaceable (pluggable).
-3. Production policy logic can remain in a private repo.
+3. Production policy logic is open-source; runtime policy values are controlled in deployment config.
 4. `validateSettlement` is admission check, `recordSettlement` persists state (rate/window counters).
 
 ### Reference Implementation
 - `ThresholdRiskPolicy.sol` (public example)
 
-### Private Implementation Repository
-- `peterpan42388/elo-risk-extension` (private)
+### Risk Extension Module (merged)
+- `extensions/elo-risk-extension/`

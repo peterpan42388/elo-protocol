@@ -1,9 +1,9 @@
-# Private Risk Integration Runbook (ZH/EN)
+# Risk Integration Runbook (ZH/EN)
 
 ## 中文
 
 ### 目标
-将私有仓库 `elo-risk-extension` 的 `AdaptiveRiskPolicy` 接入公开 `elo-protocol` 的 `SettlementEngine`。
+将仓库内 `extensions/elo-risk-extension` 的 `AdaptiveRiskPolicy` 接入 `elo-protocol` 的 `SettlementEngine`。
 
 ### 本地一键验证
 ```bash
@@ -12,7 +12,7 @@ npm run integrate:risk:local
 
 执行顺序：
 1. 部署 ELO Core（OwnerRegistry/ELOToken/SettlementEngine）
-2. 部署私有 AdaptiveRiskPolicy
+2. 部署 AdaptiveRiskPolicy
 3. 绑定 `SettlementEngine.setRiskPolicy(policyAddr)`
 4. 运行场景验证：
    - 允许一笔结算
@@ -44,7 +44,7 @@ npm run integrate:risk:base-sepolia
 ## English
 
 ### Goal
-Integrate private `AdaptiveRiskPolicy` from `elo-risk-extension` into public `SettlementEngine` in `elo-protocol`.
+Integrate `AdaptiveRiskPolicy` from `extensions/elo-risk-extension` into `SettlementEngine` in `elo-protocol`.
 
 ### Local one-command verification
 ```bash
@@ -53,7 +53,7 @@ npm run integrate:risk:local
 
 Flow:
 1. Deploy ELO Core (OwnerRegistry/ELOToken/SettlementEngine)
-2. Deploy private AdaptiveRiskPolicy
+2. Deploy AdaptiveRiskPolicy
 3. Attach policy via `SettlementEngine.setRiskPolicy(policyAddr)`
 4. Execute verification scenario:
    - one allowed settlement

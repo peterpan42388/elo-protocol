@@ -3,7 +3,7 @@
 ## 中文
 
 ### 目标
-将私有 `AdaptiveRiskPolicy` 绑定到公开 ELO `SettlementEngine`，在不公开生产策略细节的前提下增强风控。
+将 `AdaptiveRiskPolicy` 绑定到 ELO `SettlementEngine`，增强可插拔风控能力。
 
 ### 步骤
 1. 部署 `AdaptiveRiskPolicy`，并传入 `SETTLEMENT_ENGINE_ADDR`。
@@ -19,7 +19,7 @@
 ## English
 
 ### Goal
-Attach private `AdaptiveRiskPolicy` to public ELO `SettlementEngine` while keeping production policy logic private.
+Attach `AdaptiveRiskPolicy` to ELO `SettlementEngine` for pluggable risk control.
 
 ### Steps
 1. Deploy `AdaptiveRiskPolicy` with `SETTLEMENT_ENGINE_ADDR`.
