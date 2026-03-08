@@ -88,6 +88,7 @@ See [docs/API.md](docs/API.md).
 - [System Architecture (ZH/EN)](docs/SYSTEM_ARCHITECTURE.zh-en.md)
 - [Protocol Rules (ZH/EN)](docs/PROTOCOL_RULES.zh-en.md)
 - [Usage Playbook (ZH/EN)](docs/USAGE_PLAYBOOK.zh-en.md)
+- [Production Go-Live Checklist (ZH/EN)](docs/PRODUCTION_GO_LIVE_CHECKLIST.zh-en.md)
 - [User Guide (ZH/EN)](docs/USER_GUIDE.zh-en.md)
 - [Founder Requirements Statement (ZH/EN)](docs/FOUNDER_REQUIREMENTS_STATEMENT.zh-en.md)
 - [Base Sepolia Deployment Guide (ZH/EN)](docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md)

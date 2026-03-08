@@ -1,4 +1,5 @@
 import http from "node:http";
+import crypto from "node:crypto";
 import { SettlementEngine } from "./settlementEngine.js";
 import { ELOMarket } from "./eloMarket.js";
 import { X402Adapter } from "./x402Adapter.js";
@@ -110,12 +111,49 @@ function normalizeToken(value) {
   return value.trim();
 }
 
-function ensureAuthorized(req, authBearerToken) {
-  if (!authBearerToken) return;
-  const header = String(req.headers.authorization ?? "");
-  const expected = `Bearer ${authBearerToken}`;
-  if (header !== expected) {
-    throw new HttpError(401, "missing or invalid authorization token");
+function safeEqualString(a, b) {
+  const ba = Buffer.from(String(a), "utf8");
+  const bb = Buffer.from(String(b), "utf8");
+  if (ba.length !== bb.length) return false;
+  return crypto.timingSafeEqual(ba, bb);
+}
+
+function verifyHmacRequest(req, requestUrl, hmacSecret, hmacWindowMs) {
+  if (!hmacSecret) return;
+
+  const tsHeader = String(req.headers["x-elo-timestamp"] ?? "").trim();
+  const sigHeader = String(req.headers["x-elo-signature"] ?? "").trim();
+  if (!tsHeader || !sigHeader) {
+    throw new HttpError(401, "missing or invalid hmac headers");
+  }
+
+  const ts = Number(tsHeader);
+  if (!Number.isFinite(ts)) {
+    throw new HttpError(401, "invalid hmac timestamp");
+  }
+  const now = Date.now();
+  if (Math.abs(now - ts) > hmacWindowMs) {
+    throw new HttpError(401, "hmac timestamp expired");
+  }
+
+  const canonical = `${req.method}\n${requestUrl.pathname}\n${tsHeader}`;
+  const digest = crypto.createHmac("sha256", hmacSecret).update(canonical).digest("hex");
+  const expected = `sha256=${digest}`;
+  if (!safeEqualString(sigHeader, expected)) {
+    throw new HttpError(401, "missing or invalid hmac signature");
+  }
+}
+
+function ensureAuthorized(req, requestUrl, authBearerToken, hmacSecret, hmacWindowMs) {
+  if (authBearerToken) {
+    const header = String(req.headers.authorization ?? "");
+    const expected = `Bearer ${authBearerToken}`;
+    if (header !== expected) {
+      throw new HttpError(401, "missing or invalid authorization token");
+    }
+  }
+  if (hmacSecret) {
+    verifyHmacRequest(req, requestUrl, hmacSecret, hmacWindowMs);
   }
 }
 
@@ -170,6 +208,15 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
   const authBearerToken = normalizeToken(
     typeof options.authBearerToken === "string" ? options.authBearerToken : process.env.API_AUTH_BEARER_TOKEN
   );
+  const authHmacSecret = normalizeToken(
+    typeof options.authHmacSecret === "string" ? options.authHmacSecret : process.env.API_AUTH_HMAC_SECRET
+  );
+  const authHmacWindowMs = positiveInt(
+    Number.isFinite(options.authHmacWindowMs)
+      ? Number(options.authHmacWindowMs)
+      : parseIntSafe(process.env.API_AUTH_HMAC_WINDOW_MS, 300_000),
+    300_000
+  );
 
   const limiter = createRateLimiter({
     windowMs: rateLimitWindowMs,
@@ -214,7 +261,7 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
       }
 
       if (req.method === "POST") {
-        ensureAuthorized(req, authBearerToken);
+        ensureAuthorized(req, requestUrl, authBearerToken, authHmacSecret, authHmacWindowMs);
         ensureJsonRequest(req);
       }
 

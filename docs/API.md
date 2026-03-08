@@ -272,6 +272,13 @@ Market v1 schema docs:
 - `ACP_MAX_ESCROWS` (default `5000`)
 - `ACP_TERMINAL_RETENTION_MS` (default `3600000`)
 - `API_AUTH_BEARER_TOKEN` (optional; if set, all `POST` endpoints require `Authorization: Bearer <token>`)
+- `API_AUTH_HMAC_SECRET` (optional; if set, all `POST` endpoints require HMAC headers)
+- `API_AUTH_HMAC_WINDOW_MS` (default `300000`)
+
+### HMAC Header Contract
+- `X-ELO-Timestamp`: unix epoch milliseconds
+- `X-ELO-Signature`: `sha256=<hex-hmac>`
+- canonical payload for signing: `METHOD + "\\n" + PATHNAME + "\\n" + TIMESTAMP`
 
 ### Security Operations Gates (P4-F)
 - `npm run verify:p4f-closure`

@@ -31,6 +31,19 @@ npm run release:block:check
 5. 报价/购买：`POST /market/quote` -> `POST /market/purchase`
 6. 评价与结果：`POST /market/reviews/submit` / `POST /market/evaluations/submit`
 
+### 4.1) HMAC 签名调用示例（可选）
+```bash
+TS=$(date +%s%3N)
+CANONICAL=$'POST\n/register-agent\n'"$TS"
+SIG=$(printf '%s' "$CANONICAL" | openssl dgst -sha256 -hmac "$API_AUTH_HMAC_SECRET" -hex | awk '{print $2}')
+curl -X POST https://elo.metavie.co/register-agent \
+  -H "Authorization: Bearer $API_AUTH_BEARER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-ELO-Timestamp: $TS" \
+  -H "X-ELO-Signature: sha256=$SIG" \
+  -d '{"agentId":"agent-demo-1","ownerId":"owner-demo-1"}'
+```
+
 ### 5) 发布前总回归
 ```bash
 npm run verify:p3a-freeze
@@ -74,6 +87,19 @@ npm run release:block:check
 4. Search listing: `POST /market/search`
 5. Quote/purchase: `POST /market/quote` -> `POST /market/purchase`
 6. Review/outcome: `POST /market/reviews/submit` / `POST /market/evaluations/submit`
+
+### 4.1) Optional HMAC-signed request example
+```bash
+TS=$(date +%s%3N)
+CANONICAL=$'POST\n/register-agent\n'"$TS"
+SIG=$(printf '%s' "$CANONICAL" | openssl dgst -sha256 -hmac "$API_AUTH_HMAC_SECRET" -hex | awk '{print $2}')
+curl -X POST https://elo.metavie.co/register-agent \
+  -H "Authorization: Bearer $API_AUTH_BEARER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "X-ELO-Timestamp: $TS" \
+  -H "X-ELO-Signature: sha256=$SIG" \
+  -d '{"agentId":"agent-demo-1","ownerId":"owner-demo-1"}'
+```
 
 ### 5) Full pre-release regression
 ```bash

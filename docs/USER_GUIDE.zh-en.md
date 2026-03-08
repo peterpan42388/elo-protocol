@@ -258,6 +258,7 @@ npm run release:block:check
 ### 中文
 - POST 接口必须使用 `application/json`，否则返回 `415`。
 - 设置 `API_AUTH_BEARER_TOKEN` 后，所有 POST 接口都需 `Authorization: Bearer <token>`，否则返回 `401`。
+- 设置 `API_AUTH_HMAC_SECRET` 后，所有 POST 接口还需 HMAC 签名头（`X-ELO-Timestamp` + `X-ELO-Signature`），否则返回 `401`。
 - 请求体超过阈值返回 `413`。
 - 达到限流阈值返回 `429`。
 - 可通过环境变量调整：
@@ -273,10 +274,13 @@ npm run release:block:check
   - `ACP_MAX_ESCROWS`（默认 `5000`）
   - `ACP_TERMINAL_RETENTION_MS`（默认 `3600000`）
   - `API_AUTH_BEARER_TOKEN`（可选；设置后所有 POST 端点强制 Bearer 鉴权）
+  - `API_AUTH_HMAC_SECRET`（可选；设置后所有 POST 端点强制 HMAC 签名鉴权）
+  - `API_AUTH_HMAC_WINDOW_MS`（默认 `300000`）
 
 ### English
 - POST endpoints require `application/json` (`415` otherwise).
 - If `API_AUTH_BEARER_TOKEN` is set, all POST endpoints require `Authorization: Bearer <token>` (`401` otherwise).
+- If `API_AUTH_HMAC_SECRET` is set, all POST endpoints also require HMAC headers (`X-ELO-Timestamp` and `X-ELO-Signature`) (`401` otherwise).
 - Oversized request bodies return `413`.
 - Rate-limit overflow returns `429`.
 - Runtime env configs:
@@ -292,3 +296,5 @@ npm run release:block:check
   - `ACP_MAX_ESCROWS` (default `5000`)
   - `ACP_TERMINAL_RETENTION_MS` (default `3600000`)
   - `API_AUTH_BEARER_TOKEN` (optional; enforces Bearer auth on all POST endpoints when set)
+  - `API_AUTH_HMAC_SECRET` (optional; enforces HMAC auth on all POST endpoints when set)
+  - `API_AUTH_HMAC_WINDOW_MS` (default `300000`)
