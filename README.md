@@ -106,7 +106,7 @@ See [web/README.md](web/README.md).
 - [Project Disclaimer (ZH/EN)](docs/PROJECT_DISCLAIMER.zh-en.md)
 - [Base Sepolia Deployment Guide (ZH/EN)](docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md)
 - [Risk Plugin Interface (ZH/EN)](docs/RISK_PLUGIN_INTERFACE.zh-en.md)
-- [Private Risk Integration Runbook (ZH/EN)](docs/PRIVATE_RISK_INTEGRATION_RUNBOOK.zh-en.md)
+- [Risk Integration Runbook (ZH/EN)](docs/PRIVATE_RISK_INTEGRATION_RUNBOOK.zh-en.md)
 - [ELO Market Execution Plan (ZH/EN)](docs/ELO_MARKET_EXECUTION_PLAN.zh-en.md)
 - [Dashboard API Contract v1 (ZH/EN)](docs/DASHBOARD_API_CONTRACT.v1.zh-en.md)
 - [P3-A Architecture Freeze (ZH/EN)](docs/architecture/P3A_ARCHITECTURE_FREEZE.zh-en.md)
@@ -131,4 +131,4 @@ See [web/README.md](web/README.md).
 - Management plan: [docs/OPEN_SOURCE_MANAGEMENT_PLAN.zh-en.md](docs/OPEN_SOURCE_MANAGEMENT_PLAN.zh-en.md)
 - Governance: [GOVERNANCE.md](GOVERNANCE.md)
 - Security policy: [SECURITY.md](SECURITY.md)
-- Private risk extension repo: `peterpan42388/elo-risk-extension` (private)
+- Risk extension module (merged, open-source): `extensions/elo-risk-extension/`

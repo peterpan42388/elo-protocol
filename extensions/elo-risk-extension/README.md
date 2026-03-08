@@ -1,9 +1,9 @@
-# ELO Risk Extension (Private)
+# ELO Risk Extension (Open)
 
-Private repository for production-grade risk strategies and policy adapters for ELO.
+Open-source risk strategy and policy adapter module for ELO.
 
 ## Purpose
-This repository stores private risk logic that should not be publicly exposed in the protocol core repo.
+This module stores pluggable risk logic for ELO and is now maintained in the public `elo-protocol` repository under `extensions/elo-risk-extension/`.
 
 - Fraud and abuse detection strategies
 - Dynamic rate-limit and threshold policies
@@ -12,7 +12,7 @@ This repository stores private risk logic that should not be publicly exposed in
 
 ## Relation with Public Repo
 - Public core: https://github.com/peterpan42388/elo-protocol
-- This repo: private implementation of pluggable policy adapters
+- This module: merged public implementation of pluggable policy adapters
 
 ## Delivered Policy (v1)
 - `AdaptiveRiskPolicy.sol`
@@ -30,12 +30,12 @@ Deploy script:
 - `script/DeployAdaptiveRiskPolicy.s.sol`
 
 ## Structure
-- `src/`: private policy implementations
+- `src/`: policy implementations
 - `test/`: policy tests
 - `script/`: deployment scripts
 - `docs/`: architecture and runbooks
 
 ## Baseline Rules
 1. Never commit secrets/private keys.
-2. Keep policy implementation details private.
+2. Keep secrets and runtime credentials out of source control.
 3. Validate against ELO core invariants before release.
