@@ -45,6 +45,7 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] P4-D optional API bearer-auth baseline (`API_AUTH_BEARER_TOKEN`)
 - [x] P4-E external audit execution pack (scope/SLA/template/gates)
 - [x] P4-F finding closure loop (triage board + SLA checker + release blocker gate)
+- [x] P4-G human web console baseline (`web/`, market dashboard/search/purchase/review/wallet)
 - [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start
@@ -68,6 +69,8 @@ npm run verify:p4e-audit-execution
 npm run verify:p4f-closure
 npm run security:sla:check
 npm run release:block:check
+npm run web:dev
+npm run web:build
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -82,6 +85,9 @@ See [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md).
 
 ## Prototype API
 See [docs/API.md](docs/API.md).
+
+## Web Console
+See [web/README.md](web/README.md).
 
 ## Bilingual Docs
 - [Technical Overview (ZH/EN)](docs/TECHNICAL_OVERVIEW.zh-en.md)

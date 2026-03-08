@@ -27,7 +27,9 @@
     "verify:p4e-audit-execution": "node scripts/verify-p4e-audit-execution.mjs",
     "verify:p4f-closure": "node scripts/verify-p4f-closure.mjs",
     "security:sla:check": "node scripts/check-security-sla.mjs",
-    "release:block:check": "node scripts/check-release-blockers.mjs"
+    "release:block:check": "node scripts/check-release-blockers.mjs",
+    "web:dev": "npm --prefix web run dev",
+    "web:build": "npm --prefix web run build"
   },
   "devDependencies": {
     "solc": "^0.8.30"
