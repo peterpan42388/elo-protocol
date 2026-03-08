@@ -1,5 +1,7 @@
-import { type PropsWithChildren } from "react";
+import { type PropsWithChildren, useMemo, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthSettingsModal } from "../auth/AuthSettingsModal";
+import { useAuth } from "../../state/auth";
 
 const NAV_ITEMS = [
   { to: "/overview", label: "Overview" },
@@ -9,6 +11,16 @@ const NAV_ITEMS = [
 ];
 
 export function AppLayout({ children }: PropsWithChildren) {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { auth } = useAuth();
+
+  const authStatusLabel = useMemo(() => {
+    const parts = [];
+    if (auth.bearerToken) parts.push("Bearer");
+    if (auth.hmacSecret) parts.push("HMAC");
+    return parts.length ? parts.join(" + ") : "Open";
+  }, [auth.bearerToken, auth.hmacSecret]);
+
   return (
     <div className="app-root">
       <header className="top-nav">
@@ -34,18 +46,17 @@ export function AppLayout({ children }: PropsWithChildren) {
           ))}
         </nav>
 
-        <div className="header-search">
-          <input
-            type="search"
-            placeholder="Quick search..."
-            aria-label="quick search"
-            className="input"
-            disabled
-          />
+        <div className="header-actions">
+          <span className="auth-badge">Auth: {authStatusLabel}</span>
+          <button className="button button-secondary" type="button" onClick={() => setIsSettingsOpen(true)}>
+            API Config
+          </button>
         </div>
       </header>
 
       <main className="app-main">{children}</main>
+
+      <AuthSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
   );
 }
