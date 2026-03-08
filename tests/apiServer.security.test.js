@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
 import { createApiServer } from "../src/apiServer.js";
 
 async function startServer(options = {}) {
@@ -159,6 +160,101 @@ test("API should enforce optional bearer auth on POST endpoints", async () => {
 
     const readOnly = await fetch(`${app.base}/dashboard/schema`);
     assert.equal(readOnly.status, 200);
+  } finally {
+    await app.close();
+  }
+});
+
+function signHmac({ method, path, ts, secret }) {
+  const canonical = `${method}\n${path}\n${ts}`;
+  const digest = crypto.createHmac("sha256", secret).update(canonical).digest("hex");
+  return `sha256=${digest}`;
+}
+
+test("API should enforce optional HMAC auth on POST endpoints", async () => {
+  const secret = "elo-hmac-test-secret";
+  const app = await startServer({ authHmacSecret: secret, authHmacWindowMs: 60_000 });
+  try {
+    const noHmac = await fetch(`${app.base}/register-agent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ agentId: "agent-h1", ownerId: "owner-h1" }),
+    });
+    assert.equal(noHmac.status, 401);
+
+    const ts = Date.now().toString();
+    const badSig = await fetch(`${app.base}/register-agent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-ELO-Timestamp": ts,
+        "X-ELO-Signature": "sha256=bad",
+      },
+      body: JSON.stringify({ agentId: "agent-h2", ownerId: "owner-h2" }),
+    });
+    assert.equal(badSig.status, 401);
+
+    const goodSig = signHmac({ method: "POST", path: "/register-agent", ts, secret });
+    const ok = await fetch(`${app.base}/register-agent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-ELO-Timestamp": ts,
+        "X-ELO-Signature": goodSig,
+      },
+      body: JSON.stringify({ agentId: "agent-h3", ownerId: "owner-h3" }),
+    });
+    assert.equal(ok.status, 200);
+  } finally {
+    await app.close();
+  }
+});
+
+test("API should enforce bearer + HMAC together when both are configured", async () => {
+  const secret = "elo-hmac-combo-secret";
+  const bearer = "elo-bearer-combo-token";
+  const app = await startServer({
+    authBearerToken: bearer,
+    authHmacSecret: secret,
+    authHmacWindowMs: 60_000,
+  });
+
+  try {
+    const ts = Date.now().toString();
+    const sig = signHmac({ method: "POST", path: "/register-agent", ts, secret });
+
+    const hmacOnly = await fetch(`${app.base}/register-agent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-ELO-Timestamp": ts,
+        "X-ELO-Signature": sig,
+      },
+      body: JSON.stringify({ agentId: "agent-c1", ownerId: "owner-c1" }),
+    });
+    assert.equal(hmacOnly.status, 401);
+
+    const bearerOnly = await fetch(`${app.base}/register-agent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearer}`,
+      },
+      body: JSON.stringify({ agentId: "agent-c2", ownerId: "owner-c2" }),
+    });
+    assert.equal(bearerOnly.status, 401);
+
+    const both = await fetch(`${app.base}/register-agent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearer}`,
+        "X-ELO-Timestamp": ts,
+        "X-ELO-Signature": sig,
+      },
+      body: JSON.stringify({ agentId: "agent-c3", ownerId: "owner-c3" }),
+    });
+    assert.equal(both.status, 200);
   } finally {
     await app.close();
   }
