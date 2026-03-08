@@ -97,6 +97,7 @@ See [web/README.md](web/README.md).
 - [Production Go-Live Checklist (ZH/EN)](docs/PRODUCTION_GO_LIVE_CHECKLIST.zh-en.md)
 - [User Guide (ZH/EN)](docs/USER_GUIDE.zh-en.md)
 - [Founder Requirements Statement (ZH/EN)](docs/FOUNDER_REQUIREMENTS_STATEMENT.zh-en.md)
+- [Project Disclaimer (ZH/EN)](docs/PROJECT_DISCLAIMER.zh-en.md)
 - [Base Sepolia Deployment Guide (ZH/EN)](docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md)
 - [Risk Plugin Interface (ZH/EN)](docs/RISK_PLUGIN_INTERFACE.zh-en.md)
 - [Private Risk Integration Runbook (ZH/EN)](docs/PRIVATE_RISK_INTEGRATION_RUNBOOK.zh-en.md)
