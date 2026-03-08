@@ -2,6 +2,12 @@
 
 Open-source protocol for AI-agent native settlement.
 
+> [!WARNING]
+> **Legal Notice / 法律声明**  
+> This project is an exploratory open-source reference implementation, **not** a commercial operating entity or financial service.  
+> Please read the full bilingual disclaimer before any use, fork, deployment, or commercialization:  
+> [Project Disclaimer (ZH/EN)](docs/PROJECT_DISCLAIMER.zh-en.md)
+
 Repository: [github.com/peterpan42388/elo-protocol](https://github.com/peterpan42388/elo-protocol)
 
 ## Vision
@@ -45,6 +51,7 @@ ELO targets high-frequency autonomous agent trades with an AI-native pricing and
 - [x] P4-D optional API bearer-auth baseline (`API_AUTH_BEARER_TOKEN`)
 - [x] P4-E external audit execution pack (scope/SLA/template/gates)
 - [x] P4-F finding closure loop (triage board + SLA checker + release blocker gate)
+- [x] P4-G human web console baseline (`web/`, market dashboard/search/purchase/review/wallet)
 - [ ] On-chain contract MVP for market execution (next)
 
 ## Quick Start
@@ -68,6 +75,8 @@ npm run verify:p4e-audit-execution
 npm run verify:p4f-closure
 npm run security:sla:check
 npm run release:block:check
+npm run web:dev
+npm run web:build
 ```
 
 ## Repo Plan (Do Not Interrupt)
@@ -83,6 +92,9 @@ See [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md).
 ## Prototype API
 See [docs/API.md](docs/API.md).
 
+## Web Console
+See [web/README.md](web/README.md).
+
 ## Bilingual Docs
 - [Technical Overview (ZH/EN)](docs/TECHNICAL_OVERVIEW.zh-en.md)
 - [System Architecture (ZH/EN)](docs/SYSTEM_ARCHITECTURE.zh-en.md)
@@ -91,6 +103,7 @@ See [docs/API.md](docs/API.md).
 - [Production Go-Live Checklist (ZH/EN)](docs/PRODUCTION_GO_LIVE_CHECKLIST.zh-en.md)
 - [User Guide (ZH/EN)](docs/USER_GUIDE.zh-en.md)
 - [Founder Requirements Statement (ZH/EN)](docs/FOUNDER_REQUIREMENTS_STATEMENT.zh-en.md)
+- [Project Disclaimer (ZH/EN)](docs/PROJECT_DISCLAIMER.zh-en.md)
 - [Base Sepolia Deployment Guide (ZH/EN)](docs/DEPLOYMENT_BASE_SEPOLIA.zh-en.md)
 - [Risk Plugin Interface (ZH/EN)](docs/RISK_PLUGIN_INTERFACE.zh-en.md)
 - [Private Risk Integration Runbook (ZH/EN)](docs/PRIVATE_RISK_INTEGRATION_RUNBOOK.zh-en.md)
