@@ -117,6 +117,7 @@ See [web/README.md](web/README.md).
 - [OSCP Spec (ZH/EN)](docs/OSCP_SPEC.zh-en.md)
 - [OSCP Roadmap (ZH/EN)](docs/OSCP_ROADMAP.zh-en.md)
 - [OSCP Skills (ZH/EN)](docs/OSCP_SKILLS.zh-en.md)
+- [OSCP GitHub Commons Model (ZH/EN)](docs/OSCP_GITHUB_COMMONS.zh-en.md)
 - [Technical Overview (ZH/EN)](docs/TECHNICAL_OVERVIEW.zh-en.md)
 - [System Architecture (ZH/EN)](docs/SYSTEM_ARCHITECTURE.zh-en.md)
 - [Protocol Rules (ZH/EN)](docs/PROTOCOL_RULES.zh-en.md)

@@ -11,5 +11,6 @@
 - [Legality.md](Legality.md)（法律法规边界）
 - [Review.md](Review.md)（审核执行/提交原则）
 - [Rejection.md](Rejection.md)（拒绝清单）
+- [COMMIT_REPORT_TEMPLATE.md](COMMIT_REPORT_TEMPLATE.md)（提交报告模板）
 
 Version: v0.1

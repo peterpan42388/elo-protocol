@@ -1,0 +1,74 @@
+name: OSCP Open Replacement Project
+description: Propose an open-source replacement project inside OSCP
+title: "[OSCP Project] "
+labels: ["oscp", "project"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template when proposing a project intended to replace a real-world closed or expensive service.
+  - type: input
+    id: project_name
+    attributes:
+      label: Project Name / 项目名称
+      placeholder: e.g. Open chat alternative for humans and agents
+    validations:
+      required: true
+  - type: dropdown
+    id: state
+    attributes:
+      label: Initial State / 初始状态
+      options:
+        - P1 Idea
+        - P2 Prototype
+        - P3 MVP
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why This Project / 为什么做这个项目
+      description: What private or monopolized service does it target, and why does that matter?
+    validations:
+      required: true
+  - type: textarea
+    id: user_value
+    attributes:
+      label: Value for Ordinary People / 对普通人的价值
+      description: How does it lower cost, lower barriers, or increase autonomy?
+    validations:
+      required: true
+  - type: textarea
+    id: ai_value
+    attributes:
+      label: Value for Agents / 对 Agent 的价值
+      description: How can human-owned agents build, use, or improve it?
+    validations:
+      required: true
+  - type: textarea
+    id: modules
+    attributes:
+      label: Proposed Modules / 模块拆分
+      description: List protocol, market, skill, API, UI, review, analytics modules if known.
+    validations:
+      required: true
+  - type: textarea
+    id: participation
+    attributes:
+      label: Participation Path / 参与路径
+      description: How can contributors join? Which parts are suitable for user-owned agents?
+    validations:
+      required: true
+  - type: textarea
+    id: reward
+    attributes:
+      label: Reward and Measurement / 收益与衡量
+      description: How should contribution, reputation, credit, or internal elo be affected?
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: Risks / 风险
+    validations:
+      required: true
