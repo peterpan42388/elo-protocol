@@ -4,6 +4,9 @@ import { SettlementEngine } from "./settlementEngine.js";
 import { ELOMarket } from "./eloMarket.js";
 import { X402Adapter } from "./x402Adapter.js";
 import { ACPAdapter } from "./acpAdapter.js";
+import { OSCPIdentityRegistry } from "./oscpIdentity.js";
+import { OSCPProjectCommons } from "./oscpProjectCommons.js";
+import { OSCPReviewGuard } from "./oscpReviewGuard.js";
 import {
   buildDashboardAgents,
   buildDashboardMarketEfficiency,
@@ -180,7 +183,11 @@ async function readJson(req, maxBytes) {
   }
 }
 
-export function createApiServer(engine = new SettlementEngine(), market = new ELOMarket(engine), options = {}) {
+export function createApiServer(
+  engine = new SettlementEngine(),
+  market = new ELOMarket(engine),
+  options = {}
+) {
   const bodyMaxBytes = positiveInt(
     Number.isFinite(options.bodyMaxBytes)
       ? Number(options.bodyMaxBytes)
@@ -242,6 +249,10 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
     options.acp
   );
 
+  const identity = options.identity instanceof OSCPIdentityRegistry ? options.identity : new OSCPIdentityRegistry();
+  const projectCommons =
+    options.projectCommons instanceof OSCPProjectCommons ? options.projectCommons : new OSCPProjectCommons();
+  const reviewGuard = options.reviewGuard instanceof OSCPReviewGuard ? options.reviewGuard : new OSCPReviewGuard();
   const x402 = new X402Adapter(market, x402Options);
   const acp = new ACPAdapter(market, engine, acpOptions);
   const server = http.createServer(async (req, res) => {
@@ -269,6 +280,85 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
         const body = await readJson(req, bodyMaxBytes);
         engine.registerAgent(body.agentId, body.ownerId);
         return json(res, 200, { ok: true });
+      }
+
+      if (req.method === "POST" && path === "/oscp/humans/register") {
+        const body = await readJson(req, bodyMaxBytes);
+        const human = identity.registerHuman(body.humanId, body.metadata ?? {});
+        return json(res, 200, human);
+      }
+
+      if (req.method === "POST" && path === "/oscp/agents/register") {
+        const body = await readJson(req, bodyMaxBytes);
+        const agent = identity.registerAgent(body.agentId, body.humanId, body.metadata ?? {});
+        engine.registerAgent(agent.agentId, agent.humanId);
+        return json(res, 200, agent);
+      }
+
+      if (req.method === "POST" && path === "/oscp/init-ids/assign") {
+        const body = await readJson(req, bodyMaxBytes);
+        const profile = identity.assignInitId(body);
+        return json(res, 200, profile);
+      }
+
+      if (req.method === "POST" && path === "/oscp/init-ids/metrics/update") {
+        const body = await readJson(req, bodyMaxBytes);
+        const profile = identity.recordMetrics(body.initId, body.deltas ?? {});
+        return json(res, 200, profile);
+      }
+
+      if (req.method === "GET" && path === "/oscp/identities/summary") {
+        return json(res, 200, identity.buildSummary());
+      }
+
+      if (req.method === "POST" && path === "/oscp/review-guard/requirements/evaluate") {
+        const body = await readJson(req, bodyMaxBytes);
+        return json(res, 200, reviewGuard.evaluateRequirement(body));
+      }
+
+      if (req.method === "POST" && path === "/oscp/projects/create") {
+        const body = await readJson(req, bodyMaxBytes);
+        identity.getHuman(body.proposerHumanId);
+        const project = projectCommons.createProject(body);
+        try {
+          const proposerInitId = identity.assignInitId({ subjectType: "human", subjectId: project.proposerHumanId }).initId;
+          identity.recordMetrics(proposerInitId, { projectCreatedCount: 1, contributionScore: 1 });
+        } catch {}
+        return json(res, 200, project);
+      }
+
+      if (req.method === "POST" && path === "/oscp/projects/tasks/create") {
+        const body = await readJson(req, bodyMaxBytes);
+        const task = projectCommons.createTask(body);
+        return json(res, 200, task);
+      }
+
+      if (req.method === "POST" && path === "/oscp/projects/proposals/submit") {
+        const body = await readJson(req, bodyMaxBytes);
+        const proposal = projectCommons.submitProposal(body);
+        return json(res, 200, proposal);
+      }
+
+      if (req.method === "POST" && path === "/oscp/projects/reviews/record") {
+        const body = await readJson(req, bodyMaxBytes);
+        const review = projectCommons.recordReview(body);
+        return json(res, 200, review);
+      }
+
+      if (req.method === "POST" && path === "/oscp/projects/state/transition") {
+        const body = await readJson(req, bodyMaxBytes);
+        const project = projectCommons.transitionProjectState(body.projectId, body.nextState);
+        if (project.state === "Completed") {
+          try {
+            const proposerInitId = identity.assignInitId({ subjectType: "human", subjectId: project.proposerHumanId }).initId;
+            identity.recordMetrics(proposerInitId, { projectCompletedCount: 1, reputation: 1 });
+          } catch {}
+        }
+        return json(res, 200, project);
+      }
+
+      if (req.method === "GET" && path === "/oscp/projects/summary") {
+        return json(res, 200, projectCommons.buildSummary());
       }
 
       if (req.method === "POST" && path === "/recharge") {
@@ -468,7 +558,7 @@ export function createApiServer(engine = new SettlementEngine(), market = new EL
     }
   });
 
-  return { server, engine, market };
+  return { server, engine, market, identity, projectCommons, reviewGuard };
 }
 
 if (process.argv[1] && process.argv[1].endsWith("apiServer.js")) {

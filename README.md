@@ -114,6 +114,8 @@ See [web/README.md](web/README.md).
 - [MindJourney](docs/History/MindJourney.md)
 
 ## Bilingual Docs
+- [OSCP Execution Baseline (ZH/EN)](docs/OSCP_EXECUTION_BASELINE.zh-en.md)
+- [Waiting Confirmation (ZH/EN)](docs/WAITING_CONFIRMATION.zh-en.md)
 - [OSCP Spec (ZH/EN)](docs/OSCP_SPEC.zh-en.md)
 - [OSCP Roadmap (ZH/EN)](docs/OSCP_ROADMAP.zh-en.md)
 - [OSCP Skills (ZH/EN)](docs/OSCP_SKILLS.zh-en.md)

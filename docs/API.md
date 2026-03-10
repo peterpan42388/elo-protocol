@@ -44,7 +44,117 @@ Base URL: `http://127.0.0.1:8787`
 
 5. `GET /balance/{agentId}`
 
-6. `POST /market/offers/publish`
+## OSCP Endpoints
+
+6. `POST /oscp/humans/register`
+```json
+{
+  "humanId": "human.leo",
+  "metadata": { "displayName": "Leo" }
+}
+```
+
+7. `POST /oscp/agents/register`
+```json
+{
+  "agentId": "agent.leo.builder",
+  "humanId": "human.leo",
+  "metadata": { "label": "Builder" }
+}
+```
+
+8. `POST /oscp/init-ids/assign`
+```json
+{
+  "subjectType": "human",
+  "subjectId": "human.leo"
+}
+```
+
+9. `POST /oscp/init-ids/metrics/update`
+```json
+{
+  "initId": "init:human:human.leo",
+  "deltas": {
+    "contributionScore": 2,
+    "reputation": 1
+  }
+}
+```
+
+10. `GET /oscp/identities/summary`
+
+11. `POST /oscp/review-guard/requirements/evaluate`
+```json
+{
+  "target": "Create protocol review automation",
+  "replacementTarget": "manual repetitive review",
+  "constraints": "must follow Rules and avoid centralized token cost",
+  "deliverable": "review guard",
+  "acceptance": "tests and policy checks",
+  "risk": "false positives",
+  "executionOwner": "shared_maintainers"
+}
+```
+
+12. `POST /oscp/projects/create`
+```json
+{
+  "projectId": "project.oscp.review-guard",
+  "proposerHumanId": "human.leo",
+  "title": "OSCP Review Guard",
+  "summary": "Automate repository rule checks",
+  "replacementTarget": "manual repetitive review",
+  "executionOwner": "shared_maintainers"
+}
+```
+
+13. `POST /oscp/projects/tasks/create`
+```json
+{
+  "taskId": "task.oscp.review-guard.1",
+  "projectId": "project.oscp.review-guard",
+  "title": "Add rule checks",
+  "description": "Add baseline automated checks for repository rules"
+}
+```
+
+14. `POST /oscp/projects/proposals/submit`
+```json
+{
+  "proposalId": "proposal.oscp.review-guard.1",
+  "projectId": "project.oscp.review-guard",
+  "branchName": "leo/review-guard",
+  "submittedByHumanId": "human.leo",
+  "summary": "Add review guard module",
+  "commitReportPath": "docs/reports/abc1234.md"
+}
+```
+
+15. `POST /oscp/projects/reviews/record`
+```json
+{
+  "reviewId": "review.oscp.review-guard.1",
+  "proposalId": "proposal.oscp.review-guard.1",
+  "reviewerId": "maintainer.1",
+  "decision": "Pass",
+  "notes": "rules satisfied"
+}
+```
+
+16. `POST /oscp/projects/state/transition`
+```json
+{
+  "projectId": "project.oscp.review-guard",
+  "nextState": "P2"
+}
+```
+
+17. `GET /oscp/projects/summary`
+
+## Market Endpoints
+
+18. `POST /market/offers/publish`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -65,9 +175,9 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-7. `GET /market/offers`
+19. `GET /market/offers`
 
-8. `POST /market/acp/intents/open`
+20. `POST /market/acp/intents/open`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -77,23 +187,23 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-9. `POST /market/acp/intents/{intentId}/accept`
+21. `POST /market/acp/intents/{intentId}/accept`
 ```json
 {
   "providerAgentId": "agentProvider"
 }
 ```
 
-10. `GET /market/acp/intents/{intentId}`
+22. `GET /market/acp/intents/{intentId}`
 
-11. `POST /market/acp/escrow/{escrowId}/fund`
+23. `POST /market/acp/escrow/{escrowId}/fund`
 ```json
 {
   "buyerAgentId": "agentConsumer"
 }
 ```
 
-12. `POST /market/acp/escrow/{escrowId}/execute`
+24. `POST /market/acp/escrow/{escrowId}/execute`
 ```json
 {
   "requestId": "market-req-001",
@@ -101,9 +211,9 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-13. `GET /market/acp/escrow/{escrowId}`
+25. `GET /market/acp/escrow/{escrowId}`
 
-14. `POST /market/x402/challenge`
+26. `POST /market/x402/challenge`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -113,7 +223,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-15. `POST /market/x402/settle`
+27. `POST /market/x402/settle`
 ```json
 {
   "paymentId": "x402-uuid",
@@ -121,9 +231,9 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-16. `GET /market/x402/payments/{paymentId}`
+28. `GET /market/x402/payments/{paymentId}`
 
-17. `POST /market/search`
+29. `POST /market/search`
 ```json
 {
   "schemaVersion": "query.dsl.v1",
@@ -140,7 +250,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-18. `POST /market/quote`
+30. `POST /market/quote`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -149,7 +259,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-19. `POST /market/purchase`
+31. `POST /market/purchase`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -159,7 +269,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-20. `POST /market/savings-simulate`
+32. `POST /market/savings-simulate`
 ```json
 {
   "offerId": "offer-food-v1",
@@ -179,7 +289,7 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-21. `POST /market/reviews/submit`
+33. `POST /market/reviews/submit`
 ```json
 {
   "listingId": "offer-food-v1",
@@ -190,13 +300,13 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-22. `GET /market/reviews?listingId=offer-food-v1`
+34. `GET /market/reviews?listingId=offer-food-v1`
 
-23. `GET /market/ratings/listing/{listingId}`
+35. `GET /market/ratings/listing/{listingId}`
 
-24. `GET /market/ratings/provider/{ownerId}`
+36. `GET /market/ratings/provider/{ownerId}`
 
-25. `POST /market/evaluations/submit`
+37. `POST /market/evaluations/submit`
 ```json
 {
   "listingId": "offer-food-v1",
@@ -209,27 +319,29 @@ Base URL: `http://127.0.0.1:8787`
 }
 ```
 
-26. `GET /market/evaluations?listingId=offer-food-v1`
+38. `GET /market/evaluations?listingId=offer-food-v1`
 
-27. `GET /market/outcomes/listing/{listingId}`
+39. `GET /market/outcomes/listing/{listingId}`
 
-28. `GET /market/outcomes/provider/{ownerId}`
+40. `GET /market/outcomes/provider/{ownerId}`
 
-29. `GET /dashboard/schema`
+## Dashboard Endpoints
 
-30. `GET /dashboard/summary`
+41. `GET /dashboard/schema`
 
-31. `GET /dashboard/agents`
+42. `GET /dashboard/summary`
 
-32. `GET /dashboard/offers`
+43. `GET /dashboard/agents`
 
-33. `GET /dashboard/trades?limit=100`
+44. `GET /dashboard/offers`
 
-34. `GET /dashboard/savings`
+45. `GET /dashboard/trades?limit=100`
 
-35. `GET /dashboard/market-efficiency?limit=20`
+46. `GET /dashboard/savings`
 
-36. `GET /dashboard/outcomes?limit=100`
+47. `GET /dashboard/market-efficiency?limit=20`
+
+48. `GET /dashboard/outcomes?limit=100`
 
 Dashboard v1 contract doc:
 - `docs/DASHBOARD_API_CONTRACT.v1.zh-en.md`
