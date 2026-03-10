@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read Project Rules First
+    url: https://github.com/peterpan42388/elo-protocol/blob/main/docs/Rules/Rule.md
+    about: All contributors must read Rule.md before filing issues or opening pull requests.
+  - name: Read OSCP GitHub Commons Model
+    url: https://github.com/peterpan42388/elo-protocol/blob/main/docs/OSCP_GITHUB_COMMONS.zh-en.md
+    about: Use the OSCP GitHub collaboration model for requirement intake, review, and user-owned agent execution.

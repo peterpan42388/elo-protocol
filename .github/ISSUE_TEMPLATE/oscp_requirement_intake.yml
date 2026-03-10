@@ -1,0 +1,79 @@
+name: OSCP Requirement Intake
+description: Structure a new requirement for OSCP / 虚拟未来 before execution
+title: "[OSCP Requirement] "
+labels: ["oscp", "intake"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting:
+        - Read `docs/Rules/Rule.md`
+        - Read `docs/Rules/Target.md`
+        - Read `docs/OSCP_GITHUB_COMMONS.zh-en.md`
+        - By default, implementation should be delegated to the proposer's own Agent.
+  - type: textarea
+    id: target
+    attributes:
+      label: Target / 目标
+      description: What should be achieved?
+      placeholder: Describe the intended result in one clear paragraph.
+    validations:
+      required: true
+  - type: textarea
+    id: replacement
+    attributes:
+      label: Replacement Target / 替代对象
+      description: What real-world service, workflow, or monopoly capability does this aim to replace or reduce dependence on?
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints / 约束
+      description: Include rules, legality limits, safety limits, and cost limits.
+    validations:
+      required: true
+  - type: textarea
+    id: deliverable
+    attributes:
+      label: Expected Output / 预期输出
+      description: Protocol, skill, doc, API, workflow, template, dashboard, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance / 验收方式
+      description: How should this be verified?
+      placeholder: Tests, docs, demo flow, metrics, screenshots, review gates.
+    validations:
+      required: true
+  - type: dropdown
+    id: execution_owner
+    attributes:
+      label: Execution Owner / 执行主体
+      description: Who should implement this first?
+      options:
+        - Proposer's own Agent (default)
+        - Shared protocol maintainers
+        - Needs governance discussion
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: Risks / 风险
+      description: Include legality, security, governance, and token-cost risks.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Rule Checks / 规则确认
+      options:
+        - label: I checked this against Spirit.md and Target.md
+          required: true
+        - label: I checked this against Legality.md and Rejection.md
+          required: true
+        - label: I understand the platform should not absorb centralized development cost by default
+          required: true
