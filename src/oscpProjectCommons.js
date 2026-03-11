@@ -12,6 +12,7 @@ export class OSCPProjectCommons {
     this.reviews = [];
     this.projectAccounts = new Map();
     this.contributions = new Map();
+    this.stateTransitions = [];
   }
 
   createProject(params) {
@@ -182,10 +183,38 @@ export class OSCPProjectCommons {
     };
   }
 
-  transitionProjectState(projectId, nextState) {
+  transitionProjectState(projectId, nextState, options = {}) {
     const project = this.#getProjectRef(projectId);
-    project.state = this.#assertState(nextState);
+    const safeNextState = this.#assertState(nextState);
+    const actorRole = this.#assertActorRole(options.actorRole ?? "maintainer");
+    const reviewApproved = Boolean(options.reviewApproved ?? false);
+    const governanceApproved = Boolean(options.governanceApproved ?? false);
+    const testsPassed = Boolean(options.testsPassed ?? false);
+    const riskAcknowledged = Boolean(options.riskAcknowledged ?? false);
+    const reason = assertBoundedText("reason", String(options.reason ?? ""), 512);
+    this.#assertTransitionAllowed(project.state, safeNextState, {
+      actorRole,
+      reviewApproved,
+      governanceApproved,
+      testsPassed,
+      riskAcknowledged,
+      reason,
+    });
+    const fromState = project.state;
+    project.state = safeNextState;
     project.updatedAt = Date.now();
+    this.stateTransitions.push({
+      projectId: project.projectId,
+      fromState,
+      toState: safeNextState,
+      actorRole,
+      reviewApproved,
+      governanceApproved,
+      testsPassed,
+      riskAcknowledged,
+      reason,
+      createdAt: Date.now(),
+    });
     return this.getProject(projectId);
   }
 
@@ -218,6 +247,7 @@ export class OSCPProjectCommons {
         tasks: this.tasks.size,
         proposals: this.proposals.size,
         reviews: this.reviews.length,
+        stateTransitions: this.stateTransitions.length,
         projectAccountBalanceElo: this.#round(
           [...this.projectAccounts.values()].reduce((sum, account) => sum + account.balanceElo, 0)
         ),
@@ -265,12 +295,79 @@ export class OSCPProjectCommons {
     return safeValue;
   }
 
+  #assertActorRole(value) {
+    const safeValue = assertToken("actorRole", String(value), 64);
+    if (!["proposer", "maintainer", "reviewer", "governance"].includes(safeValue)) {
+      throw new Error("actorRole must be proposer/maintainer/reviewer/governance");
+    }
+    return safeValue;
+  }
+
   #assertDecision(value) {
     const safeValue = assertToken("decision", String(value), 32);
     if (!REVIEW_DECISIONS.has(safeValue)) {
       throw new Error(`decision must be one of ${[...REVIEW_DECISIONS].join("/")}`);
     }
     return safeValue;
+  }
+
+  #assertTransitionAllowed(fromState, toState, context) {
+    const order = ["P1", "P2", "P3", "Completed", "StableIterating"];
+    const fromIndex = order.indexOf(fromState);
+    const toIndex = order.indexOf(toState);
+    if (fromIndex === toIndex) return;
+
+    if (toIndex < fromIndex) {
+      if (!["maintainer", "governance"].includes(context.actorRole)) {
+        throw new Error("rollback requires maintainer or governance role");
+      }
+      if (!context.reason) {
+        throw new Error("rollback requires reason");
+      }
+      return;
+    }
+
+    if (fromState === "P1" && toState === "P2") {
+      if (!["proposer", "maintainer"].includes(context.actorRole)) {
+        throw new Error("P1 -> P2 requires proposer or maintainer");
+      }
+      if (!context.reviewApproved) {
+        throw new Error("P1 -> P2 requires reviewApproved");
+      }
+      return;
+    }
+
+    if (fromState === "P2" && toState === "P3") {
+      if (context.actorRole !== "maintainer") {
+        throw new Error("P2 -> P3 requires maintainer");
+      }
+      if (!context.reviewApproved || !context.testsPassed) {
+        throw new Error("P2 -> P3 requires reviewApproved and testsPassed");
+      }
+      return;
+    }
+
+    if (fromState === "P3" && toState === "Completed") {
+      if (context.actorRole !== "maintainer") {
+        throw new Error("P3 -> Completed requires maintainer");
+      }
+      if (!context.governanceApproved || !context.testsPassed || !context.riskAcknowledged) {
+        throw new Error("P3 -> Completed requires governanceApproved, testsPassed, and riskAcknowledged");
+      }
+      return;
+    }
+
+    if (fromState === "Completed" && toState === "StableIterating") {
+      if (context.actorRole !== "maintainer") {
+        throw new Error("Completed -> StableIterating requires maintainer");
+      }
+      if (!context.testsPassed) {
+        throw new Error("Completed -> StableIterating requires testsPassed");
+      }
+      return;
+    }
+
+    throw new Error(`unsupported transition: ${fromState} -> ${toState}`);
   }
 
   #assertContributionKind(value) {

@@ -89,6 +89,15 @@ test("OSCP API should register identities, evaluate requirements, and create pro
   assert.equal(distribution.body.distributableElo, 50);
   assert.equal(distribution.body.allocations.length, 1);
 
+  const transition = await post(base, "/oscp/projects/state/transition", {
+    projectId: "project.oscp.review-guard",
+    nextState: "P2",
+    actorRole: "proposer",
+    reviewApproved: true,
+  });
+  assert.equal(transition.status, 200);
+  assert.equal(transition.body.state, "P2");
+
   const summaryResp = await fetch(`${base}/oscp/identities/summary`);
   const summary = await summaryResp.json();
   assert.equal(summary.totals.humans, 1);
@@ -98,6 +107,20 @@ test("OSCP API should register identities, evaluate requirements, and create pro
   const projectsSummaryResp = await fetch(`${base}/oscp/projects/summary`);
   const projectsSummary = await projectsSummaryResp.json();
   assert.equal(projectsSummary.totals.projects, 1);
+
+  const forecastResp = await fetch(`${base}/oscp/forecast/summary`);
+  const forecast = await forecastResp.json();
+  assert.equal(forecast.assumptions.agentPerHumanRange.source, "participant_provided");
+  assert.ok(forecast.metrics.projectAccountInflow >= 50);
+
+  const dailyResp = await fetch(`${base}/oscp/broadcast/daily`);
+  const daily = await dailyResp.json();
+  assert.equal(daily.schedule.platform, "X");
+  assert.equal(daily.schedule.timeLocal, "11:50");
+
+  const weeklyResp = await fetch(`${base}/oscp/broadcast/weekly`);
+  const weekly = await weeklyResp.json();
+  assert.equal(weekly.schedule.frequency, "weekly");
 
   await new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
 });

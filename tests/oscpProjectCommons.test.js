@@ -40,7 +40,10 @@ test("OSCP project commons should create project, task, proposal, and review flo
   });
   assert.equal(review.proposalState, "accepted");
 
-  const moved = commons.transitionProjectState("project.chat.open", "P2");
+  const moved = commons.transitionProjectState("project.chat.open", "P2", {
+    actorRole: "proposer",
+    reviewApproved: true,
+  });
   assert.equal(moved.state, "P2");
 
   const contribution = commons.recordContribution({
@@ -68,4 +71,34 @@ test("OSCP project commons should create project, task, proposal, and review flo
   assert.equal(summary.totals.proposals, 1);
   assert.equal(summary.totals.reviews, 1);
   assert.equal(summary.totals.projectAccountBalanceElo, 0);
+});
+
+test("OSCP project commons should enforce critical state transition gates", () => {
+  const commons = new OSCPProjectCommons();
+  commons.createProject({
+    projectId: "project.state.guard",
+    proposerHumanId: "human.guard",
+    title: "State Guard",
+    replacementTarget: "manual stage control",
+  });
+
+  assert.throws(() => {
+    commons.transitionProjectState("project.state.guard", "P2", {
+      actorRole: "proposer",
+      reviewApproved: false,
+    });
+  }, /reviewApproved/);
+
+  commons.transitionProjectState("project.state.guard", "P2", {
+    actorRole: "proposer",
+    reviewApproved: true,
+  });
+
+  assert.throws(() => {
+    commons.transitionProjectState("project.state.guard", "P3", {
+      actorRole: "maintainer",
+      reviewApproved: true,
+      testsPassed: false,
+    });
+  }, /testsPassed/);
 });

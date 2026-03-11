@@ -7,6 +7,8 @@ import { ACPAdapter } from "./acpAdapter.js";
 import { OSCPIdentityRegistry } from "./oscpIdentity.js";
 import { OSCPProjectCommons } from "./oscpProjectCommons.js";
 import { OSCPReviewGuard } from "./oscpReviewGuard.js";
+import { buildOSCPForecastSummary } from "./oscpForecast.js";
+import { buildOSCPBroadcast } from "./oscpBroadcast.js";
 import {
   buildDashboardAgents,
   buildDashboardMarketEfficiency,
@@ -375,7 +377,7 @@ export function createApiServer(
 
       if (req.method === "POST" && path === "/oscp/projects/state/transition") {
         const body = await readJson(req, bodyMaxBytes);
-        const project = projectCommons.transitionProjectState(body.projectId, body.nextState);
+        const project = projectCommons.transitionProjectState(body.projectId, body.nextState, body);
         if (project.state === "Completed") {
           try {
             const proposerInitId = identity.assignInitId({ subjectType: "human", subjectId: project.proposerHumanId }).initId;
@@ -387,6 +389,22 @@ export function createApiServer(
 
       if (req.method === "GET" && path === "/oscp/projects/summary") {
         return json(res, 200, projectCommons.buildSummary());
+      }
+
+      if (req.method === "GET" && path === "/oscp/forecast/summary") {
+        return json(res, 200, buildOSCPForecastSummary(identity, projectCommons, engine));
+      }
+
+      if (req.method === "GET" && path === "/oscp/broadcast/daily") {
+        const forecast = buildOSCPForecastSummary(identity, projectCommons, engine);
+        const projects = projectCommons.buildSummary();
+        return json(res, 200, buildOSCPBroadcast("daily", forecast, projects));
+      }
+
+      if (req.method === "GET" && path === "/oscp/broadcast/weekly") {
+        const forecast = buildOSCPForecastSummary(identity, projectCommons, engine);
+        const projects = projectCommons.buildSummary();
+        return json(res, 200, buildOSCPBroadcast("weekly", forecast, projects));
       }
 
       if (req.method === "POST" && path === "/recharge") {
