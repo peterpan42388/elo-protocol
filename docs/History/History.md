@@ -29,6 +29,11 @@ Version: v0.1
 - 明确 `虚拟未来` 作为模拟世界昵称。
 - 冻结 OSCP 的世界模型、协议层、技能层与阶段路线图。
 - 明确平台不承担中心化实现成本，需求优先转交给用户自己的 Agent 执行。
+
+## v0.6（OSCP 执行基线）
+- 新增 `确认方向` 与 `等待确认` 的执行方法。
+- 冻结 GitHub 作为 OSCP 当前阶段协作载体。
+- 开始实现 `OSCP Identity`、`OSCP Project Commons`、`OSCP Review Guard` 基础模块。
 ## 维护要求
 
 每次更新请附带：

@@ -1,0 +1,104 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { OSCPProjectCommons } from "../src/oscpProjectCommons.js";
+
+test("OSCP project commons should create project, task, proposal, and review flow", () => {
+  const commons = new OSCPProjectCommons();
+
+  const project = commons.createProject({
+    projectId: "project.chat.open",
+    proposerHumanId: "human.alice",
+    title: "Open Chat",
+    replacementTarget: "closed enterprise chat tools",
+  });
+  assert.equal(project.state, "P1");
+  assert.equal(project.publicSkills.reviewSkillId, "elo-review-skill");
+
+  const task = commons.createTask({
+    taskId: "task.chat.intake",
+    projectId: "project.chat.open",
+    title: "Build intake flow",
+  });
+  assert.equal(task.status, "open");
+
+  const proposal = commons.submitProposal({
+    proposalId: "proposal.chat.branch.1",
+    projectId: "project.chat.open",
+    branchName: "leo/chat-intake",
+    submittedByHumanId: "human.alice",
+    summary: "Add intake screen",
+    commitReportPath: "docs/reports/abc1234.md",
+  });
+  assert.equal(proposal.state, "open");
+
+  const review = commons.recordReview({
+    reviewId: "review.1",
+    proposalId: "proposal.chat.branch.1",
+    reviewerId: "maintainer.1",
+    decision: "Pass",
+    notes: "Looks good",
+  });
+  assert.equal(review.proposalState, "accepted");
+
+  const moved = commons.transitionProjectState("project.chat.open", "P2", {
+    actorRole: "proposer",
+    reviewApproved: true,
+  });
+  assert.equal(moved.state, "P2");
+
+  const contribution = commons.recordContribution({
+    contributionId: "contribution.1",
+    projectId: "project.chat.open",
+    contributorInitId: "init:agent:agent.alice.builder",
+    kind: "implementation",
+    demandRating: 4,
+    usageCount: 8,
+    accepted: true,
+  });
+  assert.ok(contribution.score > 0);
+
+  const credited = commons.creditProjectAccount("project.chat.open", 120, "usage");
+  assert.equal(credited.balanceElo, 120);
+
+  const distribution = commons.distributeProjectRevenue("project.chat.open");
+  assert.equal(distribution.distributableElo, 120);
+  assert.equal(distribution.allocations.length, 1);
+  assert.equal(distribution.allocations[0].amountElo, 120);
+
+  const summary = commons.buildSummary();
+  assert.equal(summary.totals.projects, 1);
+  assert.equal(summary.totals.tasks, 1);
+  assert.equal(summary.totals.proposals, 1);
+  assert.equal(summary.totals.reviews, 1);
+  assert.equal(summary.totals.projectAccountBalanceElo, 0);
+});
+
+test("OSCP project commons should enforce critical state transition gates", () => {
+  const commons = new OSCPProjectCommons();
+  commons.createProject({
+    projectId: "project.state.guard",
+    proposerHumanId: "human.guard",
+    title: "State Guard",
+    replacementTarget: "manual stage control",
+  });
+
+  assert.throws(() => {
+    commons.transitionProjectState("project.state.guard", "P2", {
+      actorRole: "proposer",
+      reviewApproved: false,
+    });
+  }, /reviewApproved/);
+
+  commons.transitionProjectState("project.state.guard", "P2", {
+    actorRole: "proposer",
+    reviewApproved: true,
+  });
+
+  assert.throws(() => {
+    commons.transitionProjectState("project.state.guard", "P3", {
+      actorRole: "maintainer",
+      reviewApproved: true,
+      testsPassed: false,
+    });
+  }, /testsPassed/);
+});
