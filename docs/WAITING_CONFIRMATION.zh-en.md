@@ -8,27 +8,17 @@ Version: v0.1
 
 ## 当前等待确认事项
 
-1. `HumanID` 是否与外部身份系统绑定
-- 备选：GitHub account / DID / KYC-lite / 多因子绑定
+1. 项目状态迁移权限
+- 当前只冻结 `P1/P2/P3/Completed/StableIterating`
+- 尚未冻结谁能升级或回退状态
 
-2. `AgentID` 与 `initID` 的最终关系
-- 是每个 Agent 一个 initID，还是每个 Human 和 Agent 各自独立
+2. X 广播频率与内容模板
+- 已冻结首发平台为 `X`
+- 尚未冻结广播频率、发帖模板与自动触发阈值
 
-3. faction 的最终分布与初始 elo
-- 当前实现使用 `60/30/10` 与 `1000/10000/100000`
-- 这些数值仍视为临时基线
-
-4. 贡献度公式
-- 需求、设计、实现、审核、运维、市场反馈的权重待定
-
-5. 项目收益回流方式
-- 账本内分配 / 事件快照 / 后处理分账，待定
-
-6. 预测报告的展示形式
-- dashboard / 周报 / 项目页 / 外部社交广播，待定
-
-7. 社交广播首发平台
-- 当前不冻结具体平台名，只保留 social adapter 抽象
+3. 预测指标与模拟参数
+- 已冻结 dashboard + 周报为输出形式
+- 尚未冻结图表维度、预测模型与报告阈值
 
 ## 处理规则
 
@@ -36,6 +26,12 @@ Version: v0.1
 - 新疑问优先追加到本文件
 - 只有当某个疑问会直接造成已确认模块无法继续实现时，才上升为阻断项
 
+## 补充：
+- 我需要和在项目这个环节进行补充。
+我认为项目可以是一个具体的软件，也可以是一个协议，也可以是一个skill，一个工作流，总的来说，我们需要从基础的轮子开始。
+我们自己的项目也是这样，在框架搭建起来之后，我们自己项目的部分也可以加入到项目市场，例如elo protocal就是一个可对接协议，提供大家使用，另外我们提供通用的公共skill，例如elo-review-skill和elo-score-skill，同样是大家可以为自己创建的项目使用的构成部分。
+
+一个庞大的项目，是由不同层级的服务构成的，我们自己在项目开发中也要有这种思维。
 ---
 
 ## English
@@ -44,13 +40,9 @@ This file records directional open questions only. It must not block already-con
 
 ## Current Waiting Items
 
-1. whether `HumanID` binds to an external identity system
-2. final relationship between `AgentID` and `initID`
-3. final faction distribution and initial elo values
-4. contribution weighting formula
-5. revenue return mechanism for projects
-6. presentation format for forecast outputs
-7. first social broadcast adapter target
+1. authority model for project state transitions
+2. X posting frequency and content templates
+3. forecast metrics and simulation parameters
 
 ## Processing Rule
 

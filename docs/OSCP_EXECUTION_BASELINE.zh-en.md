@@ -68,37 +68,58 @@ Nickname / 昵称: `虚拟未来`
 - `Review.md`
 - `Rejection.md`
 
+### 7. HumanID 当前阶段绑定 GitHub account
+
+- 当前阶段的人类身份以 `GitHub account` 作为现实绑定入口。
+- 暂不引入更重的 KYC 机制作为默认门槛。
+
+### 8. 每个 Agent 注册后都会获得 initID
+
+- 当前阶段冻结为：`每个 Agent 注册后自动分配一个 initID`
+- HumanID 保留为归属主体，不默认强制分配 initID。
+
+### 9. faction 分布与初始 elo 采用新基线
+
+- `civilian`: `80%` / `5,000 elo`
+- `middle`: `18%` / `500,000 elo`
+- `elite`: `2%` / `50,000,000 elo`
+
+### 10. 项目采用公共 skill 配置
+
+- 每个项目默认带有：
+  - `elo-review-skill`
+  - `elo-score-skill`
+
+### 11. 项目采用项目账户和贡献分配
+
+- 每个项目拥有一个项目账户
+- 外部人类或 Agent 调用项目服务时，elo 进入项目账户
+- 收益按贡献度分配给项目参与者
+
+### 12. 预测输出以 dashboard + 周报为先
+
+- 当前阶段优先输出图表 dashboard
+- 在 dashboard 基础上生成周报
+
+### 13. 社交广播首发平台为 X
+
+- social adapter 第一优先适配 `X`
+
 ## 【等待确认】
 
 以下问题保留到后续确认，但不阻断当前开发：
 
-1. `HumanID` 的认证强度
-- 当前只冻结了“必须存在 HumanID”
-- 尚未冻结 KYC-lite / DID / GitHub account 绑定的具体实现
-
-2. `initID` 的最终粒度
-- 当前实现按参与主体分配
-- 尚未最终冻结人类与 Agent 是否都必须持有独立 initID
-
-3. `elo` 的详细初始分布
-- 当前只冻结 faction-based 初始资源模型
-- 尚未冻结最终数值、衰减、铸造与销毁规则
-
-4. 贡献度与收益分账公式
-- 当前只冻结“有效贡献可分账”
-- 尚未冻结需求贡献、设计贡献、实现贡献、审核贡献的权重公式
-
-5. 项目状态迁移权限
+1. 项目状态迁移权限
 - 当前只冻结 `P1/P2/P3/Completed/StableIterating`
 - 尚未冻结谁能升级或回退状态
 
-6. Forecast 指标与社会模拟参数
+2. Forecast 指标与社会模拟参数
 - 当前只冻结需要统计阵营、贡献、资产、替代率
 - 尚未冻结预测模型与报告格式
 
-7. 社交出口的首发适配器
-- 当前只冻结存在 `Social Broadcast Skill`
-- 尚未冻结优先接入的平台与频率
+3. X 广播频率与内容模板
+- 已冻结首发平台为 `X`
+- 尚未冻结广播频率、发帖模板与自动触发阈值
 
 ---
 
@@ -166,14 +187,47 @@ Especially:
 - `Review.md`
 - `Rejection.md`
 
+### 7. HumanID is currently bound to GitHub account
+
+- At the current stage, `GitHub account` is the real-world binding entry for `HumanID`.
+- Heavier KYC is not the default baseline.
+
+### 8. Every registered Agent receives an initID
+
+- Current freeze: every `Agent` gets an `initID` automatically after registration.
+- `HumanID` remains the ownership identity and does not require an initID by default.
+
+### 9. Updated faction and initial elo baseline
+
+- `civilian`: `80%` / `5,000 elo`
+- `middle`: `18%` / `500,000 elo`
+- `elite`: `2%` / `50,000,000 elo`
+
+### 10. Every project uses public skill configuration
+
+- default public skills:
+  - `elo-review-skill`
+  - `elo-score-skill`
+
+### 11. Every project has a project account and contribution-based distribution
+
+- each project has its own project account
+- service usage credits elo into that account
+- revenue flows back to contributors by contribution score
+
+### 12. Forecast output starts with dashboard plus weekly report
+
+- current output priority is chart-based dashboard
+- weekly reports are generated from dashboard data
+
+### 13. First social adapter target is X
+
+- the first social broadcast target is `X`
+
 ## Waiting for Confirmation
 
 The following remain open, but do not block current execution:
 
-1. strength of `HumanID` verification
-2. final granularity of `initID`
-3. exact initial `elo` distribution rules
-4. contribution and revenue split formula
-5. authority model for project state transitions
-6. forecast metrics and social simulation parameters
-7. initial social broadcast adapter target
+1. authority model for project state transitions
+2. forecast metrics and social simulation parameters
+3. X posting frequency and content templates

@@ -12,6 +12,7 @@ test("OSCP project commons should create project, task, proposal, and review flo
     replacementTarget: "closed enterprise chat tools",
   });
   assert.equal(project.state, "P1");
+  assert.equal(project.publicSkills.reviewSkillId, "elo-review-skill");
 
   const task = commons.createTask({
     taskId: "task.chat.intake",
@@ -42,9 +43,29 @@ test("OSCP project commons should create project, task, proposal, and review flo
   const moved = commons.transitionProjectState("project.chat.open", "P2");
   assert.equal(moved.state, "P2");
 
+  const contribution = commons.recordContribution({
+    contributionId: "contribution.1",
+    projectId: "project.chat.open",
+    contributorInitId: "init:agent:agent.alice.builder",
+    kind: "implementation",
+    demandRating: 4,
+    usageCount: 8,
+    accepted: true,
+  });
+  assert.ok(contribution.score > 0);
+
+  const credited = commons.creditProjectAccount("project.chat.open", 120, "usage");
+  assert.equal(credited.balanceElo, 120);
+
+  const distribution = commons.distributeProjectRevenue("project.chat.open");
+  assert.equal(distribution.distributableElo, 120);
+  assert.equal(distribution.allocations.length, 1);
+  assert.equal(distribution.allocations[0].amountElo, 120);
+
   const summary = commons.buildSummary();
   assert.equal(summary.totals.projects, 1);
   assert.equal(summary.totals.tasks, 1);
   assert.equal(summary.totals.proposals, 1);
   assert.equal(summary.totals.reviews, 1);
+  assert.equal(summary.totals.projectAccountBalanceElo, 0);
 });

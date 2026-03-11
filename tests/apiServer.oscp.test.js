@@ -19,7 +19,7 @@ test("OSCP API should register identities, evaluate requirements, and create pro
 
   const human = await post(base, "/oscp/humans/register", {
     humanId: "human.oscp.leo",
-    metadata: { displayName: "Leo" },
+    metadata: { displayName: "Leo", githubLogin: "metavie-leo" },
   });
   assert.equal(human.status, 200);
 
@@ -29,10 +29,12 @@ test("OSCP API should register identities, evaluate requirements, and create pro
     metadata: { label: "Builder" },
   });
   assert.equal(agent.status, 200);
+  assert.match(agent.body.initProfile.initId, /^init:agent:/);
+  assert.ok(agent.body.balance > 0);
 
   const init = await post(base, "/oscp/init-ids/assign", {
-    subjectType: "human",
-    subjectId: "human.oscp.leo",
+    subjectType: "agent",
+    subjectId: "agent.oscp.leo.builder",
   });
   assert.equal(init.status, 200);
   assert.match(init.body.initId, /^init:/);
@@ -58,6 +60,34 @@ test("OSCP API should register identities, evaluate requirements, and create pro
     executionOwner: "shared_maintainers",
   });
   assert.equal(project.status, 200);
+
+  const contribution = await post(base, "/oscp/projects/contributions/record", {
+    contributionId: "contribution.oscp.review-guard.1",
+    projectId: "project.oscp.review-guard",
+    contributorInitId: agent.body.initProfile.initId,
+    contributorAgentId: "agent.oscp.leo.builder",
+    kind: "implementation",
+    demandRating: 5,
+    usageCount: 10,
+    accepted: true,
+  });
+  assert.equal(contribution.status, 200);
+  assert.ok(contribution.body.score > 0);
+
+  const credit = await post(base, "/oscp/projects/accounts/credit", {
+    projectId: "project.oscp.review-guard",
+    amount: 50,
+    source: "usage",
+  });
+  assert.equal(credit.status, 200);
+  assert.equal(credit.body.balanceElo, 50);
+
+  const distribution = await post(base, "/oscp/projects/revenue/distribute", {
+    projectId: "project.oscp.review-guard",
+  });
+  assert.equal(distribution.status, 200);
+  assert.equal(distribution.body.distributableElo, 50);
+  assert.equal(distribution.body.allocations.length, 1);
 
   const summaryResp = await fetch(`${base}/oscp/identities/summary`);
   const summary = await summaryResp.json();

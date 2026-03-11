@@ -2,9 +2,9 @@ import crypto from "node:crypto";
 import { assertBoundedText, assertFiniteNumber, assertToken } from "./inputGuards.js";
 
 const DEFAULT_FACTIONS = [
-  { key: "civilian", weight: 0.6, initialElo: 1_000 },
-  { key: "middle", weight: 0.3, initialElo: 10_000 },
-  { key: "elite", weight: 0.1, initialElo: 100_000 },
+  { key: "civilian", weight: 0.8, initialElo: 5_000 },
+  { key: "middle", weight: 0.18, initialElo: 500_000 },
+  { key: "elite", weight: 0.02, initialElo: 50_000_000 },
 ];
 
 function cloneMetrics(metrics) {
@@ -43,10 +43,15 @@ export class OSCPIdentityRegistry {
     if (this.humans.has(safeHumanId)) {
       throw new Error(`duplicate humanId: ${safeHumanId}`);
     }
+    const githubLogin =
+      assertBoundedText("githubLogin", String(metadata.githubLogin ?? metadata.githubAccount ?? ""), 128) || "";
+    if (!githubLogin) {
+      throw new Error("githubLogin is required for HumanID binding");
+    }
     const record = {
       humanId: safeHumanId,
       displayName: assertBoundedText("displayName", String(metadata.displayName ?? safeHumanId), 128) || safeHumanId,
-      metadata: { ...metadata },
+      metadata: { ...metadata, githubLogin },
       createdAt: Date.now(),
     };
     this.humans.set(safeHumanId, record);

@@ -292,7 +292,11 @@ export function createApiServer(
         const body = await readJson(req, bodyMaxBytes);
         const agent = identity.registerAgent(body.agentId, body.humanId, body.metadata ?? {});
         engine.registerAgent(agent.agentId, agent.humanId);
-        return json(res, 200, agent);
+        const initProfile = identity.assignInitId({ subjectType: "agent", subjectId: agent.agentId });
+        if (engine.balanceOf(agent.agentId) === 0) {
+          engine.recharge(agent.agentId, initProfile.initialElo, "oscp_init");
+        }
+        return json(res, 200, { ...agent, initProfile, balance: engine.balanceOf(agent.agentId) });
       }
 
       if (req.method === "POST" && path === "/oscp/init-ids/assign") {
@@ -337,6 +341,30 @@ export function createApiServer(
         const body = await readJson(req, bodyMaxBytes);
         const proposal = projectCommons.submitProposal(body);
         return json(res, 200, proposal);
+      }
+
+      if (req.method === "POST" && path === "/oscp/projects/contributions/record") {
+        const body = await readJson(req, bodyMaxBytes);
+        const contribution = projectCommons.recordContribution(body);
+        try {
+          identity.recordMetrics(contribution.contributorInitId, {
+            contributionScore: contribution.score,
+            reputation: contribution.accepted ? 1 : 0,
+          });
+        } catch {}
+        return json(res, 200, contribution);
+      }
+
+      if (req.method === "POST" && path === "/oscp/projects/accounts/credit") {
+        const body = await readJson(req, bodyMaxBytes);
+        const credited = projectCommons.creditProjectAccount(body.projectId, body.amount, body.source ?? "usage");
+        return json(res, 200, credited);
+      }
+
+      if (req.method === "POST" && path === "/oscp/projects/revenue/distribute") {
+        const body = await readJson(req, bodyMaxBytes);
+        const result = projectCommons.distributeProjectRevenue(body.projectId);
+        return json(res, 200, result);
       }
 
       if (req.method === "POST" && path === "/oscp/projects/reviews/record") {
